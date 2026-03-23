@@ -354,6 +354,11 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   filter: drop-shadow(0 0 24px rgba(220,194,161,0.36));
   transform: translateY(-1px);
 }
+.case-study-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
 
 /* CTA */
 .cta-section { text-align:center; padding:clamp(6rem,12vh,10rem) 0; }
@@ -409,6 +414,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   .stat-label-wrap { width: auto; }
   .stat-sub { position: static; transform: none; margin-top: 0.2rem; }
   .case-study-callout { flex-direction: column; align-items: flex-start; }
+  .case-study-links { width: 100%; }
   .trust-bar { flex-wrap:wrap; gap:2rem; }
 }
 @media (max-width:480px) {
@@ -442,6 +448,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
     <a href="#methodik">Methodik</a>
     <a href="#matrix">Matrix</a>
     <a href="#leistungen">Produkte &amp; Leistungen</a>
+    <a href="case-study/AI%20Case%20Study_files/index.html" target="_blank" rel="noopener noreferrer">Case Study</a>
     <a href="assessment.html">Assessment</a>
   </div>
 </div>
@@ -567,7 +574,11 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
         <strong>So sieht ein echtes Ergebnis aus</strong>
         <p>Anonymisierte Case Study: Beispiel für den finalen Ergebnis-Report, wie wir ihn im Kundensetting ausliefern.</p>
       </div>
-      <a class="case-study-link" href="case-study/AI%20Case%20Study_files/AI%20Case%20Study.html" target="_blank" rel="noopener noreferrer">Case Study öffnen</a>
+      <div class="case-study-links">
+        <a class="case-study-link" href="case-study/AI%20Case%20Study_files/index.html" target="_blank" rel="noopener noreferrer">Case Study · Overview</a>
+        <a class="case-study-link" href="case-study/AI%20Case%20Study_files/gannaca-ai-scoring.html" target="_blank" rel="noopener noreferrer">Case Study · AI Scoring</a>
+        <a class="case-study-link" href="case-study/AI%20Case%20Study_files/rkr-mockup.html" target="_blank" rel="noopener noreferrer">Case Study · RKR Mockup</a>
+      </div>
     </div>
     <div class="retainer-note" style="margin-top:2rem; padding:1.2rem 1.5rem; border:1px solid var(--border-gold); background:rgba(245,225,200,0.03); text-align:center;">
       <p style="font-family:var(--font-cat); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.3rem;">Retainer-Modell</p>
