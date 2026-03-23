@@ -311,6 +311,49 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 .product-card h3 { font-family:var(--font-display); font-size:1.05rem; font-weight:500; color:var(--gold-light); margin-bottom:0.5rem; }
 .product-card p { font-size:0.82rem; color:var(--text-secondary); line-height:1.6; font-weight:300; }
 .product-trigger { font-family:var(--font-cat); font-size:0.6rem; letter-spacing:0.12em; color:var(--text-muted); margin-top:0.8rem; text-transform:uppercase; }
+.case-study-callout {
+  margin-top: 2rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid rgba(220,194,161,0.22);
+  background: linear-gradient(135deg, rgba(220,194,161,0.08), rgba(220,194,161,0.02));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.case-study-copy strong {
+  display: block;
+  font-family: var(--font-cat);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #dcc2a1;
+  margin-bottom: 0.35rem;
+}
+.case-study-copy p {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.case-study-link {
+  flex-shrink: 0;
+  font-family: var(--font-cat);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  text-decoration: none;
+  background: linear-gradient(135deg, #e6d1b7, #dcc2a1);
+  padding: 0.78rem 1.25rem;
+  border-radius: 2px;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 14px rgba(220,194,161,0.26));
+}
+.case-study-link:hover {
+  filter: drop-shadow(0 0 24px rgba(220,194,161,0.36));
+  transform: translateY(-1px);
+}
 
 /* CTA */
 .cta-section { text-align:center; padding:clamp(6rem,12vh,10rem) 0; }
@@ -365,6 +408,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   .stat-label { min-height: 0; }
   .stat-label-wrap { width: auto; }
   .stat-sub { position: static; transform: none; margin-top: 0.2rem; }
+  .case-study-callout { flex-direction: column; align-items: flex-start; }
   .trust-bar { flex-wrap:wrap; gap:2rem; }
 }
 @media (max-width:480px) {
@@ -517,6 +561,13 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
       <div class="product-card"><div class="product-icon">◇</div><h3>Strategic Foresight &amp; Decision Architecture</h3><p>Übersetzung von Zukunftsentwicklungen in Entscheidungsarchitekturen und Governance-Strukturen.</p><div class="product-trigger">Orientierung nötig</div></div>
       <div class="product-card"><div class="product-icon">▪</div><h3>Private Executive Briefings &amp; Decision Salons</h3><p>Exklusive, kuratierte Gesprächsformate zur gemeinsamen Einordnung kritischer Zukunftsfragen.</p><div class="product-trigger">Einstieg · Einordnung</div></div>
       <div class="product-card"><div class="product-icon">◈</div><h3>Curated Market &amp; Innovation Monitoring</h3><p>Kontinuierliche, strategische Auswahl, Erfassung, Analyse und Einordnung externer Informationssignale in visuellem, digitalem Entscheidungsvorlagenformat.</p><div class="product-trigger">≥ 2 aktive Cases</div></div>
+    </div>
+    <div class="case-study-callout">
+      <div class="case-study-copy">
+        <strong>So sieht ein echtes Ergebnis aus</strong>
+        <p>Anonymisierte Case Study: Beispiel für den finalen Ergebnis-Report, wie wir ihn im Kundensetting ausliefern.</p>
+      </div>
+      <a class="case-study-link" href="case-study/AI%20Case%20Study_files/AI%20Case%20Study.html" target="_blank" rel="noopener noreferrer">Case Study öffnen</a>
     </div>
     <div class="retainer-note" style="margin-top:2rem; padding:1.2rem 1.5rem; border:1px solid var(--border-gold); background:rgba(245,225,200,0.03); text-align:center;">
       <p style="font-family:var(--font-cat); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.3rem;">Retainer-Modell</p>
