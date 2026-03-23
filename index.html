@@ -118,16 +118,75 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 .hero-note { font-size:0.72rem; color:var(--text-muted); margin-top:1.2rem; font-weight:300; letter-spacing:0.05em; }
 
 /* PREMIUM STATS */
-.stats-container { display:flex; justify-content:space-between; align-items:flex-start; max-width:1200px;
-  margin:3rem auto 0; padding:2.5rem 0; border-top:1px solid rgba(220,194,161,0.15); border-bottom:1px solid rgba(220,194,161,0.15); }
-.stat-item { flex:1; text-align:center; padding:0 1.2rem; }
-.stat-value { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,3.8rem); color:#dcc2a1; line-height:1;
-  display:block; margin-bottom:0.6rem; font-variant-numeric:tabular-nums; font-weight:500;
-  text-shadow:0 0 20px rgba(220,194,161,0.15); }
-.stat-label { font-family:var(--font-cat); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.25em;
-  color:rgba(240,237,230,0.6); display:block; font-weight:400; }
-.stat-sub { font-family:var(--font-cat); font-size:0.55rem; text-transform:uppercase; letter-spacing:0.3em;
-  color:rgba(220,194,161,0.4); margin-top:0.5rem; display:block; }
+.stats-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  max-width: 1200px;
+  margin: clamp(6.25rem, 11vh, 8rem) auto 0;
+  padding: 2.7rem 0 3.2rem;
+  border-bottom: 1px solid rgba(220,194,161,0.15);
+}
+.stats-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.5px;
+  background: rgba(220,194,161,0.55);
+}
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 0 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  color: #dcc2a1;
+  line-height: 1;
+  display: inline-block;
+  margin-bottom: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  text-shadow: 0 0 20px rgba(220,194,161,0.15);
+}
+.stat-value.small-text {
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+  letter-spacing: 0.02em;
+}
+.stat-label {
+  font-family: var(--font-cat);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgba(240,237,230,0.6);
+  display: block;
+  font-weight: 400;
+  line-height: 1.55;
+  min-height: 2.5em;
+}
+.stat-label-wrap {
+  position: relative;
+  width: 100%;
+}
+.stat-sub {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-cat);
+  font-size: 0.48rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: rgba(220,194,161,0.45);
+  white-space: nowrap;
+}
 
 /* SECTION TITLES */
 .sec-title { font-family:var(--font-display); font-size:clamp(2rem,4.5vw,3.5rem); font-weight:500; line-height:1.1;
@@ -219,7 +278,10 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   .methodik-grid { grid-template-columns:1fr; }
   .products-grid { grid-template-columns:1fr; }
   .ampel-row { grid-template-columns:1fr; }
-  .stats-container { flex-direction:column; gap:2.5rem; }
+  .stats-container { flex-direction:column; gap:2.9rem; align-items:center; padding-bottom:2.6rem; }
+  .stat-label { min-height: 0; }
+  .stat-label-wrap { width: auto; }
+  .stat-sub { position: static; transform: none; margin-top: 0.2rem; }
   .trust-bar { flex-wrap:wrap; gap:2rem; }
 }
 @media (max-width:480px) {
@@ -266,10 +328,10 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
     <a href="assessment.html" class="hero-cta">Jetzt Potenzial-Check starten</a>
     <p class="hero-note">10 Klicks · Keine Registrierung · Sofort-Ergebnis</p>
     <div class="stats-container">
-      <div class="stat-item"><span class="stat-value">2</span><span class="stat-label">Analyse-Ebenen</span><span class="stat-sub">Nutzen &amp; Compliance</span></div>
+      <div class="stat-item"><span class="stat-value">2</span><span class="stat-label-wrap"><span class="stat-label">Analyse-Ebenen</span><span class="stat-sub">Nutzen &amp; Compliance</span></span></div>
       <div class="stat-item"><span class="stat-value">10</span><span class="stat-label">Deep-Dive Kriterien</span></div>
-      <div class="stat-item"><span class="stat-value">Sofort</span><span class="stat-label">Ergebnis-Bericht</span></div>
-      <div class="stat-item"><span class="stat-value">Gratis</span><span class="stat-label">Erst-Analyse</span></div>
+      <div class="stat-item"><span class="stat-value small-text">Sofort</span><span class="stat-label">Ergebnis-Bericht</span></div>
+      <div class="stat-item"><span class="stat-value small-text">Gratis</span><span class="stat-label">Erst-Analyse</span></div>
     </div>
   </div>
 </section>
