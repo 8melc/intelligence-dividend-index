@@ -63,7 +63,9 @@ body { background-color:var(--bg-deep); color:var(--text); font-family:var(--fon
   background:linear-gradient(180deg, rgba(18,21,26,0.95) 0%, rgba(18,21,26,0.8) 100%);
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
 .site-nav .container { display:flex; align-items:center; justify-content:space-between; }
-.nav-logo { font-family:var(--font-logo); font-size:1.6rem; color:white; opacity:0.85; text-decoration:none; }
+.nav-logo { display:flex; align-items:center; text-decoration:none; }
+.nav-logo img { height:24px; width:auto; opacity:0.85; transition:opacity 0.3s; }
+.nav-logo:hover img { opacity:1; }
 .nav-right { display:flex; align-items:center; gap:1.5rem; }
 .nav-tag { font-family:var(--font-cat); font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); opacity:0.6; }
 .back-link { font-size:0.75rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s; letter-spacing:0.03em; }
@@ -244,7 +246,7 @@ body { background-color:var(--bg-deep); color:var(--text); font-family:var(--fon
 
 <nav class="site-nav">
   <div class="container">
-    <a href="index.html" class="nav-logo">gannaca</a>
+    <a href="index.html" class="nav-logo"><img src="gannaca-logo-white.png" alt="gannaca"></a>
     <div class="nav-right">
       <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
       <span class="nav-tag">Assessment</span>
@@ -322,7 +324,7 @@ body { background-color:var(--bg-deep); color:var(--text); font-family:var(--fon
   </div>
 </div>
 
-<footer class="site-footer"><div class="container">© 2026 gannaca · Intelligence Dividend Index</div></footer>
+<footer class="site-footer"><div class="container"><span class="footer-logo"><img src="gannaca-logo-white.png" alt="gannaca" style="height:28px;width:auto;opacity:0.5;display:block;margin:0 auto 0.6rem;"></span>© 2026 gannaca · Intelligence Dividend Index</div></footer>
 
 </div>
 
@@ -356,12 +358,54 @@ const GOVERNANCE_CHECKS=[
 ];
 
 const PRODUCTS=[
-  {id:'discovery',name:'AI Discovery Sprint',desc:'In 2–3 Wochen die Cases finden, die am meisten bringen. Für alle, die noch nicht genau wissen, wo sie anfangen sollen.',icon:'🔍'},
-  {id:'governance',name:'Compliance-Check',desc:'DSGVO, AI Act, Branchenregulierung — wir prüfen, was geht und was Sie vorher klären müssen.',icon:'🛡'},
-  {id:'casesprint',name:'AI Case Sprint',desc:'Vom KI-Case zum konkreten Konzept in 3 Wochen. Für alle, die wissen was sie wollen — und es jetzt anpacken.',icon:'⚡'},
-  {id:'poc',name:'Proof of Concept',desc:'Ihr bester Case als funktionierender Prototyp in 4–6 Wochen. Zum Anfassen und Vorzeigen.',icon:'🚀'},
-  {id:'roadmap',name:'AI Roadmap',desc:'Der Plan für die nächsten 6–18 Monate: Was zuerst, was kann warten, und wer macht was.',icon:'🗺'},
-  {id:'ops',name:'AI Operations',desc:'Laufende Begleitung für Ihre KI-Anwendungen: Monitoring, Updates, Compliance-Check inklusive.',icon:'🔄'}
+  {id:'sparring',name:'Executive Decision Sparring',
+    desc:'Vertrauliches, kontinuierliches Sparring für Top-Entscheider:innen bei strategischen Entscheidungen.',
+    icon:'◆',
+    triggers:function(idi,pc,ac,n){return idi>=6.0&&n>=2;},
+    reasons:[
+      (d)=>`Ihr Score von ${d.idi.toFixed(1)} zeigt hohes KI-Potenzial. Bei ${d.n} Prozessen brauchen Sie laufende strategische Begleitung.`,
+      (d)=>`${d.pilotCount} Quick Win(s) stehen bereit — ein Sparringspartner hilft, die richtigen Prioritäten zu setzen.`
+    ]},
+  {id:'sprint',name:'Strategy Sprints for Transformation Decisions',
+    desc:'Verdichtete Formate (2–6 Wochen), um aus komplexen Transformationsfragen konkrete Entscheidungen abzuleiten.',
+    icon:'▸',
+    triggers:function(idi,pc,ac,n){return idi>=5.0&&pc>=1;},
+    reasons:[
+      (d)=>`${d.pilotCount} Ihrer Cases sind Quick Wins mit hohem Mehrwert und grüner Ampel — reif für einen fokussierten Sprint.`,
+      (d)=>`Ihr stärkster Case "${d.winner}" hat die besten Voraussetzungen für eine schnelle Entscheidung.`
+    ]},
+  {id:'governance',name:'Leadership & Governance in the Age of AI',
+    desc:'Begleitung von Führungsteams und Boards bei der Neuausrichtung von Verantwortung und Entscheidungslogik im KI-Zeitalter.',
+    icon:'⬡',
+    triggers:function(idi,pc,ac,n){return (ac.yellow+ac.red)>=2;},
+    reasons:[
+      (d)=>`${d.ac.yellow+d.ac.red} Ihrer Prozesse haben regulatorische Fragezeichen — das erfordert klare Governance-Strukturen.`,
+      (d)=>`AI Act, DSGVO, KRITIS: Ihr Führungsteam braucht ein gemeinsames Verständnis der neuen Verantwortungslogik.`
+    ]},
+  {id:'foresight',name:'Strategic Foresight & Decision Architecture',
+    desc:'Übersetzung von Zukunftsentwicklungen in Entscheidungsarchitekturen und Governance-Strukturen.',
+    icon:'◇',
+    triggers:function(idi,pc,ac,n){return idi<4.0;},
+    reasons:[
+      (d)=>`Ihr Score von ${d.idi!=null?d.idi.toFixed(1):'–'} zeigt: Erstmal Überblick verschaffen, bevor Sie loslegen.`,
+      (d)=>`Wir helfen Ihnen, KI-Entwicklungen in eine Entscheidungsarchitektur zu übersetzen, die zu Ihrem Unternehmen passt.`
+    ]},
+  {id:'briefing',name:'Private Executive Briefings & Decision Salons',
+    desc:'Exklusive, kuratierte Gesprächsformate zur gemeinsamen Einordnung kritischer Zukunftsfragen.',
+    icon:'▪',
+    triggers:function(idi,pc,ac,n){return true;},
+    reasons:[
+      (d)=>`Unabhängig vom Score: Ein kuratiertes Briefing gibt Ihnen die Einordnung, die Sie für Ihre nächste Entscheidung brauchen.`,
+      (d)=>`Gemeinsam mit anderen Entscheidern die richtigen Fragen stellen — bevor alle anderen sie googeln.`
+    ]},
+  {id:'monitoring',name:'Curated Market & Innovation Monitoring',
+    desc:'Kontinuierliche, strategische Auswahl, Erfassung, Analyse und Einordnung externer Informationssignale in visuellem, digitalem Entscheidungsvorlagenformat.',
+    icon:'◈',
+    triggers:function(idi,pc,ac,n){return n>=2&&idi>=4.0;},
+    reasons:[
+      (d)=>`Bei ${d.n} aktiven Prozessen lohnt sich ein kontinuierliches Monitoring relevanter KI-Entwicklungen.`,
+      (d)=>`Sie bekommen regelmäßig aufbereitete Entscheidungsvorlagen — kein Nachrichtenstrom, sondern kuratierte Relevanz.`
+    ]}
 ];
 
 let cases=[],results=null;
@@ -502,24 +546,42 @@ function renderDetailCards(scored){
 function showRecommendations(){
   if(!results)return;const{scored,ranked,idi,pilotCount}=results;
   const ac={green:0,yellow:0,red:0};scored.forEach(s=>{if(s.ampel!=='gray')ac[s.ampel]++;});
+  const n=cases.length, winner=ranked[0]?.name||'–';
+  const ctx={idi,pilotCount,ac,n,winner};
   const recs=[];
-  if(idi>=6.0){recs.push({...PRODUCTS.find(p=>p.id==='casesprint'),primary:true,
-    reason:`Ihr Score von ${idi.toFixed(1)} zeigt hohes KI-Potenzial. ${pilotCount} Quick Win(s) können Sie direkt angehen.`});
-    if(pilotCount>0)recs.push({...PRODUCTS.find(p=>p.id==='poc'),
-      reason:`"${ranked[0]?.name}" ist Ihr stärkster Case — der eignet sich für einen Prototyp.`});}
-  else if(idi>=4.0){recs.push({...PRODUCTS.find(p=>p.id==='discovery'),primary:true,
-    reason:`Ihr Score von ${idi.toFixed(1)} zeigt solides Potenzial — aber wo genau anfangen? Das klären wir.`});
-    if(ac.yellow+ac.red>0)recs.push({...PRODUCTS.find(p=>p.id==='governance'),
-      reason:`${ac.yellow+ac.red} Prozess(e) haben regulatorische Fragezeichen, die wir vorher klären sollten.`});}
-  else{recs.push({...PRODUCTS.find(p=>p.id==='roadmap'),primary:true,
-    reason:`Ihr Score von ${idi!=null?idi.toFixed(1):'–'} zeigt: Erstmal Überblick verschaffen, dann loslegen.`});
-    recs.push({...PRODUCTS.find(p=>p.id==='governance'),reason:`Einige regulatorische Fragen sollten vorab geklärt werden.`});}
-  if(cases.length>=3&&!recs.find(r=>r.id==='ops'))recs.push({...PRODUCTS.find(p=>p.id==='ops'),
-    reason:`Bei ${cases.length} Prozessen lohnt sich eine laufende Begleitung.`});
+  /* Primäre Empfehlung nach IDI-Tier */
+  if(idi>=6.0){
+    const p=PRODUCTS.find(x=>x.id==='sprint');
+    recs.push({...p,primary:true,reason:p.reasons[0](ctx)});
+    const sp=PRODUCTS.find(x=>x.id==='sparring');
+    if(n>=2)recs.push({...sp,reason:sp.reasons[0](ctx)});
+  } else if(idi>=4.0){
+    const b=PRODUCTS.find(x=>x.id==='briefing');
+    recs.push({...b,primary:true,reason:b.reasons[0](ctx)});
+    if(ac.yellow+ac.red>=1){const g=PRODUCTS.find(x=>x.id==='governance');
+      recs.push({...g,reason:g.reasons[0](ctx)});}
+  } else {
+    const f=PRODUCTS.find(x=>x.id==='foresight');
+    recs.push({...f,primary:true,reason:f.reasons[0](ctx)});
+    const g=PRODUCTS.find(x=>x.id==='governance');
+    recs.push({...g,reason:g.reasons[1](ctx)});
+  }
+  /* Monitoring wenn genug Cases */
+  if(n>=2&&idi>=4.0&&!recs.find(r=>r.id==='monitoring')){
+    const m=PRODUCTS.find(x=>x.id==='monitoring');
+    recs.push({...m,reason:m.reasons[0](ctx)});}
+  /* Briefing immer als Einstieg, falls nicht schon primary */
+  if(!recs.find(r=>r.id==='briefing')&&recs.length<3){
+    const b=PRODUCTS.find(x=>x.id==='briefing');
+    recs.push({...b,reason:b.reasons[1](ctx)});}
   document.getElementById('recommendations').innerHTML=recs.map(r=>`
     <div class="rec-card ${r.primary?'primary-rec':''}"><div class="rec-card-header">
-      <h3>${r.icon} ${r.name}</h3><span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Unser Tipp':'Auch sinnvoll'}</span></div>
-      <p>${r.desc}</p><div class="rec-reason"><strong>Warum? </strong>${r.reason}</div></div>`).join('');
+      <h3><span style="color:var(--gold);margin-right:0.5rem;">${r.icon}</span> ${r.name}</h3>
+      <span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Unser Tipp':'Auch sinnvoll'}</span></div>
+      <p>${r.desc}</p><div class="rec-reason"><strong>Warum? </strong>${r.reason}</div></div>`).join('')
+    +`<div style="margin-top:1.5rem;padding:1rem 1.5rem;border:1px solid var(--gold-border);background:rgba(245,225,200,0.03);text-align:center;">
+      <p style="font-family:var(--font-cat);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.2rem;">Retainer-Modell</p>
+      <p style="font-size:0.8rem;color:var(--text-secondary);font-weight:300;">Alle Leistungen als Retainer — laufende Begleitung statt Einzelprojekte.</p></div>`;
   goToScreen(4);
 }
 

@@ -68,7 +68,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 
 /* LAYOUT */
 .content { position:relative; z-index:10; }
-.container { max-width:1100px; margin:0 auto; padding:0 clamp(2rem,5vw,6rem); }
+.container { max-width:1400px; margin:0 auto; padding:0 5%; }
 .section { padding:clamp(5rem,10vh,8rem) 0; }
 .sec-divider { width:100%; height:1px;
   background:linear-gradient(to right, transparent, rgba(255,255,255,0.08) 20%, var(--border-gold) 50%, rgba(255,255,255,0.08) 80%, transparent); }
@@ -78,8 +78,20 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   background:linear-gradient(180deg, rgba(18,21,26,0.95) 0%, rgba(18,21,26,0.6) 80%, transparent 100%);
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
 .site-nav .container { display:flex; align-items:center; justify-content:space-between; }
-.nav-logo { font-family:var(--font-logo); font-size:1.8rem; color:white; opacity:0.85; text-decoration:none; }
+.nav-logo { display:flex; align-items:center; text-decoration:none; }
+.nav-logo img { height:28px; width:auto; opacity:0.9; transition:opacity 0.3s; }
+.nav-logo:hover img { opacity:1; }
 .nav-right { display:flex; align-items:center; gap:2rem; }
+
+/* SECTION NAV */
+.section-nav { position:fixed; top:72px; left:0; right:0; z-index:99;
+  background:rgba(18,21,26,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border); padding:0; }
+.section-nav .container { display:flex; align-items:center; gap:0; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.section-nav a { font-family:var(--font-cat); font-size:0.6rem; font-weight:400; letter-spacing:0.15em;
+  text-transform:uppercase; color:var(--text-muted); text-decoration:none; padding:0.7rem 1.2rem;
+  white-space:nowrap; transition:color 0.3s; border-bottom:1px solid transparent; }
+.section-nav a:hover { color:var(--gold); border-bottom-color:var(--gold-border); }
 .nav-tag { font-family:var(--font-cat); font-size:0.65rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--gold); opacity:0.7; }
 .nav-cta { font-family:var(--font-cat); font-size:0.7rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase;
   color:var(--bg-deep); background:linear-gradient(135deg, var(--gold-light), var(--gold)); padding:0.6rem 1.6rem;
@@ -91,9 +103,10 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   font-size:clamp(0.65rem,1vw,0.85rem); font-weight:400; margin-bottom:2rem; display:block; }
 
 /* HERO */
-.hero { min-height:100vh; display:flex; align-items:center; padding-top:5rem; }
-.hero h1 { font-family:var(--font-display); font-size:clamp(3.5rem,8vw,7rem); line-height:0.92; font-weight:500;
-  color:var(--gold-light); margin-bottom:2rem; filter:drop-shadow(0 0 15px var(--gold-glow)); }
+.hero { min-height:auto; display:flex; align-items:center; padding-top:clamp(8rem,14vh,10rem); padding-bottom:clamp(4rem,6vh,6rem); }
+.hero h1 { font-family:var(--font-display); font-size:clamp(2.5rem,5.5vw,4.2rem); line-height:1.1; font-weight:500;
+  color:var(--gold-light); margin-bottom:2rem; filter:drop-shadow(0 0 15px var(--gold-glow));
+  text-wrap:balance; hyphens:none; word-break:keep-all; overflow-wrap:normal; }
 .hero h1 em { font-style:italic; }
 .hero-line { width:280px; height:1px; background:rgba(255,255,255,0.2); margin:2.5rem 0; }
 .hero-desc { font-size:clamp(1rem,1.8vw,1.25rem); font-weight:300; color:var(--text); max-width:520px; line-height:1.8; margin-bottom:3rem; }
@@ -102,15 +115,24 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   padding:0.9rem 2.2rem; border-radius:2px; text-decoration:none; border:none; cursor:pointer; transition:all 0.3s;
   filter:drop-shadow(0 0 15px var(--gold-glow)); }
 .hero-cta:hover { filter:drop-shadow(0 0 25px var(--gold-glow)); transform:translateY(-2px); }
-.hero-note { font-size:0.72rem; color:var(--text-muted); margin-top:1.5rem; font-weight:300; letter-spacing:0.05em; }
-.hero-stats { display:flex; gap:3.5rem; margin-top:4rem; padding-top:2.5rem; border-top:1px solid var(--border); }
-.hero-stat .num { font-family:var(--font-display); font-size:clamp(2rem,3.5vw,3rem); font-weight:600; color:var(--gold-light);
-  line-height:1; filter:drop-shadow(0 0 8px rgba(212,177,133,0.15)); }
-.hero-stat .label { font-size:0.7rem; color:var(--text-muted); margin-top:0.4rem; font-weight:300; letter-spacing:0.08em; }
+.hero-note { font-size:0.72rem; color:var(--text-muted); margin-top:1.2rem; font-weight:300; letter-spacing:0.05em; }
+
+/* PREMIUM STATS */
+.stats-container { display:flex; justify-content:space-between; align-items:flex-start; max-width:1200px;
+  margin:3rem auto 0; padding:2.5rem 0; border-top:1px solid rgba(220,194,161,0.15); border-bottom:1px solid rgba(220,194,161,0.15); }
+.stat-item { flex:1; text-align:center; padding:0 1.2rem; }
+.stat-value { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,3.8rem); color:#dcc2a1; line-height:1;
+  display:block; margin-bottom:0.6rem; font-variant-numeric:tabular-nums; font-weight:500;
+  text-shadow:0 0 20px rgba(220,194,161,0.15); }
+.stat-label { font-family:var(--font-cat); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.25em;
+  color:rgba(240,237,230,0.6); display:block; font-weight:400; }
+.stat-sub { font-family:var(--font-cat); font-size:0.55rem; text-transform:uppercase; letter-spacing:0.3em;
+  color:rgba(220,194,161,0.4); margin-top:0.5rem; display:block; }
 
 /* SECTION TITLES */
-.sec-title { font-family:var(--font-display); font-size:clamp(2rem,4.5vw,3.5rem); font-weight:500; line-height:1.05;
-  color:var(--gold-light); margin-bottom:0.8rem; filter:drop-shadow(0 0 10px rgba(212,177,133,0.15)); }
+.sec-title { font-family:var(--font-display); font-size:clamp(2rem,4.5vw,3.5rem); font-weight:500; line-height:1.1;
+  color:var(--gold-light); margin-bottom:0.8rem; filter:drop-shadow(0 0 10px rgba(212,177,133,0.15));
+  text-wrap:balance; hyphens:none; word-break:keep-all; }
 .sec-sub { font-size:clamp(0.9rem,1.4vw,1.05rem); color:var(--text-secondary); max-width:560px; line-height:1.75; font-weight:300; }
 
 /* FLOW */
@@ -157,7 +179,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:4rem; background:var(--border); border:1px solid var(--border); }
 .product-card { background:var(--bg-deep); padding:2.5rem 2rem; transition:background 0.4s; }
 .product-card:hover { background:var(--bg-card-hover); }
-.product-icon { font-size:1.6rem; margin-bottom:1rem; filter:grayscale(0.3); }
+.product-icon { font-size:1.4rem; margin-bottom:1rem; color:var(--gold); opacity:0.6; line-height:1; }
 .product-card h3 { font-family:var(--font-display); font-size:1.05rem; font-weight:500; color:var(--gold-light); margin-bottom:0.5rem; }
 .product-card p { font-size:0.82rem; color:var(--text-secondary); line-height:1.6; font-weight:300; }
 .product-trigger { font-family:var(--font-cat); font-size:0.6rem; letter-spacing:0.12em; color:var(--text-muted); margin-top:0.8rem; text-transform:uppercase; }
@@ -165,7 +187,8 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 /* CTA */
 .cta-section { text-align:center; padding:clamp(6rem,12vh,10rem) 0; }
 .cta-section h2 { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.5rem); font-weight:500; color:var(--gold-light);
-  margin-bottom:1rem; line-height:1.1; filter:drop-shadow(0 0 12px rgba(212,177,133,0.15)); }
+  margin-bottom:1rem; line-height:1.1; filter:drop-shadow(0 0 12px rgba(212,177,133,0.15));
+  text-wrap:balance; hyphens:none; word-break:keep-all; }
 .cta-section h2 em { font-style:italic; }
 .cta-section p { font-size:1rem; color:var(--text-secondary); font-weight:300; max-width:480px; margin:0 auto 2.5rem; line-height:1.75; }
 .cta-btn-large { display:inline-flex; align-items:center; gap:0.8rem; font-family:var(--font-cat); font-size:0.78rem; font-weight:500;
@@ -180,15 +203,23 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 /* FOOTER */
 .site-footer { text-align:center; padding:3rem 0; font-size:0.65rem; color:var(--text-muted); font-weight:300;
   letter-spacing:0.05em; border-top:1px solid var(--border); }
-.footer-logo { font-family:var(--font-logo); font-size:2rem; color:white; opacity:0.5; margin-bottom:0.8rem; display:block; }
+.footer-logo { display:block; margin-bottom:0.8rem; }
+.footer-logo img { height:32px; width:auto; opacity:0.5; }
+
+/* WIDE DESKTOP */
+@media (min-width:1200px) {
+  .section { padding:100px 10%; }
+  .hero { padding-left:10%; padding-right:10%; }
+}
 
 /* RESPONSIVE */
 @media (max-width:768px) {
+  .section-nav { display:none; }
   .flow-grid { grid-template-columns:1fr 1fr; }
   .methodik-grid { grid-template-columns:1fr; }
   .products-grid { grid-template-columns:1fr; }
   .ampel-row { grid-template-columns:1fr; }
-  .hero-stats { flex-direction:column; gap:1.5rem; }
+  .stats-container { flex-direction:column; gap:2.5rem; }
   .trust-bar { flex-wrap:wrap; gap:2rem; }
 }
 @media (max-width:480px) {
@@ -208,7 +239,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 
 <nav class="site-nav">
   <div class="container">
-    <a href="index.html" class="nav-logo">gannaca</a>
+    <a href="index.html" class="nav-logo"><img src="gannaca-logo-white.png" alt="gannaca"></a>
     <div class="nav-right">
       <span class="nav-tag">Intelligence Dividend Index</span>
       <a href="assessment.html" class="nav-cta">Potenzial-Check starten</a>
@@ -216,7 +247,17 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
   </div>
 </nav>
 
-<section class="hero">
+<div class="section-nav">
+  <div class="container">
+    <a href="#ablauf">Ablauf</a>
+    <a href="#methodik">Methodik</a>
+    <a href="#matrix">Matrix</a>
+    <a href="#leistungen">Produkte &amp; Leistungen</a>
+    <a href="assessment.html">Assessment</a>
+  </div>
+</div>
+
+<section class="hero" id="hero">
   <div class="container">
     <span class="overline">Intelligence Dividend Index</span>
     <h1><em>Finden Sie Ihre<br>besten KI-Cases</em><br>in 5 Minuten.</h1>
@@ -224,18 +265,18 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
     <p class="hero-desc">Welche Prozesse lohnen sich für KI — und wo wird es regulatorisch eng? Der IDI zeigt Ihnen Quick Wins, Risiken und den konkreten nächsten Schritt. Ohne Vorwissen, ohne Anmeldung.</p>
     <a href="assessment.html" class="hero-cta">Jetzt Potenzial-Check starten</a>
     <p class="hero-note">10 Klicks · Keine Registrierung · Sofort-Ergebnis</p>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="num">2</div><div class="label">Fragen pro Prozess</div></div>
-      <div class="hero-stat"><div class="num">10</div><div class="label">Prüf-Kriterien</div></div>
-      <div class="hero-stat"><div class="num">5 min</div><div class="label">Bis zum Ergebnis</div></div>
-      <div class="hero-stat"><div class="num">0 €</div><div class="label">Kosten</div></div>
+    <div class="stats-container">
+      <div class="stat-item"><span class="stat-value">2</span><span class="stat-label">Analyse-Ebenen</span><span class="stat-sub">Nutzen &amp; Compliance</span></div>
+      <div class="stat-item"><span class="stat-value">10</span><span class="stat-label">Deep-Dive Kriterien</span></div>
+      <div class="stat-item"><span class="stat-value">Sofort</span><span class="stat-label">Ergebnis-Bericht</span></div>
+      <div class="stat-item"><span class="stat-value">Gratis</span><span class="stat-label">Erst-Analyse</span></div>
     </div>
   </div>
 </section>
 
 <div class="sec-divider"></div>
 
-<section class="section">
+<section class="section" id="ablauf">
   <div class="container">
     <span class="overline">So funktioniert's</span>
     <h2 class="sec-title">Vier Schritte.<br>Fünf Minuten.</h2>
@@ -251,7 +292,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 
 <div class="sec-divider"></div>
 
-<section class="section">
+<section class="section" id="methodik">
   <div class="container">
     <span class="overline">Was wir prüfen</span>
     <h2 class="sec-title">Zwei Fragen.<br>Klare Antwort.</h2>
@@ -285,7 +326,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
       </div>
     </div>
 
-    <div class="matrix-section">
+    <div class="matrix-section" id="matrix">
       <h3>Ihre Cases auf einen Blick</h3>
       <p>Jeder Prozess landet in der Matrix. Grüne Zone oben rechts = Quick Win. Dort starten Sie am besten.</p>
       <svg viewBox="0 0 780 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
@@ -319,18 +360,22 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 
 <div class="sec-divider"></div>
 
-<section class="section">
+<section class="section" id="leistungen">
   <div class="container">
     <span class="overline">Und dann?</span>
     <h2 class="sec-title">Ihr Ergebnis,<br>Ihr nächster Schritt.</h2>
-    <p class="sec-sub">Je nach Score bekommen Sie eine klare Empfehlung — kein Bauchladen, sondern genau das, was zu Ihrer Situation passt.</p>
+    <p class="sec-sub">Je nach Score bekommen Sie eine klare Empfehlung — kein Bauchladen, sondern genau das, was zu Ihrer Situation passt. Alle Leistungen als Retainer.</p>
     <div class="products-grid">
-      <div class="product-card"><div class="product-icon">🔍</div><h3>AI Discovery Sprint</h3><p>In 2–3 Wochen die Cases finden, die am meisten bringen. Für alle, die noch nicht genau wissen, wo sie anfangen sollen.</p><div class="product-trigger">Mittleres Potenzial</div></div>
-      <div class="product-card"><div class="product-icon">🛡</div><h3>Compliance-Check</h3><p>DSGVO, AI Act, Branchenregulierung — wir prüfen, was geht und was Sie vorher klären müssen.</p><div class="product-trigger">Gelbe / rote Cases</div></div>
-      <div class="product-card"><div class="product-icon">⚡</div><h3>AI Case Sprint</h3><p>Vom KI-Case zum konkreten Konzept in 3 Wochen. Für alle, die wissen was sie wollen — und es jetzt anpacken.</p><div class="product-trigger">Hohes Potenzial</div></div>
-      <div class="product-card"><div class="product-icon">🚀</div><h3>Proof of Concept</h3><p>Ihr bester Case als funktionierender Prototyp in 4–6 Wochen. Zum Anfassen und Vorzeigen.</p><div class="product-trigger">Quick-Win Cases</div></div>
-      <div class="product-card"><div class="product-icon">🗺</div><h3>AI Roadmap</h3><p>Der Plan für die nächsten 6–18 Monate: Was zuerst, was kann warten, und wer macht was.</p><div class="product-trigger">Orientierung nötig</div></div>
-      <div class="product-card"><div class="product-icon">🔄</div><h3>AI Operations</h3><p>Laufende Begleitung für Ihre KI-Anwendungen: Monitoring, Updates, Compliance-Check inklusive.</p><div class="product-trigger">≥ 3 aktive Cases</div></div>
+      <div class="product-card"><div class="product-icon">◆</div><h3>Executive Decision Sparring</h3><p>Vertrauliches, kontinuierliches Sparring für Top-Entscheider:innen bei strategischen Entscheidungen.</p><div class="product-trigger">Hohes Potenzial · Laufend</div></div>
+      <div class="product-card"><div class="product-icon">▸</div><h3>Strategy Sprints for Transformation Decisions</h3><p>Verdichtete Formate (2–6 Wochen), um aus komplexen Transformationsfragen konkrete Entscheidungen abzuleiten.</p><div class="product-trigger">Klare Cases · Quick Wins</div></div>
+      <div class="product-card"><div class="product-icon">⬡</div><h3>Leadership &amp; Governance in the Age of AI</h3><p>Begleitung von Führungsteams und Boards bei der Neuausrichtung von Verantwortung und Entscheidungslogik im KI-Zeitalter.</p><div class="product-trigger">Regulatorische Hürden</div></div>
+      <div class="product-card"><div class="product-icon">◇</div><h3>Strategic Foresight &amp; Decision Architecture</h3><p>Übersetzung von Zukunftsentwicklungen in Entscheidungsarchitekturen und Governance-Strukturen.</p><div class="product-trigger">Orientierung nötig</div></div>
+      <div class="product-card"><div class="product-icon">▪</div><h3>Private Executive Briefings &amp; Decision Salons</h3><p>Exklusive, kuratierte Gesprächsformate zur gemeinsamen Einordnung kritischer Zukunftsfragen.</p><div class="product-trigger">Einstieg · Einordnung</div></div>
+      <div class="product-card"><div class="product-icon">◈</div><h3>Curated Market &amp; Innovation Monitoring</h3><p>Kontinuierliche, strategische Auswahl, Erfassung, Analyse und Einordnung externer Informationssignale in visuellem, digitalem Entscheidungsvorlagenformat.</p><div class="product-trigger">≥ 2 aktive Cases</div></div>
+    </div>
+    <div class="retainer-note" style="margin-top:2rem; padding:1.2rem 1.5rem; border:1px solid var(--border-gold); background:rgba(245,225,200,0.03); text-align:center;">
+      <p style="font-family:var(--font-cat); font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.3rem;">Retainer-Modell</p>
+      <p style="font-size:0.82rem; color:var(--text-secondary); font-weight:300;">Alle Leistungen werden als Retainer fakturiert — keine Einzelprojekte, sondern laufende Begleitung auf Augenhöhe.</p>
     </div>
   </div>
 </section>
@@ -353,7 +398,7 @@ body { background-color: var(--bg-deep); color: var(--text); font-family: var(--
 
 <footer class="site-footer">
   <div class="container">
-    <span class="footer-logo">gannaca</span>
+    <span class="footer-logo"><img src="gannaca-logo-white.png" alt="gannaca"></span>
     © 2026 gannaca · Intelligence Dividend Index
   </div>
 </footer>
