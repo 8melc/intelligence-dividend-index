@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDI Assessment — gannaca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   DESIGN TOKENS — gannaca Dark Premium
+   ============================================ */
+:root {
+  --bg-deep: #0C1018;
+  --bg-primary: #111827;
+  --bg-card: #1A2235;
+  --bg-elevated: #1F2A3F;
+  --bg-input: #151C2C;
+  --bg-glass: rgba(26,34,53,0.85);
+  --gold: #D9AA60;
+  --gold-soft: rgba(217,170,96,0.12);
+  --gold-glow: rgba(217,170,96,0.25);
+  --warm: #E8C88A;
+  --accent: #7CB5E3;
+  --accent-soft: rgba(124,181,227,0.1);
+  --green: #6FCF97;
+  --green-soft: rgba(111,207,151,0.12);
+  --yellow: #eab308;
+  --yellow-soft: rgba(234,179,8,0.12);
+  --red: #E06060;
+  --red-soft: rgba(224,96,96,0.1);
+  --text-primary: #F0EDE6;
+  --text-secondary: rgba(240,237,230,0.6);
+  --text-muted: rgba(240,237,230,0.3);
+  --border: rgba(217,170,96,0.12);
+  --border-subtle: rgba(240,237,230,0.06);
+  --border-input: rgba(240,237,230,0.12);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 14px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; -webkit-font-smoothing:antialiased; }
+body { background: var(--bg-deep); color: var(--text-primary); font-family: var(--font-body); font-weight: 400; line-height: 1.6; overflow-x: hidden; }
+::selection { background: var(--gold); color: var(--bg-deep); }
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    linear-gradient(135deg, rgba(217,170,96,0.05) 0%, transparent 40%),
+    linear-gradient(225deg, rgba(124,181,227,0.03) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(17,24,39,0.9) 0%, var(--bg-deep) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* HEADER */
+.site-header {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,16,24,0.92);
+  backdrop-filter: blur(16px);
+}
+.site-header .container { display: flex; align-items: center; justify-content: space-between; }
+.logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--text-primary); font-style: italic; text-decoration: none; }
+.header-right { display: flex; align-items: center; gap: 1rem; }
+.header-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-soft); padding: 0.25rem 0.7rem; border-radius: 4px; }
+.back-link { font-size: 0.78rem; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.back-link:hover { color: var(--gold); }
+
+/* STEPS */
+.steps { display: flex; align-items: center; justify-content: center; gap: 0; padding: 1.75rem 0 0.75rem; }
+.step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); transition: color 0.3s; }
+.step.active { color: var(--gold); }
+.step.done { color: var(--green); }
+.step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border-subtle); transition: all 0.3s; }
+.step.active .step-num { background: var(--gold); color: var(--bg-deep); border-color: var(--gold); }
+.step.done .step-num { background: var(--green); color: var(--bg-deep); border-color: var(--green); }
+.step-connector { width: 50px; height: 2px; background: var(--border-subtle); margin: 0 0.4rem; transition: background 0.3s; }
+.step-connector.done { background: var(--green); }
+
+/* SCREENS */
+.screen { display: none; animation: fadeIn 0.4s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* SCREEN HEADERS */
+.screen-header { text-align: center; padding: 2rem 0 1.5rem; }
+.screen-header h2 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--text-primary); }
+.screen-header p { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border-radius: 8px; font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; }
+.btn-gold { background: linear-gradient(135deg, var(--gold), #C4943F); color: var(--bg-deep); }
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--gold-glow); }
+.btn-secondary { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+.btn-secondary:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.btn-green { background: var(--green); color: var(--bg-deep); font-weight: 700; }
+.btn-green:hover { box-shadow: 0 6px 20px rgba(111,207,151,0.25); }
+.btn-group { display: flex; gap: 0.75rem; justify-content: center; margin-top: 2rem; margin-bottom: 2rem; }
+
+/* CASE CARD */
+.case-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); }
+.case-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); }
+.case-card-num { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; color: var(--gold); letter-spacing: 0.12em; }
+.case-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 0.2rem 0.4rem; border-radius: 4px; transition: all 0.15s; }
+.case-remove:hover { color: var(--red); background: var(--red-soft); }
+
+/* FORM */
+.form-group { margin-bottom: 0.9rem; }
+.form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.25rem; }
+.form-group input[type="text"], .form-group textarea, .form-group select {
+  width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border-input); border-radius: 8px;
+  font-family: var(--font-body); font-size: 0.82rem; background: var(--bg-input); color: var(--text-primary); transition: border-color 0.2s;
+  appearance: none; -webkit-appearance: none;
+}
+.form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23F0EDE699'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem; cursor: pointer; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--gold); }
+.form-group textarea { resize: vertical; min-height: 50px; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-muted); }
+
+/* ASSESSMENT SECTIONS */
+.assessment-section { margin-top: 1.2rem; }
+.assessment-section h4 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); }
+.tag { font-size: 0.58rem; padding: 0.12rem 0.45rem; border-radius: 4px; font-weight: 700; letter-spacing: 0.05em; }
+.tag-x { background: var(--accent-soft); color: var(--accent); }
+.tag-y { background: var(--green-soft); color: var(--green); }
+
+.factor-row { margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-subtle); }
+.factor-row:last-child { border-bottom: none; }
+.factor-label { font-size: 0.8rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+.factor-weight-tag { font-family: var(--font-mono); font-size: 0.6rem; color: var(--gold); font-weight: 700; }
+
+/* OPTION BUTTONS */
+.option-group { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.option-btn {
+  padding: 0.35rem 0.7rem; font-size: 0.72rem; font-weight: 600; border-radius: 6px;
+  border: 1px solid var(--border-input); background: var(--bg-input); color: var(--text-muted);
+  cursor: pointer; transition: all 0.15s; font-family: var(--font-body);
+}
+.option-btn:hover { border-color: var(--gold-soft); color: var(--text-secondary); }
+.option-btn.selected { background: var(--gold); color: var(--bg-deep); border-color: var(--gold); }
+.option-btn.selected-gov-green { background: var(--green); color: var(--bg-deep); border-color: var(--green); }
+.option-btn.selected-gov-yellow { background: var(--yellow); color: var(--bg-deep); border-color: var(--yellow); }
+.option-btn.selected-gov-red { background: var(--red); color: var(--bg-deep); border-color: var(--red); }
+
+.add-case-btn { width: 100%; padding: 0.9rem; border: 2px dashed var(--border); border-radius: var(--radius); background: transparent; color: var(--text-secondary); font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; }
+.add-case-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-soft); }
+
+/* RESULTS */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+.kpi-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.2rem; text-align: center; box-shadow: var(--shadow); }
+.kpi-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; line-height: 1; margin-bottom: 0.3rem; }
+.kpi-value.v-green { color: var(--green); }
+.kpi-value.v-blue { color: var(--accent); }
+.kpi-value.v-gold { color: var(--gold); }
+.kpi-value.v-warm { color: var(--warm); }
+.kpi-label { font-size: 0.68rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+.kpi-sublabel { font-size: 0.6rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+.ranking-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.ranking-table th { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-subtle); }
+.ranking-table td { font-size: 0.82rem; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border-subtle); }
+.ranking-table tr:hover td { background: rgba(217,170,96,0.03); }
+.rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 0.68rem; font-weight: 700; }
+.rank-1 { background: var(--gold); color: var(--bg-deep); }
+.rank-2 { background: rgba(240,237,230,0.15); color: var(--text-primary); }
+.rank-3 { background: rgba(240,237,230,0.08); color: var(--text-secondary); }
+.ampel-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; }
+.ampel-badge-green { background: rgba(34,197,94,0.12); color: #6FCF97; }
+.ampel-badge-yellow { background: rgba(234,179,8,0.12); color: #eab308; }
+.ampel-badge-red { background: rgba(239,68,68,0.12); color: #E06060; }
+.pilot-tag { font-size: 0.6rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 4px; background: var(--green-soft); color: var(--green); margin-left: 0.3rem; }
+
+.matrix-container { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.matrix-container h3 { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* RECOMMENDATIONS */
+.rec-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; box-shadow: var(--shadow); border-left: 4px solid var(--accent); }
+.rec-card.primary-rec { border-left-color: var(--gold); background: linear-gradient(135deg, rgba(217,170,96,0.06), var(--bg-card)); }
+.rec-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+.rec-card h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
+.rec-badge { font-size: 0.6rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.05em; }
+.rec-badge-top { background: var(--gold-soft); color: var(--gold); }
+.rec-badge-sec { background: var(--accent-soft); color: var(--accent); }
+.rec-card > p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+.rec-reason { font-size: 0.75rem; background: var(--bg-elevated); padding: 0.7rem 1rem; border-radius: 8px; color: var(--text-primary); border-left: 3px solid var(--gold); line-height: 1.5; }
+.rec-reason strong { color: var(--gold); }
+
+/* CTA */
+.cta-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; text-align: center; margin: 2rem 0 3rem; }
+.cta-section h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem; }
+.cta-section p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem; }
+.cta-form { display: flex; gap: 0.5rem; max-width: 460px; margin: 0 auto; }
+.cta-form input { flex: 1; padding: 0.6rem 0.9rem; border: 1px solid var(--border-input); border-radius: 8px; background: var(--bg-input); color: var(--text-primary); font-family: var(--font-body); font-size: 0.82rem; }
+.cta-form input::placeholder { color: var(--text-muted); }
+.cta-form input:focus { outline: none; border-color: var(--gold); }
+
+/* FORMULA DISPLAY */
+.formula-bar { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.6rem 1rem; margin: 1rem 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; }
+.formula-bar .result { color: var(--gold); font-weight: 700; font-size: 0.82rem; }
+
+.site-footer { text-align: center; padding: 2rem 0; font-size: 0.65rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); }
+
+@media (max-width: 640px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps .step-label { display: none; }
+  .cta-form { flex-direction: column; }
+  .option-group { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">gannaca</a>
+    <div class="header-right">
+      <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
+      <div class="header-tag">IDI Assessment</div>
+    </div>
+  </div>
+</header>
+
+<!-- STEPS -->
+<div class="container">
+  <div class="steps">
+    <div class="step active" id="step-1"><div class="step-num">1</div><span class="step-label">Erfassen</span></div>
+    <div class="step-connector" id="conn-1"></div>
+    <div class="step" id="step-2"><div class="step-num">2</div><span class="step-label">Matrix</span></div>
+    <div class="step-connector" id="conn-2"></div>
+    <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Ergebnis</span></div>
+    <div class="step-connector" id="conn-3"></div>
+    <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Empfehlung</span></div>
+  </div>
+</div>
+
+<!-- SCREEN 1: ERFASSEN -->
+<div class="screen active" id="screen-1">
+  <div class="container">
+    <div class="screen-header">
+      <h2>Ihre Prozesse erfassen</h2>
+      <p>Bewerten Sie jeden Prozess anhand von 4 Nutzenfaktoren und 6 Governance-Checks.</p>
+    </div>
+    <div id="cases-container"></div>
+    <button class="add-case-btn" onclick="addCase()">+ Weiteren Prozess hinzufügen</button>
+    <div class="btn-group">
+      <button class="btn btn-gold" onclick="calculateAndShow()">Auswertung berechnen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: MATRIX -->
+<div class="screen" id="screen-2">
+  <div class="container">
+    <div class="screen-header">
+      <h2>Bewertungsmatrix</h2>
+      <p>Ihre Cases positioniert nach Strategischem Nutzen (X) und Machbarkeit (Y).</p>
+    </div>
+    <div class="kpi-grid" id="kpi-grid"></div>
+    <div class="matrix-container">
+      <h3>Matrix: Strategischer Nutzen × Machbarkeit &amp; Compliance</h3>
+      <div id="matrix-wrap"></div>
+    </div>
+    <div id="ranking-section"></div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="goToScreen(1)">← Zurück</button>
+      <button class="btn btn-green" onclick="showRecommendations()">Empfehlung anzeigen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: ERGEBNIS DETAIL -->
+<div class="screen" id="screen-3">
+  <div class="container">
+    <div class="screen-header">
+      <h2>Detailergebnis</h2>
+      <p>Analyse pro Case mit Scoring-Formeln und Ampel-Bewertung.</p>
+    </div>
+    <div id="detail-cards"></div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="goToScreen(2)">← Zurück zur Matrix</button>
+      <button class="btn btn-green" onclick="goToScreen(4)">Empfehlung anzeigen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: EMPFEHLUNG -->
+<div class="screen" id="screen-4">
+  <div class="container">
+    <div class="screen-header">
+      <h2>Unsere Empfehlung für Sie</h2>
+      <p>Basierend auf Ihrem IDI-Profil empfehlen wir folgende nächste Schritte.</p>
+    </div>
+    <div id="recommendations"></div>
+    <div class="cta-section">
+      <h3>Bereit für den nächsten Schritt?</h3>
+      <p>Wir besprechen Ihre Ergebnisse persönlich und entwickeln einen konkreten Plan.</p>
+      <div class="cta-form">
+        <input type="email" placeholder="Ihre E-Mail-Adresse" id="cta-email">
+        <button class="btn btn-gold" onclick="sendInquiry()">Kontakt aufnehmen</button>
+      </div>
+    </div>
+    <div class="btn-group" style="margin-bottom:3rem;">
+      <button class="btn btn-secondary" onclick="goToScreen(2)">← Zurück zur Matrix</button>
+      <button class="btn btn-secondary" onclick="goToScreen(3)">Detailergebnis</button>
+      <button class="btn btn-secondary" onclick="resetAll()">Neue Analyse</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">© 2026 gannaca · Intelligence Dividend Index · Assessment</div>
+</footer>
+
+<script>
+/* ============================================
+   SCORING ENGINE — Exakte Repo-Methodik
+   trianel-case-editor/src/lib/evaluation-types.ts
+   ============================================ */
+
+const MAX_FACTOR_SCORE = 3.0;
+const SCORE_SCALE = 10;
+const Y_START = 10;
+const AMPEL_GREEN = 7;
+const AMPEL_YELLOW = 4;
+
+// --- X-ACHSE: 4 Faktoren mit Gewichtung ---
+const X_FACTORS = [
+  {
+    key: 'frequenz', label: 'Frequenz-Hebel', weight: 0.30,
+    hint: 'Wie oft wird der Prozess durchgeführt?',
+    options: [
+      { value: 'taeglich', label: 'Täglich', score: 3 },
+      { value: 'woechentlich', label: 'Wöchentlich', score: 2 },
+      { value: 'monatlich', label: 'Monatlich', score: 1 },
+      { value: 'jaehrlich', label: 'Jährlich / Seltener', score: 0.5 },
+    ]
+  },
+  {
+    key: 'zeitaufwand', label: 'Zeit-Hebel', weight: 0.25,
+    hint: 'Wie viel Zeit wird pro Durchlauf benötigt?',
+    options: [
+      { value: 'ueber_20h', label: '> 20 Stunden', score: 3 },
+      { value: '10_20h', label: '10–20 Stunden', score: 2 },
+      { value: '5_10h', label: '5–10 Stunden', score: 1.5 },
+      { value: 'lt5h', label: '< 5 Stunden', score: 1 },
+    ]
+  },
+  {
+    key: 'relevanz', label: 'Strategische Relevanz', weight: 0.25,
+    hint: 'Wie strategisch bedeutsam ist der Prozess?',
+    options: [
+      { value: 'hoch_risiko_gte4', label: 'Hoch + Risiko ≥ 4', score: 3 },
+      { value: 'hoch_risiko_lt4', label: 'Hoch + Risiko < 4', score: 2 },
+      { value: 'mittel', label: 'Mittel', score: 1.5 },
+      { value: 'niedrig', label: 'Niedrig', score: 1 },
+    ]
+  },
+  {
+    key: 'qualifikation', label: 'Qualifizierungsgrad', weight: 0.20,
+    hint: 'Welches Qualifikationsniveau erfordert der Prozess?',
+    options: [
+      { value: 'spezialist', label: 'Spezialist', score: 2.5 },
+      { value: 'senior', label: 'Senior', score: 2 },
+      { value: 'medior', label: 'Medior', score: 1.5 },
+      { value: 'junior', label: 'Junior', score: 1 },
+    ]
+  }
+];
+
+// --- Y-ACHSE: 6 Governance-Checks ---
+const GOVERNANCE_CHECKS = [
+  {
+    key: 'ai_act', label: 'KI-VO / AI Act',
+    hint: 'Risikoklassifizierung nach EU AI Act',
+    options: [
+      { value: 'hochrisiko', label: 'Hochrisiko-System (Annex III)', abzug: -3 },
+      { value: 'begrenzt', label: 'Begrenztes Risiko', abzug: -1 },
+      { value: 'minimal', label: 'Minimales Risiko', abzug: 0 },
+    ]
+  },
+  {
+    key: 'kritis', label: 'KRITIS & IT-Sicherheit',
+    hint: 'Betrifft der Prozess kritische Infrastruktur?',
+    options: [
+      { value: 'kernfunktion', label: 'Kernfunktion betroffen', abzug: -3 },
+      { value: 'mittelbar', label: 'Mittelbar relevant', abzug: -1 },
+      { value: 'nicht_relevant', label: 'Nicht relevant', abzug: 0 },
+    ]
+  },
+  {
+    key: 'dsgvo', label: 'DSGVO & Datenschutz',
+    hint: 'Art der verarbeiteten personenbezogenen Daten',
+    options: [
+      { value: 'art9', label: 'Art. 9 – Besondere Kategorien', abzug: -3 },
+      { value: 'pbd', label: 'Personenbezogene Daten (Standard)', abzug: -1.5 },
+      { value: 'nein', label: 'Keine personenbezogenen Daten', abzug: 0 },
+    ]
+  },
+  {
+    key: 'haftung', label: 'Haftung & Dokumentation',
+    hint: 'Bestehen besondere Haftungs- oder Dokumentationspflichten?',
+    options: [
+      { value: 'entscheidung_kritis', label: 'Entscheidungswirkung + KRITIS', abzug: -2 },
+      { value: 'nur_doku', label: 'Nur Dokumentationspflicht', abzug: -1 },
+      { value: 'keine', label: 'Keine besonderen Pflichten', abzug: 0 },
+    ]
+  },
+  {
+    key: 'datenlage', label: 'Datenlage & Verfügbarkeit',
+    hint: 'In welcher Form liegen die Daten vor?',
+    options: [
+      { value: 'digital', label: 'Vollständig digital', abzug: 0 },
+      { value: 'teilweise', label: 'Teilweise digital', abzug: -1 },
+      { value: 'papier', label: 'Überwiegend Papier', abzug: -2 },
+    ]
+  },
+  {
+    key: 'loesungsreife', label: 'Lösungsreife & Markt',
+    hint: 'Gibt es bereits marktreife KI-Lösungen für diesen Prozess?',
+    options: [
+      { value: 'bestehend', label: 'Lösung verfügbar', abzug: 1 },
+      { value: 'nichts', label: 'Keine marktreife Lösung', abzug: 0 },
+    ]
+  }
+];
+
+const PRODUCTS = [
+  { id:'discovery', name:'AI Discovery Sprint', desc:'Systematische Identifikation der KI-Cases mit dem höchsten Wertpotenzial in 2–3 Wochen.', icon:'🔍' },
+  { id:'governance', name:'Governance & Compliance Audit', desc:'Tiefgehende regulatorische Prüfung: DSGVO, EU-AI-Act, branchenspezifische Regulierung mit konkretem Maßnahmenplan.', icon:'🛡️' },
+  { id:'casesprint', name:'AI Case Sprint', desc:'Co-kreative Entwicklung und Bewertung konkreter Use Cases in einem strukturierten 3-Wochen-Sprint.', icon:'⚡' },
+  { id:'poc', name:'Proof of Concept', desc:'Prototypische Umsetzung eines KI-Anwendungsfalls als funktionsfähiger Demonstrator in 4–6 Wochen.', icon:'🚀' },
+  { id:'roadmap', name:'AI Transformation Roadmap', desc:'Strategische Planung Ihrer KI-Einführung über 6–18 Monate mit Priorisierung und Change Management.', icon:'🗺️' },
+  { id:'ops', name:'Continuous AI Operations', desc:'Laufende Betreuung, Monitoring und Compliance-Überwachung Ihrer KI-Anwendungen.', icon:'🔄' }
+];
+
+/* ============================================
+   STATE
+   ============================================ */
+let cases = [];
+let results = null;
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+function goToScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  for (let i=1; i<=4; i++) {
+    const step = document.getElementById('step-'+i);
+    step.classList.remove('active','done');
+    if (i<n) step.classList.add('done');
+    if (i===n) step.classList.add('active');
+    if (i<4) document.getElementById('conn-'+i).classList.toggle('done', i<n);
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================
+   CASE MANAGEMENT
+   ============================================ */
+function addCase() {
+  const id = Date.now();
+  const c = { id, name:'', description:'', xFactors:{}, govChecks:{} };
+  cases.push(c);
+  renderCases();
+}
+
+function removeCase(id) { cases = cases.filter(c=>c.id!==id); renderCases(); }
+function updateCase(id, f, v) { const c=cases.find(x=>x.id===id); if(c) c[f]=v; }
+
+function setXFactor(caseId, factorKey, optionValue, score) {
+  const c = cases.find(x=>x.id===caseId);
+  if(c) { c.xFactors[factorKey] = { value: optionValue, score }; renderCases(); }
+}
+
+function setGovCheck(caseId, checkKey, optionValue, abzug) {
+  const c = cases.find(x=>x.id===caseId);
+  if(c) { c.govChecks[checkKey] = { value: optionValue, abzug }; renderCases(); }
+}
+
+/* ============================================
+   RENDER CASES
+   ============================================ */
+function renderCases() {
+  document.getElementById('cases-container').innerHTML = cases.map((c,i) => `
+    <div class="case-card">
+      <div class="case-card-header">
+        <span class="case-card-num">CASE ${String(i+1).padStart(2,'0')}</span>
+        ${cases.length>1?`<button class="case-remove" onclick="removeCase(${c.id})">✕</button>`:''}
+      </div>
+      <div class="form-group">
+        <label>Prozessbezeichnung</label>
+        <input type="text" placeholder="z.B. Vertragsprüfung, Rechnungsfreigabe..."
+               value="${c.name}" onchange="updateCase(${c.id},'name',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Kurzbeschreibung (optional)</label>
+        <textarea placeholder="Was passiert in diesem Prozess?"
+                  onchange="updateCase(${c.id},'description',this.value)">${c.description}</textarea>
+      </div>
+
+      <!-- X-ACHSE: 4 Faktoren -->
+      <div class="assessment-section">
+        <h4><span class="tag tag-x">X-Achse</span> Strategischer Nutzen — 4 Faktoren</h4>
+        ${X_FACTORS.map(f => {
+          const sel = c.xFactors[f.key];
+          return `<div class="factor-row">
+            <div class="factor-label">${f.label} <span class="factor-weight-tag">${Math.round(f.weight*100)}%</span></div>
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:0.35rem;">${f.hint}</div>
+            <div class="option-group">
+              ${f.options.map(o => `<button class="option-btn ${sel && sel.value===o.value ? 'selected' : ''}"
+                onclick="setXFactor(${c.id},'${f.key}','${o.value}',${o.score})">${o.label}</button>`).join('')}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <!-- Y-ACHSE: 6 Governance-Checks -->
+      <div class="assessment-section">
+        <h4><span class="tag tag-y">Y-Achse</span> Machbarkeit &amp; Compliance — 6 Checks</h4>
+        ${GOVERNANCE_CHECKS.map(gc => {
+          const sel = c.govChecks[gc.key];
+          return `<div class="factor-row">
+            <div class="factor-label">${gc.label}</div>
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:0.35rem;">${gc.hint}</div>
+            <div class="option-group">
+              ${gc.options.map(o => {
+                let cls = '';
+                if (sel && sel.value===o.value) {
+                  if (o.abzug >= 0) cls = 'selected-gov-green';
+                  else if (o.abzug >= -1.5) cls = 'selected-gov-yellow';
+                  else cls = 'selected-gov-red';
+                }
+                return `<button class="option-btn ${cls}"
+                  onclick="setGovCheck(${c.id},'${gc.key}','${o.value}',${o.abzug})">${o.label}</button>`;
+              }).join('')}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================================
+   SCORING — Exact Repo Formulas
+   ============================================ */
+function calculateXScore(c) {
+  if (X_FACTORS.some(f => !c.xFactors[f.key])) return null;
+  const weighted = X_FACTORS.reduce((sum, f) => sum + c.xFactors[f.key].score * f.weight, 0);
+  return Math.round((weighted / MAX_FACTOR_SCORE * SCORE_SCALE) * 100) / 100;
+}
+
+function calculateYScore(c) {
+  if (GOVERNANCE_CHECKS.some(gc => !c.govChecks[gc.key])) return null;
+  let score = Y_START;
+  GOVERNANCE_CHECKS.forEach(gc => { score += c.govChecks[gc.key].abzug; });
+  return Math.round(Math.max(0, Math.min(SCORE_SCALE, score)) * 100) / 100;
+}
+
+function getAmpel(y) {
+  if (y == null) return 'gray';
+  if (y > AMPEL_GREEN) return 'green';
+  if (y >= AMPEL_YELLOW) return 'yellow';
+  return 'red';
+}
+
+function isInPilotZone(x, y) {
+  return x != null && y != null && x >= 6.0 && y > AMPEL_GREEN;
+}
+
+function scoreAllCases() {
+  const scored = cases.map((c, i) => {
+    const x = calculateXScore(c);
+    const y = calculateYScore(c);
+    const combined = (x != null && y != null) ? Math.round((x*0.6 + y*0.4)*100)/100 : null;
+    return {
+      caseId: c.id,
+      name: c.name || `Case ${i+1}`,
+      num: i+1,
+      x, y, combined,
+      ampel: getAmpel(y),
+      pilot: isInPilotZone(x, y),
+      xFactors: c.xFactors,
+      govChecks: c.govChecks,
+    };
+  });
+
+  // Ranking (winner algorithm from repo)
+  const ranked = scored.filter(s => s.x != null && s.y != null)
+    .sort((a, b) => {
+      if (a.x !== b.x) return b.x - a.x;
+      if (a.y !== b.y) return b.y - a.y;
+      return a.num - b.num;
+    });
+  ranked.forEach((r, i) => r.rank = i + 1);
+
+  // Average scores
+  const validX = scored.filter(s => s.x != null);
+  const validY = scored.filter(s => s.y != null);
+  const avgX = validX.length ? Math.round(validX.reduce((s,c) => s+c.x, 0) / validX.length * 100)/100 : null;
+  const avgY = validY.length ? Math.round(validY.reduce((s,c) => s+c.y, 0) / validY.length * 100)/100 : null;
+  const idi = (avgX != null && avgY != null) ? Math.round((avgX*0.6 + avgY*0.4)*100)/100 : null;
+  const pilotCount = scored.filter(s => s.pilot).length;
+
+  return { scored, ranked, avgX, avgY, idi, pilotCount };
+}
+
+/* ============================================
+   RESULTS DISPLAY
+   ============================================ */
+function calculateAndShow() {
+  if (!cases.length) { alert('Bitte mindestens einen Prozess hinzufügen.'); return; }
+  // Check completeness
+  const incomplete = cases.some(c =>
+    X_FACTORS.some(f => !c.xFactors[f.key]) || GOVERNANCE_CHECKS.some(gc => !c.govChecks[gc.key])
+  );
+  if (incomplete) { alert('Bitte alle Bewertungsfragen für jeden Case beantworten (4 X-Faktoren + 6 Governance-Checks).'); return; }
+
+  results = scoreAllCases();
+  renderResults();
+  goToScreen(2);
+}
+
+function renderResults() {
+  const { scored, ranked, avgX, avgY, idi, pilotCount } = results;
+
+  // KPIs
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card"><div class="kpi-value v-blue">${avgX != null ? avgX.toFixed(1) : '–'}</div><div class="kpi-label">Ø Nutzen (X)</div><div class="kpi-sublabel">Skala 0–10</div></div>
+    <div class="kpi-card"><div class="kpi-value v-green">${avgY != null ? avgY.toFixed(1) : '–'}</div><div class="kpi-label">Ø Machbarkeit (Y)</div><div class="kpi-sublabel">Skala 0–10</div></div>
+    <div class="kpi-card"><div class="kpi-value v-gold">${idi != null ? idi.toFixed(1) : '–'}</div><div class="kpi-label">IDI Score</div><div class="kpi-sublabel">X×0.6 + Y×0.4</div></div>
+    <div class="kpi-card"><div class="kpi-value v-warm">${pilotCount}</div><div class="kpi-label">In Pilotzone</div><div class="kpi-sublabel">X≥6 & Y>7</div></div>
+  `;
+
+  // Matrix
+  renderMatrix(scored);
+
+  // Ranking table
+  if (ranked.length > 0) {
+    let html = `<div class="matrix-container"><h3>Ranking — Deterministischer Winner-Algorithmus</h3>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:1rem;">Primär: X absteigend → Tie-Break 1: Y absteigend → Tie-Break 2: Case-Nr. aufsteigend</p>
+    <table class="ranking-table"><thead><tr><th>Rang</th><th>Case</th><th>X-Score</th><th>Y-Score</th><th>Combined</th><th>Ampel</th><th>Pilotzone</th></tr></thead><tbody>`;
+    ranked.forEach(r => {
+      html += `<tr>
+        <td><span class="rank-badge rank-${r.rank <= 3 ? r.rank : 'other'}">${r.rank}</span></td>
+        <td>${r.name}</td>
+        <td style="font-family:var(--font-mono);font-weight:600;">${r.x.toFixed(2)}</td>
+        <td style="font-family:var(--font-mono);font-weight:600;">${r.y.toFixed(2)}</td>
+        <td style="font-family:var(--font-mono);color:var(--gold);font-weight:600;">${r.combined.toFixed(2)}</td>
+        <td><span class="ampel-badge ampel-badge-${r.ampel}">● ${r.ampel === 'green' ? 'Umsetzbar' : r.ampel === 'yellow' ? 'Prüfen' : 'Kritisch'}</span></td>
+        <td>${r.pilot ? '<span class="pilot-tag">PILOT</span>' : '–'}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+    document.getElementById('ranking-section').innerHTML = html;
+  }
+
+  // Detail cards
+  renderDetailCards(scored);
+}
+
+function renderMatrix(scored) {
+  const w=880, h=440, pad={top:40,right:35,bottom:60,left:70};
+  const pw=w-pad.left-pad.right, ph=h-pad.top-pad.bottom;
+  const xMin=2, xMax=10, yMin=0, yMax=10;
+
+  const sx = (v) => pad.left + ((v-xMin)/(xMax-xMin)) * pw;
+  const sy = (v) => pad.top + ph - ((v-yMin)/(yMax-yMin)) * ph;
+
+  let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">`;
+
+  // Pilot zone
+  const pzX1=sx(6), pzX2=sx(10), pzY1=sy(10), pzY2=sy(7);
+  svg += `<rect x="${pzX1}" y="${pzY1}" width="${pzX2-pzX1}" height="${pzY2-pzY1}" fill="rgba(34,197,94,0.06)" stroke="rgba(34,197,94,0.2)" stroke-width="1" stroke-dasharray="4,3" rx="4"/>`;
+  svg += `<text x="${(pzX1+pzX2)/2}" y="${pzY1+14}" text-anchor="middle" font-size="9" font-weight="600" fill="rgba(34,197,94,0.45)" font-family="Inter">PILOTZONE (X≥6, Y>7)</text>`;
+
+  // Ampel threshold lines
+  const y7 = sy(7), y4 = sy(4);
+  svg += `<line x1="${pad.left}" y1="${y7}" x2="${pad.left+pw}" y2="${y7}" stroke="rgba(34,197,94,0.2)" stroke-width="1" stroke-dasharray="4,3"/>`;
+  svg += `<text x="${pad.left+pw+5}" y="${y7+4}" font-size="8" fill="rgba(34,197,94,0.5)" font-family="JetBrains Mono">Y=7</text>`;
+  svg += `<line x1="${pad.left}" y1="${y4}" x2="${pad.left+pw}" y2="${y4}" stroke="rgba(239,68,68,0.2)" stroke-width="1" stroke-dasharray="4,3"/>`;
+  svg += `<text x="${pad.left+pw+5}" y="${y4+4}" font-size="8" fill="rgba(239,68,68,0.5)" font-family="JetBrains Mono">Y=4</text>`;
+
+  // X=6 line
+  const x6 = sx(6);
+  svg += `<line x1="${x6}" y1="${pad.top}" x2="${x6}" y2="${pad.top+ph}" stroke="rgba(240,237,230,0.06)" stroke-width="1" stroke-dasharray="4,3"/>`;
+
+  // Grid
+  for (let t=2; t<=10; t++) {
+    const px = sx(t);
+    svg += `<line x1="${px}" y1="${pad.top}" x2="${px}" y2="${pad.top+ph}" stroke="rgba(240,237,230,0.03)" stroke-width="1"/>`;
+    svg += `<text x="${px}" y="${pad.top+ph+18}" text-anchor="middle" font-size="10" fill="rgba(240,237,230,0.3)" font-family="Inter">${t}</text>`;
+  }
+  for (let t=0; t<=10; t+=2) {
+    const py = sy(t);
+    svg += `<line x1="${pad.left}" y1="${py}" x2="${pad.left+pw}" y2="${py}" stroke="rgba(240,237,230,0.03)" stroke-width="1"/>`;
+    svg += `<text x="${pad.left-10}" y="${py+4}" text-anchor="end" font-size="10" fill="rgba(240,237,230,0.3)" font-family="Inter">${t}</text>`;
+  }
+
+  // Axes
+  svg += `<line x1="${pad.left}" y1="${pad.top+ph}" x2="${pad.left+pw}" y2="${pad.top+ph}" stroke="rgba(240,237,230,0.15)" stroke-width="1"/>`;
+  svg += `<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top+ph}" stroke="rgba(240,237,230,0.15)" stroke-width="1"/>`;
+  svg += `<text x="${pad.left+pw/2}" y="${h-8}" text-anchor="middle" font-size="11" font-weight="600" fill="rgba(240,237,230,0.35)" font-family="Inter">Strategischer Nutzen →</text>`;
+  svg += `<text x="16" y="${pad.top+ph/2}" text-anchor="middle" font-size="11" font-weight="600" fill="rgba(240,237,230,0.35)" font-family="Inter" transform="rotate(-90,16,${pad.top+ph/2})">↑ Machbarkeit & Compliance</text>`;
+
+  // Case dots
+  const ampelColors = { green:'#6FCF97', yellow:'#eab308', red:'#E06060', gray:'#9ca3af' };
+  scored.forEach(s => {
+    if (s.x == null || s.y == null) return;
+    const cx = sx(s.x), cy = sy(s.y);
+    const col = ampelColors[s.ampel];
+    svg += `<circle cx="${cx}" cy="${cy}" r="14" fill="${col}" opacity="0.85" stroke="rgba(12,16,24,0.6)" stroke-width="2"/>`;
+    svg += `<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="10" font-weight="700" fill="#0C1018" font-family="Inter">${s.num}</text>`;
+    // Label
+    const labelX = cx + 20, labelY = cy + 4;
+    svg += `<text x="${labelX}" y="${labelY}" font-size="10" font-weight="500" fill="rgba(240,237,230,0.65)" font-family="Inter">${s.name}</text>`;
+    if (s.pilot) {
+      svg += `<text x="${labelX}" y="${labelY+13}" font-size="8" font-weight="700" fill="rgba(111,207,151,0.6)" font-family="JetBrains Mono">PILOT</text>`;
+    }
+  });
+
+  svg += `</svg>`;
+  document.getElementById('matrix-wrap').innerHTML = svg;
+}
+
+function renderDetailCards(scored) {
+  let html = '';
+  scored.forEach(s => {
+    const xFormulaTerms = X_FACTORS.map(f => {
+      const sel = s.xFactors[f.key];
+      return sel ? `${sel.score}×${f.weight.toFixed(2)}` : '?';
+    }).join(' + ');
+
+    const govTerms = GOVERNANCE_CHECKS.map(gc => {
+      const sel = s.govChecks[gc.key];
+      return sel ? `${sel.abzug >= 0 ? '+' : ''}${sel.abzug}` : '?';
+    }).join(', ');
+
+    html += `<div class="case-card" style="border-left:4px solid ${s.ampel === 'green' ? 'var(--green)' : s.ampel === 'yellow' ? 'var(--yellow)' : s.ampel === 'red' ? 'var(--red)' : 'var(--text-muted)'};">
+      <div class="case-card-header">
+        <span class="case-card-num">CASE ${String(s.num).padStart(2,'0')} — ${s.name}</span>
+        <span class="ampel-badge ampel-badge-${s.ampel}">● ${s.ampel === 'green' ? 'Umsetzbar' : s.ampel === 'yellow' ? 'Prüfen' : s.ampel === 'red' ? 'Kritisch' : 'N/A'}${s.pilot ? ' · PILOT' : ''}</span>
+      </div>
+      <div class="formula-bar">
+        <span>X = (${xFormulaTerms}) / ${MAX_FACTOR_SCORE} × ${SCORE_SCALE}</span>
+        <span class="result">X = ${s.x != null ? s.x.toFixed(2) : '–'}</span>
+      </div>
+      <div class="formula-bar">
+        <span>Y = CLAMP(${Y_START} ${govTerms.replace(/,/g, '')}, 0, ${SCORE_SCALE})</span>
+        <span class="result">Y = ${s.y != null ? s.y.toFixed(2) : '–'}</span>
+      </div>
+      ${s.combined != null ? `<div class="formula-bar">
+        <span>Combined = X×0.6 + Y×0.4 = ${s.x.toFixed(2)}×0.6 + ${s.y.toFixed(2)}×0.4</span>
+        <span class="result">IDI = ${s.combined.toFixed(2)}</span>
+      </div>` : ''}
+    </div>`;
+  });
+  document.getElementById('detail-cards').innerHTML = html;
+}
+
+/* ============================================
+   RECOMMENDATIONS
+   ============================================ */
+function showRecommendations() {
+  if (!results) return;
+  const { scored, ranked, avgX, avgY, idi, pilotCount } = results;
+
+  const ampelCounts = { green:0, yellow:0, red:0 };
+  scored.forEach(s => { if(s.ampel !== 'gray') ampelCounts[s.ampel]++; });
+
+  const recs = [];
+
+  if (idi >= 6.0) {
+    recs.push({...PRODUCTS.find(p=>p.id==='casesprint'), primary:true,
+      reason:`Ihr IDI von ${idi.toFixed(1)} zeigt starkes KI-Gestaltungskapital. ${pilotCount} Case(s) in der Pilotzone – ideale Voraussetzungen für einen strukturierten Sprint mit schnellen Ergebnissen.`});
+    if (pilotCount > 0) {
+      recs.push({...PRODUCTS.find(p=>p.id==='poc'),
+        reason:`${pilotCount} Case(s) mit X≥6 und Y>7 eignen sich direkt für einen Prototyp. Winner-Case: "${ranked[0]?.name}" (X=${ranked[0]?.x.toFixed(2)}, Y=${ranked[0]?.y.toFixed(2)}).`});
+    }
+  } else if (idi >= 4.0) {
+    recs.push({...PRODUCTS.find(p=>p.id==='discovery'), primary:true,
+      reason:`Ihr IDI von ${idi.toFixed(1)} zeigt solides Potenzial mit Klärungsbedarf. Ein Discovery Sprint identifiziert die besten Ansatzpunkte und klärt regulatorische Fragen.`});
+    if (ampelCounts.yellow > 0 || ampelCounts.red > 0) {
+      recs.push({...PRODUCTS.find(p=>p.id==='governance'),
+        reason:`${ampelCounts.yellow + ampelCounts.red} Case(s) haben regulatorische Hürden (${ampelCounts.yellow} gelb, ${ampelCounts.red} rot). Ein Compliance-Audit schafft Klarheit.`});
+    }
+  } else {
+    recs.push({...PRODUCTS.find(p=>p.id==='roadmap'), primary:true,
+      reason:`Ihr IDI von ${idi != null ? idi.toFixed(1) : '–'} deutet auf Orientierungsbedarf. Eine strategische Roadmap hilft, Prioritäten zu setzen und die richtigen Rahmenbedingungen zu schaffen.`});
+    recs.push({...PRODUCTS.find(p=>p.id==='governance'),
+      reason:`Mehrere Cases zeigen regulatorische Komplexität. Ein Governance-Audit ist der richtige Einstieg, um Handlungsspielräume zu identifizieren.`});
+  }
+
+  if (cases.length >= 3 && !recs.find(r=>r.id==='ops')) {
+    recs.push({...PRODUCTS.find(p=>p.id==='ops'),
+      reason:`Bei ${cases.length} analysierten Prozessen lohnt sich eine kontinuierliche Begleitung für nachhaltige KI-Integration.`});
+  }
+
+  document.getElementById('recommendations').innerHTML = recs.map(r => `
+    <div class="rec-card ${r.primary?'primary-rec':''}">
+      <div class="rec-card-header">
+        <h3>${r.icon} ${r.name}</h3>
+        <span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Top-Empfehlung':'Ergänzend'}</span>
+      </div>
+      <p>${r.desc}</p>
+      <div class="rec-reason"><strong>Warum? </strong>${r.reason}</div>
+    </div>
+  `).join('');
+  goToScreen(4);
+}
+
+function sendInquiry() {
+  const e = document.getElementById('cta-email').value;
+  if (!e || !e.includes('@')) { alert('Bitte gültige E-Mail eingeben.'); return; }
+  alert('Vielen Dank! Wir melden uns innerhalb von 24 Stunden.\n\n(Demo-Modus – keine E-Mail versendet)');
+}
+
+function resetAll() { cases = []; results = null; addCase(); goToScreen(1); }
+
+/* INIT */
+addCase();
+</script>
+</body>
+</html>
