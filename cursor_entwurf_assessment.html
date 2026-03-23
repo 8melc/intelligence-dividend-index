@@ -254,70 +254,70 @@ body { background-color:var(--bg-deep); color:var(--text); font-family:var(--fon
 
 <div class="container">
   <div class="steps">
-    <div class="step active" id="step-1"><div class="step-num">1</div><span class="step-label">Eingabe</span></div>
+    <div class="step active" id="step-1"><div class="step-num">1</div><span class="step-label">Erfassen</span></div>
     <div class="step-connector" id="conn-1"></div>
-    <div class="step" id="step-2"><div class="step-num">2</div><span class="step-label">Überblick</span></div>
+    <div class="step" id="step-2"><div class="step-num">2</div><span class="step-label">Matrix</span></div>
     <div class="step-connector" id="conn-2"></div>
-    <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Details</span></div>
+    <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Ergebnis</span></div>
     <div class="step-connector" id="conn-3"></div>
-    <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Nächster Schritt</span></div>
+    <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Empfehlung</span></div>
   </div>
 </div>
 
 <div class="screen active" id="screen-1">
   <div class="container">
     <div class="screen-header">
-      <h2>Welchen Prozess wollen Sie prüfen?</h2>
-      <p>Benennen Sie einen Prozess und klicken Sie sich durch 10 kurze Fragen — fertig.</p>
+      <h2>Ihre Prozesse erfassen</h2>
+      <p>Bewerten Sie jeden Prozess anhand von 4 Nutzenfaktoren und 6 Governance-Checks.</p>
     </div>
     <div id="cases-container"></div>
-    <button class="add-case-btn" onclick="addCase()">+ Noch einen Prozess prüfen</button>
+    <button class="add-case-btn" onclick="addCase()">+ Weiteren Prozess hinzufügen</button>
     <div class="btn-group">
-      <button class="btn btn-gold" onclick="calculateAndShow()">Jetzt auswerten</button>
+      <button class="btn btn-gold" onclick="calculateAndShow()">Auswertung berechnen</button>
     </div>
   </div>
 </div>
 
 <div class="screen" id="screen-2">
   <div class="container">
-    <div class="screen-header"><h2>Ihre Cases auf einen Blick</h2><p>Wo lohnt sich KI — und wo wird's regulatorisch eng?</p></div>
+    <div class="screen-header"><h2>Bewertungsmatrix</h2><p>Ihre Cases nach Strategischem Nutzen (X) und Machbarkeit (Y).</p></div>
     <div class="kpi-grid" id="kpi-grid"></div>
-    <div class="matrix-container"><h3>Matrix — Mehrwert × Machbarkeit</h3><div id="matrix-wrap"></div></div>
+    <div class="matrix-container"><h3>Matrix — Strategischer Nutzen × Machbarkeit</h3><div id="matrix-wrap"></div></div>
     <div id="ranking-section"></div>
     <div class="btn-group">
       <button class="btn btn-secondary" onclick="goToScreen(1)">← Zurück</button>
-      <button class="btn btn-green" onclick="showRecommendations()">Was soll ich tun?</button>
+      <button class="btn btn-green" onclick="showRecommendations()">Empfehlung anzeigen</button>
     </div>
   </div>
 </div>
 
 <div class="screen" id="screen-3">
   <div class="container">
-    <div class="screen-header"><h2>So kommen die Scores zustande</h2><p>Transparent: Die genaue Berechnung für jeden Ihrer Prozesse.</p></div>
+    <div class="screen-header"><h2>Detailergebnis</h2><p>Scoring-Formeln und Ampel-Bewertung pro Case.</p></div>
     <div id="detail-cards"></div>
     <div class="btn-group">
-      <button class="btn btn-secondary" onclick="goToScreen(2)">← Überblick</button>
-      <button class="btn btn-green" onclick="goToScreen(4)">Nächster Schritt</button>
+      <button class="btn btn-secondary" onclick="goToScreen(2)">← Matrix</button>
+      <button class="btn btn-green" onclick="goToScreen(4)">Empfehlung</button>
     </div>
   </div>
 </div>
 
 <div class="screen" id="screen-4">
   <div class="container">
-    <div class="screen-header"><h2>Ihr nächster Schritt</h2><p>Basierend auf Ihren Ergebnissen — das empfehlen wir konkret.</p></div>
+    <div class="screen-header"><h2>Unsere Empfehlung</h2><p>Basierend auf Ihrem IDI-Profil empfehlen wir folgende nächste Schritte.</p></div>
     <div id="recommendations"></div>
     <div class="cta-section">
-      <h3>Ergebnis besprechen?</h3>
-      <p>Wir schauen uns Ihre Scores gemeinsam an und sagen Ihnen, wie es weitergeht — unverbindlich.</p>
+      <h3>Bereit für den nächsten Schritt?</h3>
+      <p>Wir besprechen Ihre Ergebnisse persönlich und entwickeln einen konkreten Plan.</p>
       <div class="cta-form">
         <input type="email" placeholder="Ihre E-Mail-Adresse" id="cta-email">
-        <button class="btn btn-gold" onclick="sendInquiry()">Gespräch vereinbaren</button>
+        <button class="btn btn-gold" onclick="sendInquiry()">Kontakt aufnehmen</button>
       </div>
     </div>
     <div class="btn-group" style="margin-bottom:3rem;">
-      <button class="btn btn-secondary" onclick="goToScreen(2)">← Überblick</button>
-      <button class="btn btn-secondary" onclick="goToScreen(3)">Details</button>
-      <button class="btn btn-secondary" onclick="resetAll()">Nochmal starten</button>
+      <button class="btn btn-secondary" onclick="goToScreen(2)">← Matrix</button>
+      <button class="btn btn-secondary" onclick="goToScreen(3)">Detail</button>
+      <button class="btn btn-secondary" onclick="resetAll()">Neue Analyse</button>
     </div>
   </div>
 </div>
@@ -330,38 +330,38 @@ body { background-color:var(--bg-deep); color:var(--text); font-family:var(--fon
 const MAX_FACTOR_SCORE=3.0, SCORE_SCALE=10, Y_START=10, AMPEL_GREEN=7, AMPEL_YELLOW=4;
 
 const X_FACTORS=[
-  {key:'frequenz',label:'Wie oft läuft der Prozess?',weight:0.30,hint:'Je häufiger, desto mehr spart KI.',
+  {key:'frequenz',label:'Frequenz-Hebel',weight:0.30,hint:'Wie oft wird der Prozess durchgeführt?',
     options:[{value:'taeglich',label:'Täglich',score:3},{value:'woechentlich',label:'Wöchentlich',score:2},{value:'monatlich',label:'Monatlich',score:1},{value:'jaehrlich',label:'Jährlich / Seltener',score:0.5}]},
-  {key:'zeitaufwand',label:'Wie lange dauert ein Durchlauf?',weight:0.25,hint:'Je mehr Zeit draufgeht, desto größer der Hebel.',
+  {key:'zeitaufwand',label:'Zeit-Hebel',weight:0.25,hint:'Wie viel Zeit wird pro Durchlauf benötigt?',
     options:[{value:'ueber_20h',label:'> 20 Stunden',score:3},{value:'10_20h',label:'10–20 Stunden',score:2},{value:'5_10h',label:'5–10 Stunden',score:1.5},{value:'lt5h',label:'< 5 Stunden',score:1}]},
-  {key:'relevanz',label:'Wie wichtig ist der Prozess?',weight:0.25,hint:'Kernprozess oder Nice-to-have?',
+  {key:'relevanz',label:'Strategische Relevanz',weight:0.25,hint:'Wie strategisch bedeutsam ist der Prozess?',
     options:[{value:'hoch_risiko_gte4',label:'Hoch + Risiko ≥ 4',score:3},{value:'hoch_risiko_lt4',label:'Hoch + Risiko < 4',score:2},{value:'mittel',label:'Mittel',score:1.5},{value:'niedrig',label:'Niedrig',score:1}]},
-  {key:'qualifikation',label:'Wer macht das heute?',weight:0.20,hint:'Spezialisten-Arbeit oder Routine-Aufgabe?',
+  {key:'qualifikation',label:'Qualifizierungsgrad',weight:0.20,hint:'Welches Qualifikationsniveau erfordert der Prozess?',
     options:[{value:'spezialist',label:'Spezialist',score:2.5},{value:'senior',label:'Senior',score:2},{value:'medior',label:'Medior',score:1.5},{value:'junior',label:'Junior',score:1}]}
 ];
 
 const GOVERNANCE_CHECKS=[
-  {key:'ai_act',label:'AI Act — Risikoklasse',hint:'Wie stuft der EU AI Act diesen Einsatz ein?',
+  {key:'ai_act',label:'KI-VO / AI Act',hint:'Risikoklassifizierung nach EU AI Act',
     options:[{value:'hochrisiko',label:'Hochrisiko (Annex III)',abzug:-3},{value:'begrenzt',label:'Begrenztes Risiko',abzug:-1},{value:'minimal',label:'Minimales Risiko',abzug:0}]},
-  {key:'kritis',label:'Kritische Infrastruktur?',hint:'Betrifft der Prozess KRITIS oder IT-Sicherheit?',
+  {key:'kritis',label:'KRITIS & IT-Sicherheit',hint:'Betrifft der Prozess kritische Infrastruktur?',
     options:[{value:'kernfunktion',label:'Kernfunktion betroffen',abzug:-3},{value:'mittelbar',label:'Mittelbar relevant',abzug:-1},{value:'nicht_relevant',label:'Nicht relevant',abzug:0}]},
-  {key:'dsgvo',label:'Personenbezogene Daten?',hint:'Welche Art von Daten fließt in den Prozess?',
+  {key:'dsgvo',label:'DSGVO & Datenschutz',hint:'Art der verarbeiteten personenbezogenen Daten',
     options:[{value:'art9',label:'Art. 9 – Besondere Kategorien',abzug:-3},{value:'pbd',label:'Personenbezogene Daten',abzug:-1.5},{value:'nein',label:'Keine personenbez. Daten',abzug:0}]},
-  {key:'haftung',label:'Haftung & Nachweispflicht?',hint:'Gibt es besondere Dokumentations- oder Haftungsregeln?',
+  {key:'haftung',label:'Haftung & Dokumentation',hint:'Bestehen besondere Haftungs- oder Dokumentationspflichten?',
     options:[{value:'entscheidung_kritis',label:'Entscheidungswirkung + KRITIS',abzug:-2},{value:'nur_doku',label:'Nur Dokumentationspflicht',abzug:-1},{value:'keine',label:'Keine besonderen Pflichten',abzug:0}]},
-  {key:'datenlage',label:'Wie sehen die Daten aus?',hint:'Digital, teildigital oder noch auf Papier?',
+  {key:'datenlage',label:'Datenlage & Verfügbarkeit',hint:'In welcher Form liegen die Daten vor?',
     options:[{value:'digital',label:'Vollständig digital',abzug:0},{value:'teilweise',label:'Teilweise digital',abzug:-1},{value:'papier',label:'Überwiegend Papier',abzug:-2}]},
-  {key:'loesungsreife',label:'Gibt es schon KI-Lösungen dafür?',hint:'Fertige Produkte am Markt oder Neuland?',
+  {key:'loesungsreife',label:'Lösungsreife & Markt',hint:'Gibt es bereits marktreife KI-Lösungen?',
     options:[{value:'bestehend',label:'Lösung verfügbar',abzug:1},{value:'nichts',label:'Keine marktreife Lösung',abzug:0}]}
 ];
 
 const PRODUCTS=[
-  {id:'discovery',name:'AI Discovery Sprint',desc:'In 2–3 Wochen die Cases finden, die am meisten bringen. Für alle, die noch nicht genau wissen, wo sie anfangen sollen.',icon:'🔍'},
-  {id:'governance',name:'Compliance-Check',desc:'DSGVO, AI Act, Branchenregulierung — wir prüfen, was geht und was Sie vorher klären müssen.',icon:'🛡'},
-  {id:'casesprint',name:'AI Case Sprint',desc:'Vom KI-Case zum konkreten Konzept in 3 Wochen. Für alle, die wissen was sie wollen — und es jetzt anpacken.',icon:'⚡'},
-  {id:'poc',name:'Proof of Concept',desc:'Ihr bester Case als funktionierender Prototyp in 4–6 Wochen. Zum Anfassen und Vorzeigen.',icon:'🚀'},
-  {id:'roadmap',name:'AI Roadmap',desc:'Der Plan für die nächsten 6–18 Monate: Was zuerst, was kann warten, und wer macht was.',icon:'🗺'},
-  {id:'ops',name:'AI Operations',desc:'Laufende Begleitung für Ihre KI-Anwendungen: Monitoring, Updates, Compliance-Check inklusive.',icon:'🔄'}
+  {id:'discovery',name:'AI Discovery Sprint',desc:'Systematische Identifikation der KI-Cases mit dem höchsten Wertpotenzial in 2–3 Wochen.',icon:'🔍'},
+  {id:'governance',name:'Governance & Compliance Audit',desc:'Tiefgehende regulatorische Prüfung: DSGVO, EU-AI-Act, branchenspezifische Regulierung.',icon:'🛡'},
+  {id:'casesprint',name:'AI Case Sprint',desc:'Co-kreative Entwicklung und Bewertung konkreter Use Cases in einem 3-Wochen-Sprint.',icon:'⚡'},
+  {id:'poc',name:'Proof of Concept',desc:'Prototypische Umsetzung eines KI-Anwendungsfalls als funktionsfähiger Demonstrator in 4–6 Wochen.',icon:'🚀'},
+  {id:'roadmap',name:'AI Transformation Roadmap',desc:'Strategische Planung Ihrer KI-Einführung über 6–18 Monate.',icon:'🗺'},
+  {id:'ops',name:'Continuous AI Operations',desc:'Laufende Betreuung, Monitoring und Compliance-Überwachung.',icon:'🔄'}
 ];
 
 let cases=[],results=null;
@@ -393,7 +393,7 @@ function renderCases(){
       <div class="form-group"><label>Kurzbeschreibung (optional)</label>
         <textarea placeholder="Was passiert in diesem Prozess?" onchange="updateCase(${c.id},'description',this.value)">${c.description}</textarea></div>
       <div class="assessment-section">
-        <h4><span class="tag tag-x">Mehrwert</span> Lohnt sich der Aufwand?</h4>
+        <h4><span class="tag tag-x">X-Achse</span> Strategischer Nutzen</h4>
         ${X_FACTORS.map(f=>{const sel=c.xFactors[f.key];return`<div class="factor-row">
           <div class="factor-label">${f.label} <span class="factor-weight-tag">${Math.round(f.weight*100)}%</span></div>
           <div class="factor-hint">${f.hint}</div>
@@ -402,7 +402,7 @@ function renderCases(){
         </div>`;}).join('')}
       </div>
       <div class="assessment-section">
-        <h4><span class="tag tag-y">Machbarkeit</span> Darf ich das?</h4>
+        <h4><span class="tag tag-y">Y-Achse</span> Machbarkeit &amp; Compliance</h4>
         ${GOVERNANCE_CHECKS.map(gc=>{const sel=c.govChecks[gc.key];return`<div class="factor-row">
           <div class="factor-label">${gc.label}</div>
           <div class="factor-hint">${gc.hint}</div>
@@ -435,28 +435,28 @@ function scoreAllCases(){
 }
 
 function calculateAndShow(){
-  if(!cases.length){alert('Bitte mindestens einen Prozess eingeben.');return;}
+  if(!cases.length){alert('Bitte mindestens einen Prozess hinzufügen.');return;}
   if(cases.some(c=>X_FACTORS.some(f=>!c.xFactors[f.key])||GOVERNANCE_CHECKS.some(gc=>!c.govChecks[gc.key]))){
-    alert('Noch nicht alle Fragen beantwortet — bitte kurz durchklicken.');return;}
+    alert('Bitte alle Bewertungsfragen beantworten.');return;}
   results=scoreAllCases();renderResults();goToScreen(2);
 }
 
 function renderResults(){
   const{scored,ranked,avgX,avgY,idi,pilotCount}=results;
   document.getElementById('kpi-grid').innerHTML=`
-    <div class="kpi-card"><div class="kpi-value v-blue">${avgX!=null?avgX.toFixed(1):'–'}</div><div class="kpi-label">Ø Mehrwert</div><div class="kpi-sublabel">Lohnt sich's? (0–10)</div></div>
-    <div class="kpi-card"><div class="kpi-value v-green">${avgY!=null?avgY.toFixed(1):'–'}</div><div class="kpi-label">Ø Machbarkeit</div><div class="kpi-sublabel">Darf ich's? (0–10)</div></div>
+    <div class="kpi-card"><div class="kpi-value v-blue">${avgX!=null?avgX.toFixed(1):'–'}</div><div class="kpi-label">Ø Nutzen</div><div class="kpi-sublabel">X-Achse (0–10)</div></div>
+    <div class="kpi-card"><div class="kpi-value v-green">${avgY!=null?avgY.toFixed(1):'–'}</div><div class="kpi-label">Ø Machbarkeit</div><div class="kpi-sublabel">Y-Achse (0–10)</div></div>
     <div class="kpi-card"><div class="kpi-value v-gold">${idi!=null?idi.toFixed(1):'–'}</div><div class="kpi-label">IDI Score</div><div class="kpi-sublabel">X×0.6 + Y×0.4</div></div>
-    <div class="kpi-card"><div class="kpi-value v-warm">${pilotCount}</div><div class="kpi-label">Quick Wins</div><div class="kpi-sublabel">Sofort umsetzbar</div></div>`;
+    <div class="kpi-card"><div class="kpi-value v-warm">${pilotCount}</div><div class="kpi-label">Pilotzone</div><div class="kpi-sublabel">X≥6, Y>7</div></div>`;
   renderMatrix(scored);
   if(ranked.length>0){
-    let h=`<div class="matrix-container"><h3>Ranking — Ihre besten Cases zuerst</h3>
-    <table class="ranking-table"><thead><tr><th>Rang</th><th>Prozess</th><th>Mehrwert</th><th>Machbar?</th><th>IDI</th><th>Status</th><th>Quick Win?</th></tr></thead><tbody>`;
+    let h=`<div class="matrix-container"><h3>Ranking — Winner-Algorithmus</h3>
+    <table class="ranking-table"><thead><tr><th>Rang</th><th>Case</th><th>X</th><th>Y</th><th>IDI</th><th>Ampel</th><th>Pilot</th></tr></thead><tbody>`;
     ranked.forEach(r=>{h+=`<tr><td><span class="rank-badge rank-${r.rank<=3?r.rank:'other'}">${r.rank}</span></td>
       <td>${r.name}</td><td style="font-weight:500;">${r.x.toFixed(2)}</td><td style="font-weight:500;">${r.y.toFixed(2)}</td>
       <td style="color:var(--gold);font-weight:500;">${r.combined.toFixed(2)}</td>
-      <td><span class="ampel-badge ampel-badge-${r.ampel}">● ${r.ampel==='green'?'Freie Fahrt':r.ampel==='yellow'?'Genauer hinschauen':'Erst klären'}</span></td>
-      <td>${r.pilot?'<span class="pilot-tag">QUICK WIN</span>':'–'}</td></tr>`;});
+      <td><span class="ampel-badge ampel-badge-${r.ampel}">● ${r.ampel==='green'?'Umsetzbar':r.ampel==='yellow'?'Prüfen':'Kritisch'}</span></td>
+      <td>${r.pilot?'<span class="pilot-tag">PILOT</span>':'–'}</td></tr>`;});
     h+=`</tbody></table></div>`;document.getElementById('ranking-section').innerHTML=h;}
   renderDetailCards(scored);
 }
@@ -478,8 +478,8 @@ function renderMatrix(scored){
     svg+=`<text x="${pad.left-10}" y="${sy(t)+4}" text-anchor="end" font-size="10" fill="rgba(255,255,255,0.2)" font-family="Inter">${t}</text>`;}
   svg+=`<line x1="${pad.left}" y1="${pad.top+ph}" x2="${pad.left+pw}" y2="${pad.top+ph}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
   svg+=`<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top+ph}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
-  svg+=`<text x="${pad.left+pw/2}" y="${h-8}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em">LOHNT SICH DER AUFWAND? →</text>`;
-  svg+=`<text x="16" y="${pad.top+ph/2}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em" transform="rotate(-90,16,${pad.top+ph/2})">↑ DARF ICH DAS?</text>`;
+  svg+=`<text x="${pad.left+pw/2}" y="${h-8}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em">STRATEGISCHER NUTZEN →</text>`;
+  svg+=`<text x="16" y="${pad.top+ph/2}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em" transform="rotate(-90,16,${pad.top+ph/2})">↑ MACHBARKEIT</text>`;
   scored.forEach(s=>{if(s.x==null||s.y==null)return;const cx=sx(s.x),cy=sy(s.y),col=ampelColors[s.ampel];
     svg+=`<circle cx="${cx}" cy="${cy}" r="14" fill="${col}" stroke="rgba(18,21,26,0.5)" stroke-width="2"/>`;
     svg+=`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="10" font-weight="600" fill="rgba(18,21,26,0.9)" font-family="Inter">${s.num}</text>`;
@@ -493,7 +493,7 @@ function renderDetailCards(scored){
     const govTerms=GOVERNANCE_CHECKS.map(gc=>{const sel=s.govChecks[gc.key];return sel?`${sel.abzug>=0?'+':''}${sel.abzug}`:'?';}).join(', ');
     return`<div class="case-card" style="border-left:3px solid ${s.ampel==='green'?'var(--green)':s.ampel==='yellow'?'var(--yellow)':s.ampel==='red'?'var(--red)':'var(--text-muted)'};">
       <div class="case-card-header"><span class="case-card-num">Case ${String(s.num).padStart(2,'0')} — ${s.name}</span>
-        <span class="ampel-badge ampel-badge-${s.ampel}">● ${s.ampel==='green'?'Freie Fahrt':s.ampel==='yellow'?'Genauer hinschauen':s.ampel==='red'?'Erst klären':'N/A'}${s.pilot?' · QUICK WIN':''}</span></div>
+        <span class="ampel-badge ampel-badge-${s.ampel}">● ${s.ampel==='green'?'Umsetzbar':s.ampel==='yellow'?'Prüfen':s.ampel==='red'?'Kritisch':'N/A'}${s.pilot?' · PILOT':''}</span></div>
       <div class="formula-bar"><span>X = (${xTerms}) / ${MAX_FACTOR_SCORE} × ${SCORE_SCALE}</span><span class="result">X = ${s.x!=null?s.x.toFixed(2):'–'}</span></div>
       <div class="formula-bar"><span>Y = CLAMP(${Y_START} ${govTerms.replace(/,/g,'')}, 0, ${SCORE_SCALE})</span><span class="result">Y = ${s.y!=null?s.y.toFixed(2):'–'}</span></div>
       ${s.combined!=null?`<div class="formula-bar"><span>IDI = ${s.x.toFixed(2)}×0.6 + ${s.y.toFixed(2)}×0.4</span><span class="result">${s.combined.toFixed(2)}</span></div>`:''}</div>`;}).join('');
@@ -504,28 +504,28 @@ function showRecommendations(){
   const ac={green:0,yellow:0,red:0};scored.forEach(s=>{if(s.ampel!=='gray')ac[s.ampel]++;});
   const recs=[];
   if(idi>=6.0){recs.push({...PRODUCTS.find(p=>p.id==='casesprint'),primary:true,
-    reason:`Ihr Score von ${idi.toFixed(1)} zeigt hohes KI-Potenzial. ${pilotCount} Quick Win(s) können Sie direkt angehen.`});
+    reason:`Ihr IDI von ${idi.toFixed(1)} zeigt starkes KI-Gestaltungskapital. ${pilotCount} Case(s) in der Pilotzone.`});
     if(pilotCount>0)recs.push({...PRODUCTS.find(p=>p.id==='poc'),
-      reason:`"${ranked[0]?.name}" ist Ihr stärkster Case — der eignet sich für einen Prototyp.`});}
+      reason:`${pilotCount} Case(s) mit X≥6 und Y>7 eignen sich für einen Prototyp. Winner: "${ranked[0]?.name}".`});}
   else if(idi>=4.0){recs.push({...PRODUCTS.find(p=>p.id==='discovery'),primary:true,
-    reason:`Ihr Score von ${idi.toFixed(1)} zeigt solides Potenzial — aber wo genau anfangen? Das klären wir.`});
+    reason:`Ihr IDI von ${idi.toFixed(1)} zeigt solides Potenzial mit Klärungsbedarf.`});
     if(ac.yellow+ac.red>0)recs.push({...PRODUCTS.find(p=>p.id==='governance'),
-      reason:`${ac.yellow+ac.red} Prozess(e) haben regulatorische Fragezeichen, die wir vorher klären sollten.`});}
+      reason:`${ac.yellow+ac.red} Case(s) haben regulatorische Hürden.`});}
   else{recs.push({...PRODUCTS.find(p=>p.id==='roadmap'),primary:true,
-    reason:`Ihr Score von ${idi!=null?idi.toFixed(1):'–'} zeigt: Erstmal Überblick verschaffen, dann loslegen.`});
-    recs.push({...PRODUCTS.find(p=>p.id==='governance'),reason:`Einige regulatorische Fragen sollten vorab geklärt werden.`});}
+    reason:`Ihr IDI von ${idi!=null?idi.toFixed(1):'–'} deutet auf Orientierungsbedarf.`});
+    recs.push({...PRODUCTS.find(p=>p.id==='governance'),reason:`Regulatorische Komplexität erfordert ein Audit.`});}
   if(cases.length>=3&&!recs.find(r=>r.id==='ops'))recs.push({...PRODUCTS.find(p=>p.id==='ops'),
-    reason:`Bei ${cases.length} Prozessen lohnt sich eine laufende Begleitung.`});
+    reason:`Bei ${cases.length} Prozessen lohnt sich kontinuierliche Begleitung.`});
   document.getElementById('recommendations').innerHTML=recs.map(r=>`
     <div class="rec-card ${r.primary?'primary-rec':''}"><div class="rec-card-header">
-      <h3>${r.icon} ${r.name}</h3><span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Unser Tipp':'Auch sinnvoll'}</span></div>
+      <h3>${r.icon} ${r.name}</h3><span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Top-Empfehlung':'Ergänzend'}</span></div>
       <p>${r.desc}</p><div class="rec-reason"><strong>Warum? </strong>${r.reason}</div></div>`).join('');
   goToScreen(4);
 }
 
 function sendInquiry(){const e=document.getElementById('cta-email').value;
   if(!e||!e.includes('@')){alert('Bitte gültige E-Mail eingeben.');return;}
-  alert('Perfekt — wir melden uns innerhalb von 24 Stunden bei Ihnen.\n\n(Demo-Modus)');}
+  alert('Vielen Dank! Wir melden uns innerhalb von 24 Stunden.\n\n(Demo-Modus)');}
 function resetAll(){cases=[];results=null;addCase();goToScreen(1);}
 addCase();
 </script>
