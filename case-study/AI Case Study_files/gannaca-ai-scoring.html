@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<!-- saved from url=(0138)file:///Users/melissagannaca/gannaca%20x%20Trianel/intelligence-dividend-index/trianel-case-editor/dist/case-study/gannaca-ai-scoring.html -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>gannaca Case Scoring — Bewertungsmatrix Phase 2</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;line-height:1.5;-webkit-font-smoothing:antialiased}
+.container{max-width:1440px;margin:0 auto;padding:24px 20px}
+/* Side-by-side Layout — dynamic 75/25 ↔ 40/60 */
+.main-layout{display:flex;gap:16px;align-items:stretch;margin-bottom:24px}
+.matrix-col{flex:0 0 75%;min-width:0;transition:flex-basis 0.3s ease}
+.main-layout.expanded .matrix-col{flex-basis:40%}
+.panel-col{flex:1;min-width:0;display:flex;flex-direction:column}
+.panel-col .ranking-wrap{height:100%;display:flex;flex-direction:column;margin-bottom:0}
+.panel-scroll{overflow-y:auto;flex:1}
+/* Toggle Button */
+.toggle-btn{padding:5px 14px;font-size:0.7rem;font-weight:600;border-radius:6px;border:1px solid #e5e7eb;background:#fff;color:#666;cursor:pointer;transition:all .15s;white-space:nowrap}
+.toggle-btn:hover{background:#f3f4f6;color:#1a1a1a}
+/* Compact Table */
+.compact-table{width:100%;border-collapse:collapse;font-size:0.78rem}
+.compact-table tbody tr{border-bottom:1px solid #f3f4f6;transition:background .1s;cursor:pointer}
+.compact-table tbody tr:hover{background:#fafbfc}
+.compact-table tbody td{padding:7px 10px;vertical-align:middle}
+.compact-table .case-name{white-space:normal;line-height:1.3}
+/* Scroll-Hint Overlay */
+.scroll-hint-wrap{position:relative}
+.scroll-hint-wrap::after{content:'\2192';position:absolute;right:0;top:0;bottom:0;width:36px;background:linear-gradient(to right,rgba(255,255,255,0),#fff 50%);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:0.85rem;color:#999;pointer-events:none;transition:opacity .25s}
+.scroll-hint-wrap.at-end::after{opacity:0}
+/* Winner Banner */
+.winner-banner{background:#fef3c7;border:1.5px solid #fcd34d;border-radius:12px;padding:16px 24px;display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.winner-banner .trophy{font-size:2rem}
+.winner-banner .info{flex:1}
+.winner-banner .title{font-size:1rem;font-weight:700;color:#1a1a1a}
+.winner-banner .desc{font-size:0.8rem;color:#666;margin-top:2px}
+/* Header */
+.header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.header h1{font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:600;color:#1a1a1a}
+.header .subtitle{font-size:0.75rem;color:#666}
+/* Legend */
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px;padding:10px 16px;background:#fff;border-radius:8px;border:1px solid #e5e7eb}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:0.7rem;font-weight:600;color:#1a1a1a}
+.legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+/* Matrix SVG */
+.matrix-wrap{background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:16px;overflow-x:auto}
+.matrix-wrap svg text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.dot{cursor:pointer;transition:opacity .15s}
+.dot:hover{opacity:1 !important}
+/* Ranking Table */
+.ranking-wrap{background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:24px}
+.ranking-header{padding:12px 20px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between}
+.ranking-header h3{font-size:0.85rem;font-weight:700;color:#1a1a1a}
+.ranking-header .hint{font-size:0.65rem;color:#666}
+table{width:100%;border-collapse:collapse;font-size:0.8rem}
+thead th{padding:8px 12px;text-align:left;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#666;border-bottom:2px solid #e5e7eb;white-space:nowrap}
+thead th.center{text-align:center}
+thead th.right{text-align:right}
+tbody tr{border-bottom:1px solid #f3f4f6;transition:background .1s}
+tbody tr:hover{background:#fafbfc}
+tbody td{padding:8px 12px;white-space:nowrap}
+td.center{text-align:center}
+td.right{text-align:right}
+.row-winner{background:#fef3c7 !important}
+.row-winner:hover{background:#fef08a !important}
+.row-secondary{opacity:.5}
+.row-secondary:hover{opacity:.75}
+.score-green{color:#22c55e;font-weight:700}
+.score-yellow{color:#eab308;font-weight:700}
+.score-red{color:#ef4444;font-weight:700}
+.text-navy{color:#1a3a5c}
+.text-orange{color:#E8743B}
+.text-muted{color:#666}
+.font-bold{font-weight:700}
+.font-mono{font-family:'SF Mono',Menlo,Consolas,monospace}
+.tabular{font-variant-numeric:tabular-nums}
+.sum-row{background:#f8fafc;font-weight:700;border-top:2px solid #e5e7eb}
+/* Detail Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);z-index:100;display:none;align-items:center;justify-content:center}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);max-width:750px;width:95%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{padding:16px 24px;border-bottom:1px solid #e5e7eb;background:#f9fafb}
+.modal-head .case-num{font-size:1.1rem;font-weight:700;color:#1a3a5c;display:inline}
+.modal-head .case-title{font-size:1rem;font-weight:700;color:#1a1a1a}
+.modal-head .case-owner{font-size:0.75rem;color:#666;margin-top:2px}
+.ampel-badge{display:inline-block;font-size:0.7rem;font-weight:600;padding:2px 10px;border-radius:50px;margin-left:8px;vertical-align:middle}
+.ampel-gruen{background:#dcfce7;color:#15803d}
+.ampel-gelb{background:#fef9c3;color:#a16207}
+.ampel-rot{background:#fee2e2;color:#b91c1c}
+.scores-row{display:flex;gap:16px;margin-top:10px}
+.score-box{text-align:center;padding:6px 12px;border-radius:8px}
+.score-box .label{font-size:0.6rem;color:#666;text-transform:uppercase;letter-spacing:.5px}
+.score-box .value{font-size:1.1rem;font-weight:700}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid #e5e7eb}
+.tab-btn{flex:1;padding:10px 16px;font-size:0.8rem;font-weight:600;background:none;border:none;cursor:pointer;color:#666;border-bottom:2px solid transparent;transition:all .15s}
+.tab-btn.active-y{color:#1a3a5c;border-bottom-color:#1a3a5c;background:rgba(26,58,92,.05)}
+.tab-btn.active-x{color:#E8743B;border-bottom-color:#E8743B;background:rgba(232,116,59,.05)}
+/* Content */
+.modal-body{flex:1;overflow-y:auto;padding:24px}
+.section-head{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-head.navy{color:#1a3a5c}
+.section-head.orange{color:#E8743B}
+.detail-table{width:100%;border-collapse:collapse;background:#fafbfc;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:16px}
+.detail-table td{padding:8px 12px;font-size:0.75rem;border-bottom:1px solid #e5e7eb}
+.detail-table tr:last-child td{border-bottom:none}
+.detail-table .lbl{color:#666;width:38%}
+.detail-table .val{color:#1a1a1a}
+.detail-table .score{font-weight:700;color:#1a3a5c;text-align:right;width:50px}
+.detail-table .weight{font-size:0.6rem;color:#999;text-align:right;width:45px}
+.abzug-pos{color:#22c55e;font-weight:700}
+.abzug-zero{color:#9ca3af;font-weight:700}
+.abzug-neg{color:#ef4444;font-weight:700}
+.sum-line{border-top:2px solid #1a3a5c;font-weight:700}
+.sum-line-x{border-top:2px solid #E8743B;font-weight:700}
+.gap-section{margin-top:16px}
+.gap-badge{display:inline-block;font-size:0.6rem;font-weight:600;padding:2px 8px;border-radius:50px}
+.gap-offen{background:#fef9c3;color:#a16207}
+.gap-vollstaendig{background:#dcfce7;color:#15803d}
+.gap-text{font-size:0.72rem;color:#555;background:#fafbfc;border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-top:8px;white-space:pre-wrap;max-height:200px;overflow-y:auto;line-height:1.6}
+.formula-box{font-size:0.65rem;color:#666;background:rgba(26,58,92,.05);border-radius:6px;padding:6px 10px;margin-bottom:12px;font-family:'SF Mono',Menlo,monospace}
+/* Teilcases Tab */
+.tab-btn.active-t{color:#0d6944;border-bottom-color:#0d6944;background:rgba(13,105,68,.05)}
+.teilcases-intro{font-size:0.72rem;color:#555;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:16px;line-height:1.6}
+.teilcases-intro strong{color:#1a1a1a}
+/* Accordion */
+.accordion{border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:12px}
+.accordion-head{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#f9fafb;cursor:pointer;border:none;width:100%;text-align:left;font-size:0.8rem;font-weight:600;color:#1a1a1a;transition:background .15s}
+.accordion-head:hover{background:#f3f4f6}
+.accordion-head .arrow{font-size:0.6rem;color:#999;transition:transform .2s;flex-shrink:0}
+.accordion-head.open .arrow{transform:rotate(90deg)}
+.accordion-head .sub-scores{margin-left:auto;display:flex;gap:10px;font-size:0.65rem;font-weight:700}
+.accordion-head .sub-scores .s-y{color:#1a3a5c}
+.accordion-head .sub-scores .s-x{color:#E8743B}
+.accordion-body{display:none;padding:14px 16px;border-top:1px solid #e5e7eb;background:#fff}
+.accordion-body.open{display:block}
+.accordion-body .section-head{margin-top:12px}
+.accordion-body .section-head:first-child{margin-top:0}
+/* Footer */
+.modal-foot{padding:12px 24px;border-top:1px solid #e5e7eb;background:#fafbfc;display:flex;justify-content:flex-end;gap:10px}
+.btn-close{padding:8px 20px;font-size:0.75rem;font-weight:600;border-radius:8px;border:none;cursor:pointer;background:#1a3a5c;color:#fff;transition:background .15s}
+.btn-close:hover{background:#0f2640}
+.page-footer{text-align:center;padding:16px;font-size:0.65rem;color:#999}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <!-- Header -->
+  <div class="header">
+    <h1>Bewertungsmatrix</h1>
+    <span class="subtitle">Ergebnis-Matrix: Umsetzbarkeit vs. Nutzen</span>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(34,197,94,.4)"></div>Pilotzone (X≥6, Y≥6)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(234,179,8,.35)"></div>Mittelfeld</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(239,68,68,.4)"></div>Kritisch (X&lt;4 oder Y&lt;4)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#94a3b8;width:10px;height:10px;border-radius:50%"></div>Case</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fff;border:2px solid #c0392b;width:12px;height:12px;border-radius:50%"></div>Gewinner</div>
+  </div>
+
+  <!-- Main Layout: Matrix links, Panel rechts -->
+  <div class="main-layout">
+    <div class="matrix-col">
+      <div class="matrix-wrap">
+        <svg id="matrix" viewBox="0 0 820 580" width="100%" preserveAspectRatio="xMidYMid meet"><rect x="60" y="30" width="296" height="500" fill="#ef4444" fill-opacity="0.08"></rect><rect x="60" y="330" width="740" height="200" fill="#ef4444" fill-opacity="0.06"></rect><rect x="504" y="30" width="296" height="200" fill="#22c55e" fill-opacity="0.1"></rect><rect x="356" y="230" width="148" height="100" fill="#eab308" fill-opacity="0.06"></rect><rect x="356" y="30" width="148" height="200" fill="#eab308" fill-opacity="0.06"></rect><rect x="504" y="230" width="296" height="100" fill="#eab308" fill-opacity="0.06"></rect><line x1="504" y1="30" x2="800" y2="30" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="6 3"></line><line x1="504" y1="30" x2="504" y2="230" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="6 3"></line><line x1="800" y1="30" x2="800" y2="230" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="6 3"></line><line x1="504" y1="230" x2="800" y2="230" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="6 3"></line><line x1="60" y1="530" x2="60" y2="30" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="60" y1="530" x2="800" y2="530" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="208" y1="530" x2="208" y2="30" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="60" y1="430" x2="800" y2="430" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="356" y1="530" x2="356" y2="30" stroke="#ddd" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="60" y1="330" x2="800" y2="330" stroke="#ddd" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="504" y1="530" x2="504" y2="30" stroke="#ddd" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="60" y1="230" x2="800" y2="230" stroke="#ddd" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="652" y1="530" x2="652" y2="30" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="60" y1="129.99999999999997" x2="800" y2="129.99999999999997" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="800" y1="530" x2="800" y2="30" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="60" y1="30" x2="800" y2="30" stroke="#ddd" stroke-opacity="1" stroke-width="1"></line><line x1="356" y1="530" x2="356" y2="30" stroke="#ef4444" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="504" y1="530" x2="504" y2="30" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="60" y1="330" x2="800" y2="330" stroke="#ef4444" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="60" y1="230" x2="800" y2="230" stroke="#22c55e" stroke-opacity="0.15" stroke-width="0.5" stroke-dasharray="8 4"></line><line x1="60" y1="530" x2="800" y2="530" stroke="#1a1a1a" stroke-opacity="1" stroke-width="1"></line><line x1="60" y1="530" x2="60" y2="30" stroke="#1a1a1a" stroke-opacity="1" stroke-width="1"></line><text x="60" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">0</text><text x="208" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">2</text><text x="48" y="434" font-size="11" fill="#1a1a1a" text-anchor="end" font-weight="400">2</text><text x="356" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">4</text><text x="48" y="334" font-size="11" fill="#1a1a1a" text-anchor="end" font-weight="400">4</text><text x="504" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">6</text><text x="48" y="234" font-size="11" fill="#1a1a1a" text-anchor="end" font-weight="400">6</text><text x="652" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">8</text><text x="48" y="133.99999999999997" font-size="11" fill="#1a1a1a" text-anchor="end" font-weight="400">8</text><text x="800" y="550" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="400">10</text><text x="48" y="34" font-size="11" fill="#1a1a1a" text-anchor="end" font-weight="400">10</text><text x="430" y="572" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Umsetzbarkeit →</text><text x="16" y="280" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600" transform="rotate(-90, 16, 280)">Strategischer Nutzen →</text><text x="652" y="105.00000000000001" font-size="11" fill="#22c55e" text-anchor="middle" font-weight="600" opacity="0.6">Pilotzone</text><text x="208" y="455" font-size="11" fill="#ef4444" text-anchor="middle" font-weight="600" opacity="0.5">Kritisch</text><circle cx="208" cy="89.99999999999994" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="208" y="93.99999999999994" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">14</text><circle cx="415.2" cy="160" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="415.2" y="164" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">01</text><circle cx="430" cy="165" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="430" y="169" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">07</text><circle cx="444.8" cy="175.00000000000003" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="444.8" y="179.00000000000003" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">06</text><circle cx="430" cy="175.00000000000003" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="430" y="179.00000000000003" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">11</text><circle cx="541" cy="240.00000000000003" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="541" y="244.00000000000003" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">03</text><circle cx="430" cy="240.00000000000003" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="430" y="244.00000000000003" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">10</text><circle cx="652" cy="335" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="652" y="339" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">15</text><circle cx="208" cy="240.00000000000003" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="208" y="244.00000000000003" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">08</text><circle cx="393" cy="295" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="393" y="299" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">02</text><circle cx="282" cy="315.00000000000006" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="282" y="319.00000000000006" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">09</text><circle cx="208" cy="330" r="11" fill="#94a3b8" stroke="#fff" stroke-width="1.5" opacity="0.22" class="dot"></circle><text x="208" y="334" font-size="9" fill="#fff" text-anchor="middle" font-weight="600" opacity="0.22">12</text><circle cx="526.2" cy="140" r="14" fill="none" stroke="#334155" stroke-width="2.5" opacity="0.5" stroke-dasharray="4 3" class="dot"></circle><text x="526.2" y="144" font-size="9" fill="#334155" text-anchor="middle" font-weight="600" opacity="0.5">04</text><circle cx="555.8" cy="155" r="14" fill="none" stroke="#334155" stroke-width="2.5" opacity="0.5" stroke-dasharray="4 3" class="dot"></circle><text x="555.8" y="159" font-size="9" fill="#334155" text-anchor="middle" font-weight="600" opacity="0.5">05</text><circle cx="356" cy="165" r="14" fill="none" stroke="#334155" stroke-width="2.5" opacity="0.5" stroke-dasharray="4 3" class="dot"></circle><text x="356" y="169" font-size="9" fill="#334155" text-anchor="middle" font-weight="600" opacity="0.5">13</text><circle cx="481.80000000000007" cy="155" r="20" fill="#fff" stroke="#c0392b" stroke-width="2.5" opacity="1" class="dot"></circle><text x="481.80000000000007" y="160" font-size="13" fill="#444" text-anchor="middle" font-weight="700">16</text><text x="481.80000000000007" y="127" font-size="11" fill="#c0392b" text-anchor="middle" font-weight="700">RKR-Check</text><text x="481.80000000000007" y="139" font-size="9" fill="#999" text-anchor="middle" font-weight="400">Score 6.97</text></svg>
+      </div>
+    </div>
+    <div class="panel-col">
+      <div class="ranking-wrap">
+        <div class="ranking-header">
+          <div>
+            <h3>Ranking nach Combined Score</h3>
+            <span class="hint">Umsetzbarkeit × 30% + Nutzen × 70%</span>
+          </div>
+          <button class="toggle-btn" id="panel-toggle" onclick="togglePanel()">Tabelle »</button>
+        </div>
+        <!-- Zustand A: Kompaktes Ranking (Standard) -->
+        <div class="panel-scroll" id="compact-view">
+          <table class="compact-table">
+            <tbody id="compact-ranking-body"><tr class="row-winner" onclick="openDetail(16)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">🏆</td>
+      <td class="font-bold text-navy" style="width:40px">#16</td>
+      <td><span class="case-name">RKR - Check</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="score-green tabular font-bold">6.97</td>
+    </tr><tr class="row-secondary" onclick="openDetail(4)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">–</td>
+      <td class="font-bold text-navy" style="width:40px">#04</td>
+      <td><span class="case-name">Relevanzprüfung</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">7.38</td>
+    </tr><tr class="row-secondary" onclick="openDetail(5)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">–</td>
+      <td class="font-bold text-navy" style="width:40px">#05</td>
+      <td><span class="case-name">Konsistenz- und Stringenzprüfung</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">7.26</td>
+    </tr><tr class="" onclick="openDetail(14)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">2</td>
+      <td class="font-bold text-navy" style="width:40px">#14</td>
+      <td><span class="case-name">Marktüberwachung auf Missbrauch</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.78</td>
+    </tr><tr class="" onclick="openDetail(1)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">3</td>
+      <td class="font-bold text-navy" style="width:40px">#01</td>
+      <td><span class="case-name">Vorbereitende Rechtsrecherche</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.64</td>
+    </tr><tr class="" onclick="openDetail(7)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">4</td>
+      <td class="font-bold text-navy" style="width:40px">#07</td>
+      <td><span class="case-name">Sparring-Konzepte</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.57</td>
+    </tr><tr class="" onclick="openDetail(6)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">5</td>
+      <td class="font-bold text-navy" style="width:40px">#06</td>
+      <td><span class="case-name">Prompt-Assistenz</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.52</td>
+    </tr><tr class="" onclick="openDetail(11)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">6</td>
+      <td class="font-bold text-navy" style="width:40px">#11</td>
+      <td><span class="case-name">Strukturierungs- und Fokussierungs-Assistenten</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.46</td>
+    </tr><tr class="row-secondary" onclick="openDetail(13)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">–</td>
+      <td class="font-bold text-navy" style="width:40px">#13</td>
+      <td><span class="case-name">Risiko-Radar</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.28</td>
+    </tr><tr class="" onclick="openDetail(3)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">7</td>
+      <td class="font-bold text-navy" style="width:40px">#03</td>
+      <td><span class="case-name">Vorzusammenfassungen</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">6.03</td>
+    </tr><tr class="" onclick="openDetail(10)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">8</td>
+      <td class="font-bold text-navy" style="width:40px">#10</td>
+      <td><span class="case-name">Aufbereitung von Sachverhalten/Fragelisten</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">5.58</td>
+    </tr><tr class="" onclick="openDetail(15)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">9</td>
+      <td class="font-bold text-navy" style="width:40px">#15</td>
+      <td><span class="case-name">Schulungsunterlagen</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">5.14</td>
+    </tr><tr class="" onclick="openDetail(8)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">10</td>
+      <td class="font-bold text-navy" style="width:40px">#08</td>
+      <td><span class="case-name">Diktatgestützte Erstellung juristischer Schriftsätze</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">4.68</td>
+    </tr><tr class="" onclick="openDetail(2)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">11</td>
+      <td class="font-bold text-navy" style="width:40px">#02</td>
+      <td><span class="case-name">Handschrift dechiffrieren</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">4.62</td>
+    </tr><tr class="" onclick="openDetail(9)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">12</td>
+      <td class="font-bold text-navy" style="width:40px">#09</td>
+      <td><span class="case-name">Protokollierung von Gremiensitzungen</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">3.93</td>
+    </tr><tr class="" onclick="openDetail(12)">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">13</td>
+      <td class="font-bold text-navy" style="width:40px">#12</td>
+      <td><span class="case-name">Entscheidungsassistent Compliance, KYC-Prüfungen</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="text-muted tabular font-bold">3.40</td>
+    </tr></tbody>
+          </table>
+        </div>
+        <!-- Zustand B: Volle Detailtabelle -->
+        <div class="panel-scroll" id="detail-view" style="display:none">
+          <div style="padding:6px 12px;font-size:0.65rem;color:#666;border-bottom:1px solid #f3f4f6">Stundensatz: €80/h</div>
+          <div class="scroll-hint-wrap">
+          <div id="detail-scroll" style="overflow-x:auto">
+            <table>
+              <thead><tr>
+                <th class="center" style="width:50px">Rang</th>
+                <th style="width:40px">#</th>
+                <th>Case</th>
+                <th class="center">Umsetzb.</th>
+                <th class="center">Nutzen</th>
+                <th class="center" style="color:#1a3a5c">Score</th>
+                <th class="right">h/Jahr</th>
+                <th class="right">€/Jahr</th>
+                <th class="right">FTE</th>
+                <th>Owner</th>
+              </tr></thead>
+              <tbody id="ranking-body"><tr class="row-winner" style="cursor:pointer" onclick="openDetail(16)">
+      <td class="center font-bold text-muted">🏆</td>
+      <td class="font-bold text-navy">#16</td>
+      <td>RKR - Check</td>
+      <td class="center font-bold text-navy tabular">5.7</td>
+      <td class="center font-bold text-orange tabular">7.5</td>
+      <td class="center score-green tabular font-bold">6.97</td>
+      <td class="right tabular font-bold text-navy">953</td>
+      <td class="right tabular font-bold text-navy">€76.240</td>
+      <td class="right tabular font-bold text-navy">0.6</td>
+      <td class="text-muted">Unternehmensdienste</td>
+    </tr><tr class="row-secondary" style="cursor:pointer" onclick="openDetail(4)">
+      <td class="center font-bold text-muted">–</td>
+      <td class="font-bold text-navy">#04</td>
+      <td>Relevanzprüfung <span style="font-size:.6rem;color:#94a3b8">→ in #16</span></td>
+      <td class="center font-bold text-navy tabular">6.3</td>
+      <td class="center font-bold text-orange tabular">7.8</td>
+      <td class="center text-muted tabular font-bold">7.38</td>
+      <td class="right tabular ">173</td>
+      <td class="right tabular ">€13.840</td>
+      <td class="right tabular ">0.1</td>
+      <td class="text-muted">Felix Hartmann</td>
+    </tr><tr class="row-secondary" style="cursor:pointer" onclick="openDetail(5)">
+      <td class="center font-bold text-muted">–</td>
+      <td class="font-bold text-navy">#05</td>
+      <td>Konsistenz- und Stringenzprüfung <span style="font-size:.6rem;color:#94a3b8">→ in #16</span></td>
+      <td class="center font-bold text-navy tabular">6.7</td>
+      <td class="center font-bold text-orange tabular">7.5</td>
+      <td class="center text-muted tabular font-bold">7.26</td>
+      <td class="right tabular ">520</td>
+      <td class="right tabular ">€41.600</td>
+      <td class="right tabular ">0.3</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(14)">
+      <td class="center font-bold text-muted">2</td>
+      <td class="font-bold text-navy">#14</td>
+      <td>Marktüberwachung auf Missbrauch</td>
+      <td class="center font-bold text-navy tabular">2.0</td>
+      <td class="center font-bold text-orange tabular">8.8</td>
+      <td class="center text-muted tabular font-bold">6.78</td>
+      <td class="right tabular text-muted">975</td>
+      <td class="right tabular text-muted">€78.000</td>
+      <td class="right tabular text-muted">0.6</td>
+      <td class="text-muted">Rainer Vogel</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(1)">
+      <td class="center font-bold text-muted">3</td>
+      <td class="font-bold text-navy">#01</td>
+      <td>Vorbereitende Rechtsrecherche</td>
+      <td class="center font-bold text-navy tabular">4.8</td>
+      <td class="center font-bold text-orange tabular">7.4</td>
+      <td class="center text-muted tabular font-bold">6.64</td>
+      <td class="right tabular text-muted">433</td>
+      <td class="right tabular text-muted">€34.640</td>
+      <td class="right tabular text-muted">0.3</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(7)">
+      <td class="center font-bold text-muted">4</td>
+      <td class="font-bold text-navy">#07</td>
+      <td>Sparring-Konzepte</td>
+      <td class="center font-bold text-navy tabular">5.0</td>
+      <td class="center font-bold text-orange tabular">7.3</td>
+      <td class="center text-muted tabular font-bold">6.57</td>
+      <td class="right tabular text-muted">260</td>
+      <td class="right tabular text-muted">€20.800</td>
+      <td class="right tabular text-muted">0.2</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(6)">
+      <td class="center font-bold text-muted">5</td>
+      <td class="font-bold text-navy">#06</td>
+      <td>Prompt-Assistenz</td>
+      <td class="center font-bold text-navy tabular">5.2</td>
+      <td class="center font-bold text-orange tabular">7.1</td>
+      <td class="center text-muted tabular font-bold">6.52</td>
+      <td class="right tabular text-muted">433</td>
+      <td class="right tabular text-muted">€34.640</td>
+      <td class="right tabular text-muted">0.3</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(11)">
+      <td class="center font-bold text-muted">6</td>
+      <td class="font-bold text-navy">#11</td>
+      <td>Strukturierungs- und Fokussierungs-Assistenten</td>
+      <td class="center font-bold text-navy tabular">5.0</td>
+      <td class="center font-bold text-orange tabular">7.1</td>
+      <td class="center text-muted tabular font-bold">6.46</td>
+      <td class="right tabular text-muted">416</td>
+      <td class="right tabular text-muted">€33.280</td>
+      <td class="right tabular text-muted">0.2</td>
+      <td class="text-muted">Dr. Lukas Brandt</td>
+    </tr><tr class="row-secondary" style="cursor:pointer" onclick="openDetail(13)">
+      <td class="center font-bold text-muted">–</td>
+      <td class="font-bold text-navy">#13</td>
+      <td>Risiko-Radar <span style="font-size:.6rem;color:#94a3b8">→ in #16</span></td>
+      <td class="center font-bold text-navy tabular">4.0</td>
+      <td class="center font-bold text-orange tabular">7.3</td>
+      <td class="center text-muted tabular font-bold">6.28</td>
+      <td class="right tabular ">260</td>
+      <td class="right tabular ">€20.800</td>
+      <td class="right tabular ">0.2</td>
+      <td class="text-muted">Tobias Lange</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(3)">
+      <td class="center font-bold text-muted">7</td>
+      <td class="font-bold text-navy">#03</td>
+      <td>Vorzusammenfassungen</td>
+      <td class="center font-bold text-navy tabular">6.5</td>
+      <td class="center font-bold text-orange tabular">5.8</td>
+      <td class="center text-muted tabular font-bold">6.03</td>
+      <td class="right tabular text-muted">104</td>
+      <td class="right tabular text-muted">€8.320</td>
+      <td class="right tabular text-muted">0.1</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(10)">
+      <td class="center font-bold text-muted">8</td>
+      <td class="font-bold text-navy">#10</td>
+      <td>Aufbereitung von Sachverhalten/Fragelisten</td>
+      <td class="center font-bold text-navy tabular">5.0</td>
+      <td class="center font-bold text-orange tabular">5.8</td>
+      <td class="center text-muted tabular font-bold">5.58</td>
+      <td class="right tabular text-muted">312</td>
+      <td class="right tabular text-muted">€24.960</td>
+      <td class="right tabular text-muted">0.2</td>
+      <td class="text-muted">Dr. Lukas Brandt</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(15)">
+      <td class="center font-bold text-muted">9</td>
+      <td class="font-bold text-navy">#15</td>
+      <td>Schulungsunterlagen</td>
+      <td class="center font-bold text-navy tabular">8.0</td>
+      <td class="center font-bold text-orange tabular">3.9</td>
+      <td class="center text-muted tabular font-bold">5.14</td>
+      <td class="right tabular text-muted">225</td>
+      <td class="right tabular text-muted">€18.000</td>
+      <td class="right tabular text-muted">0.1</td>
+      <td class="text-muted">Rainer Vogel</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(8)">
+      <td class="center font-bold text-muted">10</td>
+      <td class="font-bold text-navy">#08</td>
+      <td>Diktatgestützte Erstellung juristischer Schriftsätze</td>
+      <td class="center font-bold text-navy tabular">2.0</td>
+      <td class="center font-bold text-orange tabular">5.8</td>
+      <td class="center text-muted tabular font-bold">4.68</td>
+      <td class="right tabular text-muted">43</td>
+      <td class="right tabular text-muted">€3.440</td>
+      <td class="right tabular text-muted">0.0</td>
+      <td class="text-muted">Dr. Peter Krämer</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(2)">
+      <td class="center font-bold text-muted">11</td>
+      <td class="font-bold text-navy">#02</td>
+      <td>Handschrift dechiffrieren</td>
+      <td class="center font-bold text-navy tabular">4.5</td>
+      <td class="center font-bold text-orange tabular">4.7</td>
+      <td class="center text-muted tabular font-bold">4.62</td>
+      <td class="right tabular text-muted">22</td>
+      <td class="right tabular text-muted">€1.760</td>
+      <td class="right tabular text-muted">0.0</td>
+      <td class="text-muted">Hendrik Werner</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(9)">
+      <td class="center font-bold text-muted">12</td>
+      <td class="font-bold text-navy">#09</td>
+      <td>Protokollierung von Gremiensitzungen</td>
+      <td class="center font-bold text-navy tabular">3.0</td>
+      <td class="center font-bold text-orange tabular">4.3</td>
+      <td class="center text-muted tabular font-bold">3.93</td>
+      <td class="right tabular text-muted">96</td>
+      <td class="right tabular text-muted">€7.680</td>
+      <td class="right tabular text-muted">0.1</td>
+      <td class="text-muted">Hendrik Werner</td>
+    </tr><tr class="" style="cursor:pointer" onclick="openDetail(12)">
+      <td class="center font-bold text-muted">13</td>
+      <td class="font-bold text-navy">#12</td>
+      <td>Entscheidungsassistent Compliance, KYC-Prüfungen</td>
+      <td class="center font-bold text-navy tabular">2.0</td>
+      <td class="center font-bold text-orange tabular">4.0</td>
+      <td class="center text-muted tabular font-bold">3.40</td>
+      <td class="right tabular text-muted">150</td>
+      <td class="right tabular text-muted">€12.000</td>
+      <td class="right tabular text-muted">0.1</td>
+      <td class="text-muted">Rainer Vogel</td>
+    </tr><tr class="sum-row">
+    <td colspan="3">Σ 13 Cases — Manueller Aufwand gesamt</td>
+    <td></td><td></td><td></td>
+    <td class="right tabular font-bold">4.422</td>
+    <td class="right tabular font-bold">€353.760</td>
+    <td class="right tabular font-bold">2.8</td>
+    <td></td>
+  </tr></tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">gannaca Case Scoring · Klicke auf einen Dot für Details · Stand: 22.02.2026</div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="if(event.target===this)closeDetail()">
+  <div class="modal">
+    <div class="modal-head" id="modal-head"></div>
+    <div class="tabs" id="modal-tabs"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot">
+      <button class="btn-close" onclick="closeDetail()">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// HARDCODED DATA — Freeze-Stand: 2026-02-22
+// ============================================
+
+const RANKING = [
+  {cn:16,rank:'&#127942;',umsetzb:5.7,nutzen:7.5,score:6.97,hYear:953,eurYear:76240,fte:0.6,tier:'hero',sub:false},
+  {cn:4,rank:'&ndash;',umsetzb:6.3,nutzen:7.8,score:7.38,hYear:173,eurYear:13840,fte:0.1,tier:'secondary',sub:true},
+  {cn:5,rank:'&ndash;',umsetzb:6.7,nutzen:7.5,score:7.26,hYear:520,eurYear:41600,fte:0.3,tier:'secondary',sub:true},
+  {cn:14,rank:'2',umsetzb:2.0,nutzen:8.8,score:6.78,hYear:975,eurYear:78000,fte:0.6,tier:'context',sub:false},
+  {cn:1,rank:'3',umsetzb:4.8,nutzen:7.4,score:6.64,hYear:433,eurYear:34640,fte:0.3,tier:'context',sub:false},
+  {cn:7,rank:'4',umsetzb:5.0,nutzen:7.3,score:6.57,hYear:260,eurYear:20800,fte:0.2,tier:'context',sub:false},
+  {cn:6,rank:'5',umsetzb:5.2,nutzen:7.1,score:6.52,hYear:433,eurYear:34640,fte:0.3,tier:'context',sub:false},
+  {cn:11,rank:'6',umsetzb:5.0,nutzen:7.1,score:6.46,hYear:416,eurYear:33280,fte:0.2,tier:'context',sub:false},
+  {cn:13,rank:'&ndash;',umsetzb:4.0,nutzen:7.3,score:6.28,hYear:260,eurYear:20800,fte:0.2,tier:'secondary',sub:true},
+  {cn:3,rank:'7',umsetzb:6.5,nutzen:5.8,score:6.03,hYear:104,eurYear:8320,fte:0.1,tier:'context',sub:false},
+  {cn:10,rank:'8',umsetzb:5.0,nutzen:5.8,score:5.58,hYear:312,eurYear:24960,fte:0.2,tier:'context',sub:false},
+  {cn:15,rank:'9',umsetzb:8.0,nutzen:3.9,score:5.14,hYear:225,eurYear:18000,fte:0.1,tier:'context',sub:false},
+  {cn:8,rank:'10',umsetzb:2.0,nutzen:5.8,score:4.68,hYear:43,eurYear:3440,fte:0.0,tier:'context',sub:false},
+  {cn:2,rank:'11',umsetzb:4.5,nutzen:4.7,score:4.62,hYear:22,eurYear:1760,fte:0.0,tier:'context',sub:false},
+  {cn:9,rank:'12',umsetzb:3.0,nutzen:4.3,score:3.93,hYear:96,eurYear:7680,fte:0.1,tier:'context',sub:false},
+  {cn:12,rank:'13',umsetzb:2.0,nutzen:4.0,score:3.40,hYear:150,eurYear:12000,fte:0.1,tier:'context',sub:false},
+];
+
+const CASES = {
+  1:{title:'Vorbereitende Rechtsrecherche',owner:'Dr. Peter Krämer',ampel:'gelb'},
+  2:{title:'Handschrift dechiffrieren',owner:'Hendrik Werner',ampel:'gelb'},
+  3:{title:'Vorzusammenfassungen',owner:'Dr. Peter Krämer',ampel:'gelb'},
+  4:{title:'Relevanzpr\u00fcfung',owner:'Felix Hartmann',ampel:'gelb'},
+  5:{title:'Konsistenz- und Stringenzpr\u00fcfung',owner:'Dr. Peter Krämer',ampel:'gelb'},
+  6:{title:'Prompt-Assistenz',owner:'Dr. Peter Krämer',ampel:'gelb'},
+  7:{title:'Sparring-Konzepte',owner:'Dr. Peter Krämer',ampel:'gelb'},
+  8:{title:'Diktatgest\u00fctzte Erstellung juristischer Schrifts\u00e4tze',owner:'Dr. Peter Krämer',ampel:'rot'},
+  9:{title:'Protokollierung von Gremiensitzungen',owner:'Hendrik Werner',ampel:'rot'},
+  10:{title:'Aufbereitung von Sachverhalten/Fragelisten',owner:'Dr. Lukas Brandt',ampel:'gelb'},
+  11:{title:'Strukturierungs- und Fokussierungs-Assistenten',owner:'Dr. Lukas Brandt',ampel:'gelb'},
+  12:{title:'Entscheidungsassistent Compliance, KYC-Pr\u00fcfungen',owner:'Rainer Vogel',ampel:'rot'},
+  13:{title:'Risiko-Radar',owner:'Tobias Lange',ampel:'gelb'},
+  14:{title:'Markt\u00fcberwachung auf Missbrauch',owner:'Rainer Vogel',ampel:'rot'},
+  15:{title:'Schulungsunterlagen',owner:'Rainer Vogel',ampel:'gruen'},
+  16:{title:'RKR - Check',owner:'Unternehmensdienste',ampel:'gelb'},
+};
+
+// X-Faktoren (Y-Achse: Strategischer Nutzen)
+const XFACTORS = {
+  1:{freq:'T\u00e4glich',freqS:3.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:7.25,formel:'20min \u00d7 5/Tag \u00d7 5 Tage = 8.33 h/Woche'},
+  2:{freq:'W\u00f6chentlich',freqS:2.0,zeit:'< 5 h',zeitS:1.0,rel:'Niedrig',relS:1.0,qual:'Medior',qualS:1.5,xScore:4.67,formel:'5min \u00d7 5/Woche = 0.42 h/Woche'},
+  3:{freq:'W\u00f6chentlich',freqS:2.0,zeit:'< 5 h',zeitS:1.0,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:5.83,formel:'1h \u00d7 2/Woche = 2.00 h/Woche'},
+  4:{freq:'T\u00e4glich',freqS:3.0,zeit:'< 5 h',zeitS:1.0,rel:'Hoch + Risiko \u2265 4',relS:3.0,qual:'Senior',qualS:2.0,xScore:7.67,formel:'20min \u00d7 2/Tag \u00d7 5 Tage = 3.33 h/Woche'},
+  5:{freq:'T\u00e4glich',freqS:3.0,zeit:'10\u201320 h',zeitS:2.0,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:7.67,formel:'30min \u00d7 4/Tag \u00d7 5 Tage = 10.00 h/Woche'},
+  6:{freq:'T\u00e4glich',freqS:3.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:7.25,formel:'20min \u00d7 5/Tag \u00d7 5 Tage = 8.33 h/Woche'},
+  7:{freq:'T\u00e4glich',freqS:3.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:7.25,formel:'20min \u00d7 3/Tag \u00d7 5 Tage = 5.00 h/Woche'},
+  8:{freq:'W\u00f6chentlich',freqS:2.0,zeit:'< 5 h',zeitS:1.0,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:5.83,formel:'25min \u00d7 2/Woche = 0.83 h/Woche'},
+  9:{freq:'J\u00e4hrlich',freqS:0.5,zeit:'< 5 h',zeitS:1.0,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:4.33,formel:'12h \u00d7 8/Jahr / 52 = 1.85 h/Woche'},
+  10:{freq:'W\u00f6chentlich',freqS:2.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Mittel',relS:1.5,qual:'Senior',qualS:2.0,xScore:5.83,formel:'3h \u00d7 2/Woche = 6.00 h/Woche'},
+  11:{freq:'W\u00f6chentlich',freqS:2.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Hoch + Risiko \u2265 4',relS:3.0,qual:'Senior',qualS:2.0,xScore:7.08,formel:'4h \u00d7 2/Woche = 8.00 h/Woche'},
+  12:{freq:'J\u00e4hrlich',freqS:0.5,zeit:'< 5 h',zeitS:1.0,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Medior',qualS:1.5,xScore:4.00,formel:'60min \u00d7 150/Jahr / 52 = 2.88 h/Woche'},
+  13:{freq:'T\u00e4glich',freqS:3.0,zeit:'5\u201310 h',zeitS:1.5,rel:'Hoch + Risiko < 4',relS:2.0,qual:'Senior',qualS:2.0,xScore:7.25,formel:'1h \u00d7 1/Tag \u00d7 5 Tage = 5.00 h/Woche'},
+  14:{freq:'T\u00e4glich',freqS:3.0,zeit:'10\u201320 h',zeitS:2.0,rel:'Hoch + Risiko \u2265 4',relS:3.0,qual:'Spezialist',qualS:2.5,xScore:8.83,formel:'45min \u00d7 5/Tag \u00d7 5 Tage = 18.75 h/Woche'},
+  15:{freq:'J\u00e4hrlich',freqS:0.5,zeit:'< 5 h',zeitS:1.0,rel:'Mittel',relS:1.5,qual:'Senior',qualS:2.0,xScore:3.92,formel:'75h \u00d7 3/Jahr / 52 = 4.33 h/Woche'},
+  16:{freq:'T\u00e4glich',freqS:3.0,zeit:'> 20 h',zeitS:1.5,rel:'Hoch + Risiko \u2265 4',relS:2.3,qual:'Senior',qualS:2.0,xScore:7.53,formel:'[KUMULIERT] Case 04: 20min \u00d7 2/Tag \u00d7 5 = 3.33 h/Wo + Case 05: 30min \u00d7 4/Tag \u00d7 5 = 10.00 h/Wo + Case 13: 1h \u00d7 1/Tag \u00d7 5 = 5.00 h/Wo = 18.33 h/Woche (953 h/Jahr)'},
+};
+
+// Governance Checks (X-Achse: Regulatorische Umsetzbarkeit)
+const GOVERNANCE = {
+  1:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.0},
+  2:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Nicht relevant',a:0},{l:'DSGVO & Datenschutz',v:'Privacy by Design',a:-1.5},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Papierbasiert',a:-2},{l:'L\u00f6sungsreife & Marktangebot',v:'Keine Marktl\u00f6sung',a:0}],yScore:4.5},
+  3:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Privacy by Design',a:-1.5},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:6.5},
+  4:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Privacy by Design',a:-1.5},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:6.5},
+  5:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Privacy by Design',a:-1.5},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:6.5},
+  6:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.0},
+  7:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.0},
+  8:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'KRITIS-Kernfunktion',a:-3},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:2.0},
+  9:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Teilweise analog',a:-1},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:3.0},
+  10:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.0},
+  11:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.0},
+  12:{checks:[{l:'KI-VO / AI Act',v:'Hochrisiko-KI',a:-3},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:2.0},
+  13:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:4.0},
+  14:{checks:[{l:'KI-VO / AI Act',v:'Hochrisiko-KI',a:-3},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:2.0},
+  15:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Kein Personenbezug',a:0},{l:'Haftung, Revision & Doku',v:'Nur Dokumentation',a:-1},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:8.0},
+  16:{checks:[{l:'KI-VO / AI Act',v:'Begrenztes Risiko',a:-1},{l:'KRITIS & IT-Sicherheit',v:'Mittelbar relevant',a:-1},{l:'DSGVO & Datenschutz',v:'Art. 9 \u2013 Bes. Kategorien',a:-3},{l:'Haftung, Revision & Doku',v:'Entscheidungswirksam + KRITIS',a:-2},{l:'Datenlage & Verf\u00fcgbarkeit',v:'Vollst\u00e4ndig digital',a:0},{l:'L\u00f6sungsreife & Marktangebot',v:'Bestehende L\u00f6sung',a:1}],yScore:5.67},
+};
+
+// Gap-Analyse Texte (gekuerzt)
+const GAPS = {
+  1:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-1.0) (-3.0) (-1.0) (+1.0) = 3.0\nKeine kritischen Gaps - Bewertung kann reviewed werden.\n\nAUDITIERBARKEIT: Case erfordert Nachvollziehbarkeit. Die KI darf nicht autonom entscheiden, der Mensch muss als Kontrollinstanz dokumentiert sein.\nVENDOR-LOCK-IN: Warnung vor der Nutzung von ChatGPT (Free/Plus) mit vertraulichen Firmendaten.'},
+  2:{status:'OFFEN',text:'Berechnungsweg: 10 (-1) (-2) (-1) (-2) = 4\nUnsicherheiten: ai_act: INTERPRETATION | kritis: INTERPRETATION | dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Das Originaldokument (Handschrift) muss als Referenz f\u00fcr die Revision verf\u00fcgbar bleiben.\nVENDOR-LOCK-IN: Handschriftliche Notizen werden oft per Handy-Foto in kostenlose Cloud-Tools geladen.'},
+  3:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-1.0) (-2.0) (-2.0) (+1.0) = 3.0\nUnsicherheiten: dsgvo: OWNER_UNKLAR | haftung: INTERPRETATION\n\nAUDITIERBARKEIT: Es muss nachvollziehbar sein, welches Dokument wann zusammengefasst wurde und wer das Ergebnis gepr\u00fcft hat.\nVENDOR-LOCK-IN: Hinweis auf entstehenden Vendor-Lock-in im Microsoft-\u00d6kosystem.'},
+  4:{status:'OFFEN',text:'Berechnungsweg: 10 (-3) (-2) (-1) = 4\nUnsicherheiten: dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Explainable AI (XAI) ist hier Pflicht f\u00fcr Akzeptanz und Auditierbarkeit.\nVENDOR-LOCK-IN: Klassifizierungslogik sollte nicht nur mit einem spezifischen LLM funktionieren.'},
+  5:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-3.0) (-2.0) (-2.0) = 0.0\nUnsicherheiten: kritis: INTERPRETATION | dsgvo: OWNER_UNKLAR | haftung: INTERPRETATION\n\nAUDITIERBARKEIT: Der Pr\u00fcfbericht der KI muss vom Juristen Punkt f\u00fcr Punkt best\u00e4tigt werden k\u00f6nnen.\nVENDOR-LOCK-IN: Abh\u00e4ngigkeit von Microsoft. Export-F\u00e4higkeit pr\u00fcfen.'},
+  6:{status:'OFFEN',text:'Berechnungsweg: 10 (-2.0) (-1.0) = 7.0\nUnsicherheiten: ai_act: INTERPRETATION | dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Die Nutzung der Prompt-Assistenz kann als Training-on-the-Job gewertet und auditiert werden.\nVENDOR-LOCK-IN: Case nennt explizit OpenAI und Microsoft, was ein Vendor-Lock-in-Risiko darstellt.'},
+  7:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-2.0) (-1.0) = 4.0\nUnsicherheiten: dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Es muss dokumentiert sein, welche Argumente von der KI kamen und welche vom Menschen.\nVENDOR-LOCK-IN: Nutzung propriet\u00e4rer Modelle. Wechsel w\u00fcrde Kontext verloren gehen lassen.'},
+  8:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-3.0) (-2.0) (-2.0) = 0.0\nUnsicherheiten: kritis: INTERPRETATION | dsgvo: OWNER_UNKLAR | haftung: INTERPRETATION\n\nAUDITIERBARKEIT: Revisionssicherheit \u2013 es muss dokumentiert sein, wer den KI-Entwurf freigegeben hat.\nVENDOR-LOCK-IN: Case basiert auf propriet\u00e4ren US-Cloud-Modellen.'},
+  9:{status:'OFFEN',text:'Berechnungsweg: 10 (-1.0) (-2.0) (-1.0) = 6.0\nUnsicherheiten: dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Original-Audio/Transkript muss als Referenz erhalten bleiben.\nVENDOR-LOCK-IN: Mitarbeiter k\u00f6nnten Meetings mit privaten Handys aufzeichnen und in Online-Tools hochladen.'},
+  10:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-2.0) (-1.0) = 4.0\nUnsicherheiten: dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Es muss nachvollziehbar sein, auf welcher Informationsbasis die KI die Frageliste erstellt hat.\nVENDOR-LOCK-IN: Mitarbeiter k\u00f6nnten vertrauliche Sachverhalte in ChatGPT Free eingeben.'},
+  11:{status:'OFFEN',text:'Berechnungsweg: 10 (-3) (-2) (-1) = 4\nUnsicherheiten: dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Es muss nachvollziehbar sein, warum der Assistent bestimmte Punkte als relevant extrahiert hat.\nVENDOR-LOCK-IN: Mitarbeiter kopieren E-Mail-Verl\u00e4ufe in ChatGPT Free.'},
+  12:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-1.0) (-2.0) (-1.0) = 3.0\nUnsicherheiten: kritis: OWNER_UNKLAR | dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Bei KYC-Pr\u00fcfung muss erkl\u00e4rbar sein, warum ein Partner abgelehnt wurde.\nVENDOR-LOCK-IN: Wechsel zu propriet\u00e4rer KI-Plattform schafft hohen Lock-in.'},
+  13:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-1.0) (-2.0) (-2.0) = 2.0\nUnsicherheiten: dsgvo: OWNER_UNKLAR | haftung: INTERPRETATION\n\nAUDITIERBARKEIT: Wenn das Radar ein Risiko meldet (oder nicht), muss die Datenbasis nachvollziehbar sein.\nVENDOR-LOCK-IN: Radar ist abh\u00e4ngig von externen Datenlieferanten.'},
+  14:{status:'OFFEN',text:'Berechnungsweg: 10 (-3.0) (-1.0) (-2.0) (-1.0) = 3.0\nUnsicherheiten: kritis: OWNER_UNKLAR | dsgvo: OWNER_UNKLAR\n\nAUDITIERBARKEIT: Jeder KI-generierte Alert muss revisionssicher protokolliert werden.\nVENDOR-LOCK-IN: Bestehendes System CubeWatch \u2013 neue KI-L\u00f6sung muss integriert werden.'},
+  15:{status:'OFFEN',text:'Berechnungsweg: 10 (-1) (-1) = 8\nUnsicherheiten: ai_act: INTERPRETATION\n\nAUDITIERBARKEIT: KI generiert nicht nur Inhalte, sondern auch Tools zur \u00dcberpr\u00fcfung des Lernerfolgs.\nVENDOR-LOCK-IN: Schulungsunterlagen sollten in offenen Formaten exportiert werden k\u00f6nnen.'},
+  16:{status:'OFFEN',text:'[COMBINED 04+05+13] RKR-Check = Relevanzpr\u00fcfung (R) + Konsistenzpr\u00fcfung (K) + Risiko-Radar (R).\nKumulierter Zeitaufwand: 18.33 h/Woche = 953 h/Jahr.\nUmsetzbarkeit = Durchschnitt: (6.3 + 6.7 + 4.0) \u00f7 3 = 5.67\nCombined Score: 6.97 (Nutzen 7.53 \u00d7 70% + Umsetzbarkeit 5.67 \u00d7 30%).'},
+};
+
+// ============================================
+// SVG MATRIX RENDERING
+// ============================================
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const PAD = {l:60, r:20, t:30, b:50};
+const W = 820, H = 580;
+const CW = W - PAD.l - PAD.r;
+const CH = H - PAD.t - PAD.b;
+
+function sx(v) { return PAD.l + (v / 10) * CW; }
+function sy(v) { return PAD.t + (1 - v / 10) * CH; }
+
+function renderMatrix() {
+  const svg = document.getElementById('matrix');
+  svg.innerHTML = '';
+
+  // Background zones
+  // Kritisch vertical (x < 4)
+  addRect(svg, sx(0), sy(10), sx(4)-sx(0), sy(0)-sy(10), '#ef4444', .08);
+  // Kritisch horizontal (y < 4)
+  addRect(svg, sx(0), sy(4), sx(10)-sx(0), sy(0)-sy(4), '#ef4444', .06);
+  // Pilotzone (x >= 6, y >= 6)
+  addRect(svg, sx(6), sy(10), sx(10)-sx(6), sy(6)-sy(10), '#22c55e', .10);
+  // Mittelfeld — alle verbleibenden Flächen gelb einfärben
+  addRect(svg, sx(4), sy(6), sx(6)-sx(4), sy(4)-sy(6), '#eab308', .06);
+  addRect(svg, sx(4), sy(10), sx(6)-sx(4), sy(6)-sy(10), '#eab308', .06);
+  addRect(svg, sx(6), sy(6), sx(10)-sx(6), sy(4)-sy(6), '#eab308', .06);
+
+  // Pilotzone dashed border (subtil)
+  addLine(svg, sx(6), sy(10), sx(10), sy(10), '#22c55e', .15, '6 3', .5);
+  addLine(svg, sx(6), sy(10), sx(6), sy(6), '#22c55e', .15, '6 3', .5);
+  addLine(svg, sx(10), sy(10), sx(10), sy(6), '#22c55e', .15, '6 3', .5);
+  addLine(svg, sx(6), sy(6), sx(10), sy(6), '#22c55e', .15, '6 3', .5);
+
+  // Grid lines
+  for (let i = 0; i <= 10; i += 2) {
+    const isDashed = i===4||i===6;
+    addLine(svg, sx(i), sy(0), sx(i), sy(10), '#ddd', isDashed ? .15 : 1, isDashed ? '8 4' : '', isDashed ? .5 : 1);
+    addLine(svg, sx(0), sy(i), sx(10), sy(i), '#ddd', isDashed ? .15 : 1, isDashed ? '8 4' : '', isDashed ? .5 : 1);
+  }
+
+  // Reference lines at 4 and 6 (subtil)
+  addLine(svg, sx(4), sy(0), sx(4), sy(10), '#ef4444', .15, '8 4', .5);
+  addLine(svg, sx(6), sy(0), sx(6), sy(10), '#22c55e', .15, '8 4', .5);
+  addLine(svg, sx(0), sy(4), sx(10), sy(4), '#ef4444', .15, '8 4', .5);
+  addLine(svg, sx(0), sy(6), sx(10), sy(6), '#22c55e', .15, '8 4', .5);
+
+  // Axes
+  addLine(svg, sx(0), sy(0), sx(10), sy(0), '#1a1a1a', 1); // X-axis
+  addLine(svg, sx(0), sy(0), sx(0), sy(10), '#1a1a1a', 1); // Y-axis
+
+  // Tick labels
+  for (let i = 0; i <= 10; i += 2) {
+    addText(svg, sx(i), sy(0)+20, String(i), 11, '#1a1a1a', 'middle');
+    if (i > 0) addText(svg, sx(0)-12, sy(i)+4, String(i), 11, '#1a1a1a', 'end');
+  }
+
+  // Axis labels
+  addText(svg, sx(5), sy(0)+42, 'Umsetzbarkeit \u2192', 13, '#1a1a1a', 'middle', 600);
+  const yLabel = addText(svg, 16, sy(5), 'Strategischer Nutzen \u2192', 13, '#1a1a1a', 'middle', 600);
+  yLabel.setAttribute('transform', `rotate(-90, 16, ${sy(5)})`);
+
+  // Zone labels
+  addText(svg, sx(8), sy(8.5), 'Pilotzone', 11, '#22c55e', 'middle', 600, .6);
+  addText(svg, sx(2), sy(1.5), 'Kritisch', 11, '#ef4444', 'middle', 600, .5);
+
+  // Dots — Context first, then Secondary, then Hero (painter's order)
+  const tiers = {context:[], secondary:[], hero:[]};
+  RANKING.forEach(r => tiers[r.tier].push(r));
+
+  [...tiers.context, ...tiers.secondary, ...tiers.hero].forEach(r => {
+    const c = CASES[r.cn];
+    const px = sx(r.umsetzb);
+    const py = sy(r.nutzen);
+
+    if (r.tier === 'hero') {
+      // Hero dot — white fill, red stroke
+      const circle = addCircle(svg, px, py, 20, '#fff', '#c0392b', 2.5, 1);
+      circle.classList.add('dot');
+      circle.onclick = () => openDetail(r.cn);
+      addText(svg, px, py+5, String(r.cn), 13, '#444', 'middle', 700);
+      // Label above dot to avoid overlap with #04/#05
+      addText(svg, px, py-28, 'RKR-Check', 11, '#c0392b', 'middle', 700);
+      addText(svg, px, py-16, 'Score '+r.score.toFixed(2), 9, '#999', 'middle', 400);
+    } else if (r.tier === 'secondary') {
+      // Secondary dot — dashed outline
+      const circle = addCircle(svg, px, py, 14, 'none', '#334155', 2.5, .5);
+      circle.setAttribute('stroke-dasharray', '4 3');
+      circle.classList.add('dot');
+      circle.onclick = () => openDetail(r.cn);
+      addText(svg, px, py+4, String(r.cn).padStart(2,'0'), 9, '#334155', 'middle', 600, .5);
+    } else {
+      // Context dot
+      const circle = addCircle(svg, px, py, 11, '#94a3b8', '#fff', 1.5, .22);
+      circle.classList.add('dot');
+      circle.onclick = () => openDetail(r.cn);
+      addText(svg, px, py+4, String(r.cn).padStart(2,'0'), 9, '#fff', 'middle', 600, .22);
+    }
+  });
+}
+
+function addRect(svg, x, y, w, h, fill, opacity) {
+  const r = document.createElementNS(SVG_NS, 'rect');
+  r.setAttribute('x', x); r.setAttribute('y', y);
+  r.setAttribute('width', w); r.setAttribute('height', h);
+  r.setAttribute('fill', fill); r.setAttribute('fill-opacity', opacity);
+  svg.appendChild(r); return r;
+}
+function addLine(svg, x1, y1, x2, y2, stroke, opacity, dash, sw) {
+  const l = document.createElementNS(SVG_NS, 'line');
+  l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+  l.setAttribute('stroke',stroke);l.setAttribute('stroke-opacity',opacity||1);
+  l.setAttribute('stroke-width', sw || 1);
+  if(dash) l.setAttribute('stroke-dasharray',dash);
+  svg.appendChild(l); return l;
+}
+function addCircle(svg, cx, cy, r, fill, stroke, sw, opacity) {
+  const c = document.createElementNS(SVG_NS, 'circle');
+  c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);
+  c.setAttribute('fill',fill);c.setAttribute('stroke',stroke);c.setAttribute('stroke-width',sw);
+  c.setAttribute('opacity',opacity);
+  svg.appendChild(c); return c;
+}
+function addText(svg, x, y, text, size, fill, anchor, weight, opacity) {
+  const t = document.createElementNS(SVG_NS, 'text');
+  t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('font-size',size);
+  t.setAttribute('fill',fill);t.setAttribute('text-anchor',anchor||'start');
+  t.setAttribute('font-weight',weight||400);
+  if(opacity!=null) t.setAttribute('opacity',opacity);
+  t.textContent = text;
+  svg.appendChild(t); return t;
+}
+
+// ============================================
+// COMPACT SIDEBAR RANKING
+// ============================================
+function renderCompactRanking() {
+  const tbody = document.getElementById('compact-ranking-body');
+  let html = '';
+  RANKING.forEach(r => {
+    const c = CASES[r.cn];
+    const isWinner = r.tier === 'hero';
+    const isSub = r.sub;
+    const rowClass = isWinner ? 'row-winner' : isSub ? 'row-secondary' : '';
+    const scoreClass = isWinner ? 'score-green' : 'text-muted';
+    html += `<tr class="${rowClass}" onclick="openDetail(${r.cn})">
+      <td class="center text-muted" style="font-size:.7rem;font-weight:700;width:30px">${r.rank}</td>
+      <td class="font-bold text-navy" style="width:40px">#${String(r.cn).padStart(2,'0')}</td>
+      <td><span class="case-name">${c.title}</span></td>
+      <td style="text-align:right;padding-right:12px;white-space:nowrap" class="${scoreClass} tabular font-bold">${r.score.toFixed(2)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+// ============================================
+// PANEL TOGGLE: Kompaktes Ranking ↔ Detailtabelle
+// ============================================
+function togglePanel() {
+  const layout = document.querySelector('.main-layout');
+  const compact = document.getElementById('compact-view');
+  const detail = document.getElementById('detail-view');
+  const btn = document.getElementById('panel-toggle');
+  const isCompact = compact.style.display !== 'none';
+  layout.classList.toggle('expanded', isCompact);
+  compact.style.display = isCompact ? 'none' : '';
+  detail.style.display = isCompact ? '' : 'none';
+  btn.innerHTML = isCompact ? 'Ranking &laquo;' : 'Tabelle &raquo;';
+}
+
+// ============================================
+// FULL RANKING TABLE
+// ============================================
+function renderRanking() {
+  const tbody = document.getElementById('ranking-body');
+  let html = '';
+  let sumH = 0, sumEur = 0, sumFte = 0, countRanked = 0;
+
+  RANKING.forEach(r => {
+    const c = CASES[r.cn];
+    const isWinner = r.tier === 'hero';
+    const isSub = r.sub;
+    const rowClass = isWinner ? 'row-winner' : isSub ? 'row-secondary' : '';
+    const scoreClass = isWinner ? 'score-green' : 'text-muted';
+    const suffix = isSub ? ' <span style="font-size:.6rem;color:#94a3b8">\u2192 in #16</span>' : '';
+
+    html += `<tr class="${rowClass}" style="cursor:pointer" onclick="openDetail(${r.cn})">
+      <td class="center font-bold text-muted">${r.rank}</td>
+      <td class="font-bold text-navy">#${String(r.cn).padStart(2,'0')}</td>
+      <td>${c.title}${suffix}</td>
+      <td class="center font-bold text-navy tabular">${r.umsetzb.toFixed(1)}</td>
+      <td class="center font-bold text-orange tabular">${r.nutzen.toFixed(1)}</td>
+      <td class="center ${scoreClass} tabular font-bold">${r.score.toFixed(2)}</td>
+      <td class="right tabular ${isWinner?'font-bold text-navy':isSub?'':'text-muted'}">${r.hYear.toLocaleString('de-DE')}</td>
+      <td class="right tabular ${isWinner?'font-bold text-navy':isSub?'':'text-muted'}">\u20ac${r.eurYear.toLocaleString('de-DE')}</td>
+      <td class="right tabular ${isWinner?'font-bold text-navy':isSub?'':'text-muted'}">${r.fte.toFixed(1)}</td>
+      <td class="text-muted">${c.owner}</td>
+    </tr>`;
+
+    if (!isSub) { sumH += r.hYear; sumEur += r.eurYear; sumFte += r.fte; countRanked++; }
+  });
+
+  // Sum row
+  html += `<tr class="sum-row">
+    <td colspan="3">\u03A3 ${countRanked} Cases &mdash; Manueller Aufwand gesamt</td>
+    <td></td><td></td><td></td>
+    <td class="right tabular font-bold">${sumH.toLocaleString('de-DE')}</td>
+    <td class="right tabular font-bold">\u20ac${sumEur.toLocaleString('de-DE')}</td>
+    <td class="right tabular font-bold">${sumFte.toFixed(1)}</td>
+    <td></td>
+  </tr>`;
+
+  tbody.innerHTML = html;
+}
+
+// ============================================
+// DETAIL PANEL
+// ============================================
+let activeTab = 'y'; // 'y' = Nutzen, 'x' = Umsetzbarkeit
+const SUB_CASES = [4, 5, 13];
+const HERO_CASE = 16;
+
+function openDetail(cn) {
+  const c = CASES[cn];
+  const xf = XFACTORS[cn];
+  const gov = GOVERNANCE[cn];
+  const gap = GAPS[cn];
+  const r = RANKING.find(r => r.cn === cn);
+
+  const ampelClass = c.ampel === 'gruen' ? 'ampel-gruen' : c.ampel === 'rot' ? 'ampel-rot' : 'ampel-gelb';
+  const ampelText = c.ampel === 'gruen' ? 'Umsetzbar' : c.ampel === 'rot' ? 'Kritisch' : 'Pr\u00fcfen';
+
+  // Header
+  document.getElementById('modal-head').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <span class="case-num">#${String(cn).padStart(2,'0')}</span>
+        <span class="ampel-badge ${ampelClass}">${ampelText}</span>
+      </div>
+      <div class="scores-row">
+        <div class="score-box" style="background:rgba(232,116,59,.08)">
+          <div class="label">Umsetzb.</div>
+          <div class="value" style="color:#E8743B">${r ? r.umsetzb.toFixed(1) : gov.yScore.toFixed(1)}</div>
+        </div>
+        <div class="score-box" style="background:rgba(26,58,92,.08)">
+          <div class="label">Nutzen</div>
+          <div class="value" style="color:#1a3a5c">${r ? r.nutzen.toFixed(1) : xf.xScore.toFixed(1)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-title" style="margin-top:8px">${c.title}</div>
+    <div class="case-owner">Owner: ${c.owner}</div>
+  `;
+
+  // Tabs — default to Teilcases for Case #16
+  activeTab = cn === HERO_CASE ? 't' : 'y';
+  renderTabs(cn);
+  renderTabContent(cn);
+
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function renderTabs(cn) {
+  const isHero = cn === HERO_CASE;
+  let html = '';
+  if (isHero) {
+    html += `<button class="tab-btn ${activeTab==='t'?'active-t':''}" onclick="activeTab='t';renderTabs(${cn});renderTabContent(${cn})">
+      Teilcases (${SUB_CASES.length})
+    </button>`;
+  }
+  html += `<button class="tab-btn ${activeTab==='y'?'active-y':''}" onclick="activeTab='y';renderTabs(${cn});renderTabContent(${cn})">
+      &#9650; Y-Achse: Strategischer Nutzen
+    </button>
+    <button class="tab-btn ${activeTab==='x'?'active-x':''}" onclick="activeTab='x';renderTabs(${cn});renderTabContent(${cn})">
+      &#9654; X-Achse: Regulat. Umsetzbarkeit
+    </button>`;
+  document.getElementById('modal-tabs').innerHTML = html;
+}
+
+function renderSubCaseAccordion(subCn) {
+  const sc = CASES[subCn];
+  const sxf = XFACTORS[subCn];
+  const sgov = GOVERNANCE[subCn];
+  const sgap = GAPS[subCn];
+  const sr = RANKING.find(r => r.cn === subCn);
+  const id = 'acc-' + subCn;
+
+  let body = '';
+
+  // Y-Achse
+  body += `<div class="section-head navy">&#9650; Y-ACHSE: STRATEGISCHER NUTZEN (${sxf.xScore.toFixed(1)})</div>`;
+  body += `<div class="formula-box">${sxf.formel}</div>`;
+  body += `<table class="detail-table">
+    <tr><td class="lbl">Frequenz-Hebel</td><td class="val">${sxf.freq}</td><td class="score">${sxf.freqS.toFixed(1)}</td><td class="weight">\u00d730%</td></tr>
+    <tr><td class="lbl">Zeit-Hebel</td><td class="val">${sxf.zeit}</td><td class="score">${sxf.zeitS.toFixed(1)}</td><td class="weight">\u00d725%</td></tr>
+    <tr><td class="lbl">Strateg. Relevanz</td><td class="val">${sxf.rel}</td><td class="score">${sxf.relS.toFixed(1)}</td><td class="weight">\u00d725%</td></tr>
+    <tr><td class="lbl">Qualifizierungsgrad</td><td class="val">${sxf.qual}</td><td class="score">${sxf.qualS.toFixed(1)}</td><td class="weight">\u00d720%</td></tr>
+    <tr class="sum-line"><td class="lbl" style="font-weight:700;color:#1a3a5c">Nutzen-Score</td><td></td><td class="score" style="font-size:.9rem;color:#1a3a5c">${sxf.xScore.toFixed(2)}</td><td></td></tr>
+  </table>`;
+
+  // X-Achse
+  body += `<div class="section-head orange" style="margin-top:16px">&#9654; X-ACHSE: REGULATORISCHE UMSETZBARKEIT (${sgov.yScore.toFixed(1)})</div>`;
+  body += `<table class="detail-table">`;
+  sgov.checks.forEach(ch => {
+    const cls = ch.a > 0 ? 'abzug-pos' : ch.a === 0 ? 'abzug-zero' : 'abzug-neg';
+    const sign = ch.a > 0 ? '+' : '';
+    body += `<tr><td class="lbl">${ch.l}</td><td class="val">${ch.v}</td><td class="score ${cls}">${sign}${ch.a}</td><td></td></tr>`;
+  });
+  const sumAbzug = sgov.checks.reduce((s,c) => s+c.a, 0);
+  body += `<tr class="sum-line-x"><td class="lbl" style="font-weight:700;color:#E8743B">Umsetzbarkeit-Score</td><td style="font-size:.65rem;color:#999">10 + (${sumAbzug >= 0 ? '+' : ''}${sumAbzug.toFixed(1)})</td><td class="score" style="font-size:.9rem;color:#E8743B">${sgov.yScore.toFixed(1)}</td><td></td></tr>`;
+  body += `</table>`;
+
+  // Gap
+  body += renderGap(sgap);
+
+  return `<div class="accordion">
+    <button class="accordion-head" onclick="toggleAcc('${id}',this)">
+      <span class="arrow">&#9654;</span>
+      <span>#${String(subCn).padStart(2,'0')} &mdash; ${sc.title}</span>
+      <span class="sub-scores">
+        <span class="s-y">Y ${sxf.xScore.toFixed(1)}</span>
+        <span class="s-x">X ${sgov.yScore.toFixed(1)}</span>
+      </span>
+    </button>
+    <div class="accordion-body" id="${id}">${body}</div>
+  </div>`;
+}
+
+function toggleAcc(id, btn) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  el.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function renderTabContent(cn) {
+  const xf = XFACTORS[cn];
+  const gov = GOVERNANCE[cn];
+  const gap = GAPS[cn];
+  const body = document.getElementById('modal-body');
+
+  if (activeTab === 't') {
+    // Teilcases tab (only for Case #16)
+    let html = `<div class="teilcases-intro">
+      <strong>Case #16 — RKR-Check</strong>: <strong>R</strong>elevanzpr\u00fcfung (#04) + <strong>K</strong>onsistenzpr\u00fcfung (#05) + <strong>R</strong>isiko-Radar (#13).
+      Umsetzbarkeit = Durchschnitt: (6.3 + 6.7 + 4.0) \u00f7 3 = <strong>5.67</strong>
+    </div>`;
+    SUB_CASES.forEach(sc => { html += renderSubCaseAccordion(sc); });
+    body.innerHTML = html;
+  } else if (activeTab === 'y') {
+    // Y-Achse: Strategischer Nutzen
+    let html = `<div class="section-head navy">&#9650; Y-ACHSE: STRATEGISCHER NUTZEN (${xf.xScore.toFixed(1)})</div>`;
+    html += `<div class="formula-box">${xf.formel}</div>`;
+    html += `<table class="detail-table">
+      <tr><td class="lbl">Frequenz-Hebel</td><td class="val">${xf.freq}</td><td class="score">${xf.freqS.toFixed(1)}</td><td class="weight">\u00d730%</td></tr>
+      <tr><td class="lbl">Zeit-Hebel</td><td class="val">${xf.zeit}</td><td class="score">${xf.zeitS.toFixed(1)}</td><td class="weight">\u00d725%</td></tr>
+      <tr><td class="lbl">Strateg. Relevanz</td><td class="val">${xf.rel}</td><td class="score">${xf.relS.toFixed(1)}</td><td class="weight">\u00d725%</td></tr>
+      <tr><td class="lbl">Qualifizierungsgrad</td><td class="val">${xf.qual}</td><td class="score">${xf.qualS.toFixed(1)}</td><td class="weight">\u00d720%</td></tr>
+      <tr class="sum-line"><td class="lbl" style="font-weight:700;color:#1a3a5c">Nutzen-Score</td><td></td><td class="score" style="font-size:.9rem;color:#1a3a5c">${xf.xScore.toFixed(2)}</td><td></td></tr>
+    </table>`;
+    html += `<div style="font-size:.6rem;color:#999;margin-top:-10px;margin-bottom:16px">Formel: (F\u00d70.30 + Z\u00d70.25 + R\u00d70.25 + Q\u00d70.20) / 3.0 \u00d7 10</div>`;
+
+    // Gap-Analyse
+    html += renderGap(gap);
+    body.innerHTML = html;
+  } else {
+    // X-Achse: Regulatorische Umsetzbarkeit
+    let html = `<div class="section-head orange">&#9654; X-ACHSE: REGULATORISCHE UMSETZBARKEIT (${gov.yScore.toFixed(1)})</div>`;
+    html += `<table class="detail-table">`;
+    gov.checks.forEach(ch => {
+      const cls = ch.a > 0 ? 'abzug-pos' : ch.a === 0 ? 'abzug-zero' : 'abzug-neg';
+      const sign = ch.a > 0 ? '+' : '';
+      html += `<tr>
+        <td class="lbl">${ch.l}</td>
+        <td class="val">${ch.v}</td>
+        <td class="score ${cls}">${sign}${ch.a}</td>
+        <td></td>
+      </tr>`;
+    });
+    const sumAbzug = gov.checks.reduce((s,c) => s+c.a, 0);
+    html += `<tr class="sum-line-x"><td class="lbl" style="font-weight:700;color:#E8743B">Umsetzbarkeit-Score</td><td style="font-size:.65rem;color:#999">10 + (${sumAbzug >= 0 ? '+' : ''}${sumAbzug.toFixed(1)})</td><td class="score" style="font-size:.9rem;color:#E8743B">${gov.yScore.toFixed(1)}</td><td></td></tr>`;
+    html += `</table>`;
+    html += `<div style="font-size:.6rem;color:#999;margin-top:-10px;margin-bottom:16px">Formel: CLAMP(10 + \u03A3(Abz\u00fcge), 0, 10) &mdash; Start bei 10 (Optimismus-Prinzip)</div>`;
+
+    // Gap-Analyse
+    html += renderGap(gap);
+    body.innerHTML = html;
+  }
+}
+
+function renderGap(gap) {
+  const badgeClass = gap.status === 'OFFEN' ? 'gap-offen' : 'gap-vollstaendig';
+  return `<div class="gap-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span class="section-head" style="margin-bottom:0;color:#666">GAP-ANALYSE</span>
+      <span class="gap-badge ${badgeClass}">${gap.status}</span>
+    </div>
+    <div class="gap-text">${gap.text}</div>
+  </div>`;
+}
+
+function closeDetail() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+}
+
+// Keyboard escape
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeDetail(); });
+
+// ============================================
+// INIT
+// ============================================
+renderMatrix();
+renderCompactRanking();
+renderRanking();
+
+// Scroll-Hint: Pfeil ausblenden wenn ganz rechts gescrollt
+const detailScroll = document.getElementById('detail-scroll');
+const scrollWrap = detailScroll.parentElement;
+detailScroll.addEventListener('scroll', function() {
+  const atEnd = this.scrollLeft + this.clientWidth >= this.scrollWidth - 4;
+  scrollWrap.classList.toggle('at-end', atEnd);
+});
+</script>
+
+
+</body></html>
