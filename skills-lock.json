@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "educator-teacher": {
+      "source": "dylantarre/animation-principles",
+      "sourceType": "github",
+      "computedHash": "73f0c585b344a3311bb3cf74c283750113df44bf654fd451c1f8eb3c53846597"
+    }
+  }
+}
