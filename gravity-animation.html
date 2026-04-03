@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schwerkraft — Animierte Erklärung</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #dcc2a1;
+  --gold-deep: #c1a27d;
+  --gold-glow: rgba(220,194,161,0.3);
+  --bg-deep: #12151a;
+  --bg-mid: #1a1e25;
+  --green: #7ecfa0;
+  --accent: #8bb8d9;
+  --text: rgba(255,255,255,0.9);
+  --text-secondary: rgba(255,255,255,0.5);
+  --border: rgba(255,255,255,0.06);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1rem 1rem;
+}
+
+header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Scene Navigation */
+.scene-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.scene-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+
+.scene-btn:hover {
+  border-color: var(--gold-deep);
+  color: var(--gold);
+}
+
+.scene-btn.active {
+  background: rgba(220,194,161,0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Canvas Container */
+.canvas-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+canvas {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-mid);
+}
+
+/* Info Panel */
+.info-panel {
+  max-width: 720px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+.info-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.info-card h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-card p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.principle-tag {
+  display: inline-block;
+  background: rgba(220,194,161,0.1);
+  border: 1px solid rgba(220,194,161,0.2);
+  color: var(--gold);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-right: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.formula {
+  font-family: 'Georgia', serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  text-align: center;
+  padding: 1rem;
+  letter-spacing: 0.05em;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ctrl-btn {
+  background: rgba(220,194,161,0.08);
+  border: 1px solid rgba(220,194,161,0.2);
+  color: var(--gold);
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.ctrl-btn:hover {
+  background: rgba(220,194,161,0.15);
+  border-color: var(--gold);
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slider-group label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.slider-group input[type="range"] {
+  accent-color: var(--gold);
+  width: 100px;
+}
+
+.slider-group .val {
+  color: var(--gold);
+  font-size: 0.8rem;
+  min-width: 60px;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Schwerkraft</h1>
+  <p>Eine interaktive Animation, die Gravitation durch Disneys 12 Animationsprinzipien erklärt.</p>
+</header>
+
+<div class="scene-nav">
+  <button class="scene-btn active" onclick="setScene(0)">1 — Der Fall</button>
+  <button class="scene-btn" onclick="setScene(1)">2 — Erde vs. Mond</button>
+  <button class="scene-btn" onclick="setScene(2)">3 — Parabelwurf</button>
+  <button class="scene-btn" onclick="setScene(3)">4 — Freier Fall</button>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" onclick="resetScene()">Neustart</button>
+  <button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">Pause</button>
+  <div class="slider-group" id="massSlider" style="display:none;">
+    <label>Masse:</label>
+    <input type="range" min="1" max="20" value="5" oninput="setMass(this.value)">
+    <span class="val" id="massVal">5 kg</span>
+  </div>
+</div>
+
+<div class="canvas-wrap">
+  <canvas id="c" width="720" height="420"></canvas>
+</div>
+
+<div class="info-panel">
+  <div class="info-card" id="infoCard">
+    <div id="principles"></div>
+    <h3 id="infoTitle">Szene 1: Der Fall</h3>
+    <p id="infoText">Ein Ball wird losgelassen und beschleunigt nach unten. Beobachte, wie er langsam startet und immer schneller wird — das ist Schwerkraft als Beschleunigung (g = 9,81 m/s²). Beim Aufprall staucht er sich (Squash), beim Rückprall streckt er sich (Stretch).</p>
+    <div class="formula" id="infoFormula">F = m · g</div>
+  </div>
+</div>
+
+<footer>Erstellt mit den 12 Animationsprinzipien — Educator Skill</footer>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// Responsive canvas
+function resizeCanvas() {
+  const maxW = Math.min(720, window.innerWidth - 32);
+  const ratio = 420 / 720;
+  canvas.width = maxW;
+  canvas.height = maxW * ratio;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// State
+let currentScene = 0;
+let paused = false;
+let animFrame;
+let mass = 5;
+let time = 0;
+
+// Colors
+const GOLD = '#dcc2a1';
+const GOLD_DIM = 'rgba(220,194,161,0.3)';
+const GREEN = '#7ecfa0';
+const ACCENT = '#8bb8d9';
+const GROUND_COLOR = 'rgba(255,255,255,0.06)';
+const SKY_TOP = '#12151a';
+const SKY_BOT = '#1a1e25';
+
+// Scene data
+const scenes = [
+  {
+    title: 'Szene 1: Der Fall',
+    text: 'Ein Ball wird losgelassen und beschleunigt nach unten. Er startet langsam und wird immer schneller — Schwerkraft ist Beschleunigung (g = 9,81 m/s²). Beim Aufprall staucht er sich (Squash), beim Rückprall streckt er sich (Stretch). So wird eine unsichtbare Kraft sichtbar.',
+    formula: 'F = m · g = ' + mass + ' · 9,81 = ' + (mass * 9.81).toFixed(1) + ' N',
+    principles: ['Squash & Stretch', 'Slow In / Slow Out', 'Anticipation']
+  },
+  {
+    title: 'Szene 2: Erde vs. Mond',
+    text: 'Derselbe Ball fällt auf der Erde (g = 9,81 m/s²) und auf dem Mond (g = 1,62 m/s²). Der Unterschied wird übertrieben dargestellt, damit er sofort sichtbar ist. Timing lehrt: langsamer Fall = weniger Schwerkraft.',
+    formula: 'g(Erde) = 9,81 m/s²  ·  g(Mond) = 1,62 m/s²',
+    principles: ['Exaggeration', 'Timing', 'Staging']
+  },
+  {
+    title: 'Szene 3: Parabelwurf',
+    text: 'Ein geworfener Ball folgt einer Parabel — nicht einer geraden Linie. Die Flugbahn wird nachgezeichnet und zeigt: Schwerkraft wirkt konstant nach unten, während die horizontale Geschwindigkeit gleich bleibt.',
+    formula: 'y = v₀t · sin(θ) − ½gt²',
+    principles: ['Arc', 'Follow Through', 'Secondary Action']
+  },
+  {
+    title: 'Szene 4: Freier Fall — Masse ändern',
+    text: 'Ändere die Masse mit dem Slider. Überraschung: Alle Objekte fallen gleich schnell! Die Masse ändert die Kraft (F = mg), aber auch die Trägheit — beides hebt sich auf. Galileo hatte Recht.',
+    formula: 'a = F/m = mg/m = g  (masseunabhängig!)',
+    principles: ['Pose to Pose', 'Solid Drawing', 'Appeal']
+  }
+];
+
+// Ball physics
+let balls = [];
+
+class Ball {
+  constructor(x, y, r, gravity, color, label) {
+    this.x = x;
+    this.y = y;
+    this.startX = x;
+    this.startY = y;
+    this.r = r;
+    this.vy = 0;
+    this.vx = 0;
+    this.gravity = gravity;
+    this.color = color;
+    this.label = label || '';
+    this.grounded = false;
+    this.squash = 1;
+    this.stretch = 1;
+    this.bounces = 0;
+    this.trail = [];
+    this.anticipation = 1.0; // 1 = waiting, 0 = released
+    this.releaseDelay = 0;
+    this.released = false;
+  }
+
+  update(dt, groundY) {
+    // Anticipation phase
+    if (!this.released) {
+      this.releaseDelay += dt;
+      if (this.releaseDelay > 1.2) {
+        this.released = true;
+        this.anticipation = 0;
+      } else {
+        // Subtle lift before drop
+        this.anticipation = Math.max(0, 1 - this.releaseDelay / 1.2);
+        this.y = this.startY - Math.sin(this.releaseDelay * 2.5) * 8 * this.anticipation;
+        return;
+      }
+    }
+
+    if (this.grounded && this.bounces >= 3) return;
+
+    this.vy += this.gravity * dt * 60;
+    this.x += this.vx * dt * 60;
+    this.y += this.vy * dt * 60;
+
+    // Trail for parabola scene
+    if (this.vx !== 0 && this.trail.length < 500) {
+      this.trail.push({ x: this.x, y: this.y });
+    }
+
+    // Ground collision
+    if (this.y + this.r >= groundY) {
+      this.y = groundY - this.r;
+      this.bounces++;
+
+      // Squash on impact
+      const impactSpeed = Math.abs(this.vy);
+      this.squash = Math.max(0.4, 1 - impactSpeed / 40);
+      this.stretch = 1 + (1 - this.squash) * 0.8;
+
+      // Bounce with energy loss
+      this.vy = -this.vy * 0.55;
+
+      if (Math.abs(this.vy) < 0.5) {
+        this.vy = 0;
+        this.grounded = true;
+      }
+    } else {
+      // Stretch while falling fast
+      const speed = Math.abs(this.vy);
+      this.stretch = Math.min(1.3, 1 + speed / 60);
+      this.squash = 1 / this.stretch;
+    }
+
+    // Squash recovery
+    this.squash += (1 - this.squash) * 0.15;
+    this.stretch += (1 - this.stretch) * 0.15;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.scale(this.stretch, this.squash);
+
+    // Shadow
+    ctx.beginPath();
+    ctx.ellipse(0, this.r * 0.9, this.r * 0.8, this.r * 0.15, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.fill();
+
+    // Ball
+    ctx.beginPath();
+    ctx.arc(0, 0, this.r, 0, Math.PI * 2);
+    const grad = ctx.createRadialGradient(-this.r * 0.3, -this.r * 0.3, this.r * 0.1, 0, 0, this.r);
+    grad.addColorStop(0, lighten(this.color, 40));
+    grad.addColorStop(1, this.color);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Highlight
+    ctx.beginPath();
+    ctx.arc(-this.r * 0.25, -this.r * 0.25, this.r * 0.35, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.fill();
+
+    ctx.restore();
+
+    // Label
+    if (this.label) {
+      ctx.fillStyle = this.color;
+      ctx.font = `500 ${canvas.width * 0.018}px Inter`;
+      ctx.textAlign = 'center';
+      ctx.fillText(this.label, this.x, this.y - this.r - 10);
+    }
+  }
+
+  drawTrail(ctx) {
+    if (this.trail.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(this.trail[0].x, this.trail[0].y);
+    for (let i = 1; i < this.trail.length; i++) {
+      ctx.lineTo(this.trail[i].x, this.trail[i].y);
+    }
+    ctx.strokeStyle = GOLD_DIM;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+function lighten(hex, pct) {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.min(255, (num >> 16) + pct);
+  const g = Math.min(255, ((num >> 8) & 0x00FF) + pct);
+  const b = Math.min(255, (num & 0x0000FF) + pct);
+  return `rgb(${r},${g},${b})`;
+}
+
+// Ground
+function drawGround(ctx, groundY) {
+  // Ground line
+  ctx.fillStyle = GROUND_COLOR;
+  ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+  ctx.strokeStyle = 'rgba(220,194,161,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, groundY);
+  ctx.lineTo(canvas.width, groundY);
+  ctx.stroke();
+}
+
+// Particle dust on impact
+let particles = [];
+
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 3;
+    this.vy = -Math.random() * 2 - 1;
+    this.life = 1;
+    this.r = Math.random() * 2 + 1;
+  }
+  update(dt) {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.05;
+    this.life -= dt * 2;
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(220,194,161,${this.life * 0.5})`;
+    ctx.fill();
+  }
+}
+
+// Velocity arrow
+function drawArrow(ctx, x, y, vy, color) {
+  const len = Math.min(Math.abs(vy) * 3, 60);
+  if (len < 3) return;
+  const dir = vy > 0 ? 1 : -1;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + len * dir);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // Arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x, y + len * dir);
+  ctx.lineTo(x - 4, y + (len - 8) * dir);
+  ctx.lineTo(x + 4, y + (len - 8) * dir);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+// Speed label
+function drawSpeed(ctx, x, y, vy) {
+  const speed = Math.abs(vy * 0.5).toFixed(1);
+  ctx.fillStyle = var_text_sec();
+  ctx.font = `400 ${canvas.width * 0.016}px Inter`;
+  ctx.textAlign = 'left';
+  ctx.fillText(`v = ${speed} m/s`, x + 20, y);
+}
+
+function var_text_sec() { return 'rgba(255,255,255,0.5)'; }
+
+// ---- SCENES ----
+
+function initScene(idx) {
+  time = 0;
+  balls = [];
+  particles = [];
+  const W = canvas.width;
+  const H = canvas.height;
+  const groundY = H * 0.82;
+  const r = W * 0.03;
+
+  switch(idx) {
+    case 0: // Single drop
+      balls.push(new Ball(W * 0.5, H * 0.15, r, 0.35, GOLD, ''));
+      document.getElementById('massSlider').style.display = 'none';
+      break;
+    case 1: // Earth vs Moon
+      balls.push(new Ball(W * 0.3, H * 0.15, r, 0.35, GOLD, 'Erde (g=9,81)'));
+      balls.push(new Ball(W * 0.7, H * 0.15, r, 0.058, ACCENT, 'Mond (g=1,62)'));
+      document.getElementById('massSlider').style.display = 'none';
+      break;
+    case 2: // Parabola
+      const b = new Ball(W * 0.08, H * 0.55, r, 0.3, GOLD, '');
+      b.released = true;
+      b.anticipation = 0;
+      b.releaseDelay = 2;
+      b.vx = 3.5;
+      b.vy = -7;
+      balls.push(b);
+      document.getElementById('massSlider').style.display = 'none';
+      break;
+    case 3: // Mass comparison
+      const r1 = r * 0.7;
+      const r2 = r * 1.0;
+      const r3 = r * 1.5;
+      balls.push(new Ball(W * 0.25, H * 0.15, r1, 0.35, GREEN, '1 kg'));
+      balls.push(new Ball(W * 0.5, H * 0.15, r2, 0.35, GOLD, '5 kg'));
+      balls.push(new Ball(W * 0.75, H * 0.15, r3, 0.35, ACCENT, '20 kg'));
+      document.getElementById('massSlider').style.display = 'flex';
+      break;
+  }
+
+  updateInfo(idx);
+}
+
+function updateInfo(idx) {
+  const s = scenes[idx];
+  document.getElementById('infoTitle').textContent = s.title;
+  document.getElementById('infoText').textContent = s.text;
+  document.getElementById('infoFormula').textContent = s.formula;
+
+  const pEl = document.getElementById('principles');
+  pEl.innerHTML = '';
+  s.principles.forEach(p => {
+    const span = document.createElement('span');
+    span.className = 'principle-tag';
+    span.textContent = p;
+    pEl.appendChild(span);
+  });
+}
+
+// Main loop
+let lastTime = 0;
+let prevBounces = [];
+
+function animate(timestamp) {
+  if (!lastTime) lastTime = timestamp;
+  const dt = Math.min((timestamp - lastTime) / 1000, 0.05);
+  lastTime = timestamp;
+
+  if (!paused) {
+    time += dt;
+    const W = canvas.width;
+    const H = canvas.height;
+    const groundY = H * 0.82;
+
+    // Clear
+    ctx.clearRect(0, 0, W, H);
+
+    // Sky gradient
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, H);
+    skyGrad.addColorStop(0, SKY_TOP);
+    skyGrad.addColorStop(1, SKY_BOT);
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    drawGround(ctx, groundY);
+
+    // Stars (subtle)
+    if (currentScene === 1) {
+      for (let i = 0; i < 30; i++) {
+        const sx = (i * 137.5 + 50) % W;
+        const sy = (i * 97.3 + 20) % (groundY * 0.5);
+        const alpha = 0.1 + Math.sin(time * 2 + i) * 0.05;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fill();
+      }
+      // Divider line
+      ctx.setLineDash([4, 8]);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath();
+      ctx.moveTo(W * 0.5, 0);
+      ctx.lineTo(W * 0.5, groundY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Update & draw balls
+    balls.forEach((ball, i) => {
+      const oldBounces = prevBounces[i] || 0;
+      ball.update(dt, groundY);
+
+      // Spawn particles on new bounce
+      if (ball.bounces > oldBounces) {
+        for (let p = 0; p < 8; p++) {
+          particles.push(new Particle(ball.x, groundY));
+        }
+      }
+      prevBounces[i] = ball.bounces;
+
+      ball.drawTrail(ctx);
+      ball.draw(ctx);
+
+      // Velocity arrow (scene 0)
+      if (currentScene === 0 && ball.released && !ball.grounded) {
+        drawArrow(ctx, ball.x + ball.r + 15, ball.y, ball.vy, 'rgba(126,207,160,0.7)');
+        drawSpeed(ctx, ball.x + ball.r + 15, ball.y - 15, ball.vy);
+      }
+    });
+
+    // Particles
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+      p.update(dt);
+      p.draw(ctx);
+    });
+
+    // Parabola label
+    if (currentScene === 2 && balls[0].trail.length > 20) {
+      const mid = balls[0].trail[Math.floor(balls[0].trail.length * 0.3)];
+      if (mid) {
+        ctx.fillStyle = GOLD_DIM;
+        ctx.font = `500 ${W * 0.02}px Inter`;
+        ctx.textAlign = 'center';
+        ctx.fillText('Parabel', mid.x, mid.y - 15);
+      }
+    }
+
+    // g-arrow annotation (scene 0)
+    if (currentScene === 0 && time > 0.5 && time < 4) {
+      const alpha = Math.min(1, (time - 0.5) * 2);
+      ctx.fillStyle = `rgba(220,194,161,${alpha * 0.6})`;
+      ctx.font = `400 ${W * 0.018}px Inter`;
+      ctx.textAlign = 'left';
+      ctx.fillText('g = 9,81 m/s²', W * 0.65, H * 0.35);
+      ctx.beginPath();
+      ctx.moveTo(W * 0.72, H * 0.37);
+      ctx.lineTo(W * 0.72, H * 0.5);
+      ctx.strokeStyle = `rgba(220,194,161,${alpha * 0.4})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Scene 3: "same acceleration" label
+    if (currentScene === 3 && time > 2) {
+      const alpha = Math.min(1, (time - 2));
+      ctx.fillStyle = `rgba(126,207,160,${alpha * 0.7})`;
+      ctx.font = `500 ${W * 0.022}px Inter`;
+      ctx.textAlign = 'center';
+      ctx.fillText('Gleiche Beschleunigung!', W * 0.5, H * 0.5);
+    }
+  }
+
+  animFrame = requestAnimationFrame(animate);
+}
+
+// Controls
+function setScene(idx) {
+  currentScene = idx;
+  document.querySelectorAll('.scene-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  lastTime = 0;
+  prevBounces = [];
+  initScene(idx);
+}
+
+function resetScene() {
+  lastTime = 0;
+  prevBounces = [];
+  paused = false;
+  document.getElementById('pauseBtn').textContent = 'Pause';
+  initScene(currentScene);
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('pauseBtn').textContent = paused ? 'Weiter' : 'Pause';
+  if (!paused) lastTime = 0;
+}
+
+function setMass(val) {
+  mass = parseInt(val);
+  document.getElementById('massVal').textContent = val + ' kg';
+}
+
+// Init
+initScene(0);
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
