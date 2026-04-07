@@ -4,22 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IDI Assessment — gannaca</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@200;300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold-light: #f5e1c8;
-  --gold: #d4b185;
-  --gold-deep: #b8935f;
-  --gold-glow: rgba(212,177,133,0.3);
+  --gold-light: #dcc2a1;
+  --gold: #dcc2a1;
+  --gold-deep: #c1a27d;
+  --gold-glow: rgba(220,194,161,0.16);
   --gold-soft: rgba(245,225,200,0.08);
   --gold-border: rgba(245,225,200,0.15);
-  --bg-deep: #12151a;
+  --bg-deep: #0a0c11;
   --bg-card: rgba(255,255,255,0.03);
   --bg-card-hover: rgba(255,255,255,0.05);
   --bg-input: rgba(255,255,255,0.04);
   --green: #7ecfa0;
   --green-soft: rgba(126,207,160,0.1);
-  --green-glow: rgba(126,207,160,0.15);
   --yellow: #e2c36b;
   --yellow-soft: rgba(226,195,107,0.1);
   --red: #d47070;
@@ -27,569 +26,2024 @@
   --accent: #8bb8d9;
   --accent-soft: rgba(139,184,217,0.08);
   --text: rgba(255,255,255,0.9);
-  --text-secondary: rgba(255,255,255,0.5);
-  --text-muted: rgba(255,255,255,0.25);
-  --border: rgba(255,255,255,0.06);
-  --border-input: rgba(255,255,255,0.1);
+  --text-secondary: rgba(255,255,255,0.72);
+  --text-muted: rgba(255,255,255,0.46);
+  --border: rgba(255,255,255,0.08);
+  --border-input: rgba(255,255,255,0.12);
   --font-display: 'Playfair Display', Georgia, serif;
   --font-cat: 'Montserrat', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
-  --font-logo: 'Great Vibes', cursive;
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; font-size:16px; -webkit-font-smoothing:antialiased; }
-body { background-color:var(--bg-deep); color:var(--text); font-family:var(--font-body); font-weight:300; line-height:1.7; overflow-x:hidden; }
-::selection { background:var(--gold); color:var(--bg-deep); }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 17px; -webkit-font-smoothing: antialiased; }
+body {
+  background-color: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: var(--bg-deep); }
 
-/* BACKGROUND */
-.scene { position:fixed; width:100%;height:100%; z-index:0;
-  background: radial-gradient(circle at 100% 80%, rgba(245,225,200,0.2) 0%, transparent 45%),
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 100% 80%, rgba(245,225,200,0.2) 0%, transparent 45%),
     radial-gradient(circle at 80% 40%, rgba(255,255,255,0.03) 0%, transparent 60%),
-    linear-gradient(135deg, #1e242b 0%, #0d0f12 100%); }
-.scene::before { content:""; position:absolute; top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(165deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 38%, transparent 38.2%); z-index:1; }
-.light-edge { position:fixed; top:58%;left:0;width:100%;height:1px;
-  background:linear-gradient(to right, transparent, rgba(255,255,255,0.06) 40%, rgba(245,225,200,0.15) 100%);
-  transform:rotate(-2.5deg); z-index:1; }
-.noise { position:fixed; top:0;left:0;width:100%;height:100%; opacity:0.025; pointer-events:none; z-index:5;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    linear-gradient(135deg, #141821 0%, #0a0c11 100%);
+}
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(165deg, rgba(255,255,255,0.018) 0%, rgba(255,255,255,0.018) 41.8%, transparent 42%);
+}
+.light-edge {
+  position: fixed;
+  top: 58%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  z-index: 1;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06) 40%, rgba(245,225,200,0.15) 100%);
+  transform: rotate(-2.5deg);
+}
+.noise {
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-.content { position:relative; z-index:10; }
-.container { max-width:960px; margin:0 auto; padding:0 clamp(1.5rem,4vw,4rem); }
+.content { position: relative; z-index: 10; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 5rem); }
 
-/* NAV */
-.site-nav { position:sticky; top:0; z-index:100; padding:1.2rem 0;
-  background:linear-gradient(180deg, rgba(18,21,26,0.95) 0%, rgba(18,21,26,0.8) 100%);
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
-.site-nav .container { display:flex; align-items:center; justify-content:space-between; }
-.nav-logo { display:flex; align-items:center; text-decoration:none; }
-.nav-logo img { height:24px; width:auto; opacity:0.85; transition:opacity 0.3s; }
-.nav-logo:hover img { opacity:1; }
-.nav-right { display:flex; align-items:center; gap:1.5rem; }
-.nav-tag { font-family:var(--font-cat); font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); opacity:0.6; }
-.back-link { font-size:0.75rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s; letter-spacing:0.03em; }
-.back-link:hover { color:var(--gold); }
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 0;
+  background: linear-gradient(180deg, rgba(18,21,26,0.96) 0%, rgba(18,21,26,0.82) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+}
+.nav-logo img { height: 24px; width: auto; opacity: 0.88; }
+.brand-copy { display: flex; flex-direction: column; gap: 0.08rem; }
+.brand-eyebrow {
+  font-family: var(--font-cat);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.42);
+}
+.brand-title {
+  font-family: var(--font-cat);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.52);
+}
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+.nav-tag {
+  font-family: var(--font-cat);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.56);
+}
+.back-link {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.back-link:hover { color: var(--gold-light); }
 
-/* STEPS */
-.steps { display:flex; align-items:center; justify-content:center; gap:0; padding:2rem 0 1rem; }
-.step { display:flex; align-items:center; gap:0.5rem; font-family:var(--font-cat); font-size:0.68rem; font-weight:500;
-  letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); transition:color 0.3s; }
-.step.active { color:var(--gold); }
-.step.done { color:var(--green); }
-.step-num { width:30px;height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:0.7rem; font-weight:600; background:transparent; color:var(--text-muted); border:1px solid var(--border); transition:all 0.3s; }
-.step.active .step-num { background:var(--gold); color:var(--bg-deep); border-color:var(--gold);
-  box-shadow:0 0 15px var(--gold-glow); }
-.step.done .step-num { background:var(--green); color:var(--bg-deep); border-color:var(--green);
-  box-shadow:0 0 10px var(--green-glow); }
-.step-connector { width:50px; height:1px; background:var(--border); margin:0 0.5rem; transition:background 0.3s; }
-.step-connector.done { background:var(--green); }
+.product-intro { padding: 4.8rem 0 1.6rem; }
+.product-intro-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 31rem;
+  padding: clamp(2rem, 4vw, 3.4rem);
+  background:
+    radial-gradient(circle at 85% 62%, rgba(245,225,200,0.3) 0%, rgba(245,225,200,0.12) 18%, transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+    linear-gradient(140deg, rgba(24,28,36,0.8) 4%, rgba(14,17,23,0.44) 42%, rgba(10,12,17,0.2) 100%);
+  border-radius: 26px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.28);
+}
+.product-intro-card::before {
+  content: "";
+  position: absolute;
+  inset: auto auto 14% -8%;
+  width: 70%;
+  height: 42%;
+  background:
+    linear-gradient(165deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+  clip-path: polygon(0 72%, 32% 46%, 54% 58%, 79% 34%, 100% 47%, 100% 100%, 0 100%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.product-intro-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(6,8,12,0.34) 0%, rgba(6,8,12,0.12) 22%, transparent 64%),
+    radial-gradient(circle at 88% 56%, rgba(255,248,233,0.24), transparent 28%);
+  pointer-events: none;
+}
+.product-intro-main,
+.product-intro-side {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 0;
+}
+.product-intro-main {
+  max-width: min(58rem, calc(100% - 21rem));
+  padding-top: 2rem;
+}
+.product-intro-main h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5.2vw, 5.2rem);
+  line-height: 0.96;
+  color: var(--gold-light);
+  margin-bottom: 1rem;
+  max-width: 9ch;
+  text-wrap: balance;
+  text-shadow: 0 10px 28px rgba(0,0,0,0.18);
+}
+.product-intro-main p,
+.product-intro-side p {
+  font-size: 1.08rem;
+  color: var(--text-secondary);
+}
+.product-intro-side strong {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-cat);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--gold-light);
+}
+.product-intro-side {
+  position: absolute;
+  right: clamp(1.6rem, 3vw, 2.6rem);
+  bottom: clamp(1.6rem, 3vw, 2.4rem);
+  width: min(19rem, 32vw);
+  padding: 1.1rem 0 0 1.2rem;
+}
+.product-intro-side::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(220,194,161,0.44), rgba(255,255,255,0));
+}
 
-/* SCREENS */
-.screen { display:none; animation:fadeIn 0.5s ease; }
-.screen.active { display:block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 1.2rem 0 0.4rem;
+  opacity: 0.9;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.steps::-webkit-scrollbar { display: none; }
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-cat);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.step.active { color: var(--gold-light); }
+.step.done { color: var(--green); }
+.step-num {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  border: none;
+}
+.step.active .step-num {
+  background: var(--gold);
+  color: var(--bg-deep);
+  box-shadow: 0 0 18px var(--gold-glow);
+}
+.step.done .step-num {
+  background: var(--green);
+  color: var(--bg-deep);
+}
+.step-connector {
+  width: 2.4rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.12));
+  margin: 0 0.1rem;
+}
+.step-connector.done { background: var(--green); }
 
-.screen-header { text-align:center; padding:2.5rem 0 2rem; }
-.screen-header h2 { font-family:var(--font-display); font-size:clamp(1.5rem,3vw,2rem); font-weight:500; color:var(--gold-light);
-  filter:drop-shadow(0 0 8px rgba(212,177,133,0.12)); }
-.screen-header p { color:var(--text-secondary); font-size:0.88rem; margin-top:0.4rem; font-weight:300; }
+.screen { display: none; animation: fadeIn 0.4s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* BUTTONS */
-.btn { display:inline-flex; align-items:center; gap:0.5rem; font-family:var(--font-cat); font-size:0.72rem; font-weight:500;
-  letter-spacing:0.12em; text-transform:uppercase; padding:0.7rem 1.6rem; border-radius:2px; border:none; cursor:pointer; transition:all 0.3s; }
-.btn-gold { background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:var(--bg-deep);
-  filter:drop-shadow(0 0 10px var(--gold-glow)); }
-.btn-gold:hover { filter:drop-shadow(0 0 20px var(--gold-glow)); transform:translateY(-1px); }
-.btn-secondary { background:transparent; color:var(--text-secondary); border:1px solid var(--border); }
-.btn-secondary:hover { border-color:var(--gold-border); color:var(--gold-light); }
-.btn-green { background:var(--green); color:var(--bg-deep); font-weight:600; }
-.btn-green:hover { box-shadow:0 0 20px var(--green-glow); transform:translateY(-1px); }
-.btn-group { display:flex; gap:0.75rem; justify-content:center; margin:2.5rem 0; }
+.screen-header {
+  text-align: center;
+  padding: 4rem 0 2.8rem;
+}
+.screen-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 3vw, 2.55rem);
+  font-weight: 500;
+  color: var(--gold-light);
+  line-height: 1.12;
+}
+.screen-header p {
+  margin-top: 0.55rem;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
 
-/* CASE CARD */
-.case-card { border:1px solid var(--border); background:var(--bg-card); padding:2rem; margin-bottom:1.2rem; }
-.case-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; padding-bottom:0.8rem;
-  border-bottom:1px solid var(--border); }
-.case-card-num { font-family:var(--font-cat); font-size:0.6rem; font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); }
-.case-remove { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.9rem; padding:0.3rem;
-  transition:all 0.2s; }
-.case-remove:hover { color:var(--red); }
+.btn,
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-cat);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  border-radius: 2px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn { padding: 0.9rem 1.55rem; }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--bg-deep);
+  filter: drop-shadow(0 0 10px var(--gold-glow));
+}
+.btn-gold:hover { transform: translateY(-1px); filter: drop-shadow(0 0 18px var(--gold-glow)); }
+.btn-secondary {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.btn-secondary:hover { border-color: var(--gold-border); color: var(--gold-light); }
+.btn-green { background: var(--green); color: var(--bg-deep); }
+.btn-green:hover { transform: translateY(-1px); box-shadow: 0 0 18px rgba(126,207,160,0.18); }
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 2.4rem 0;
+}
 
-/* FORM */
-.form-group { margin-bottom:1rem; }
-.form-group label { display:block; font-family:var(--font-cat); font-size:0.65rem; font-weight:400; letter-spacing:0.12em;
-  text-transform:uppercase; color:var(--text-muted); margin-bottom:0.4rem; }
-.form-group input[type="text"],.form-group textarea {
-  width:100%; padding:0.65rem 1rem; border:1px solid var(--border-input); border-radius:2px;
-  font-family:var(--font-body); font-size:0.85rem; font-weight:300; background:var(--bg-input); color:var(--text);
-  transition:border-color 0.3s; }
-.form-group input:focus,.form-group textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 8px rgba(212,177,133,0.08); }
-.form-group textarea { resize:vertical; min-height:50px; }
-.form-group input::placeholder,.form-group textarea::placeholder { color:var(--text-muted); font-weight:300; }
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-cat);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.56);
+}
+.form-group input[type="text"],
+.form-group textarea,
+.cta-form input {
+  width: 100%;
+  padding: 0.88rem 1rem;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 350;
+}
+.form-group textarea { resize: vertical; min-height: 88px; }
+.form-group input:focus,
+.form-group textarea:focus,
+.cta-form input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(212,177,133,0.08);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder,
+.cta-form input::placeholder { color: var(--text-muted); }
 
-/* ASSESSMENT SECTIONS */
-.assessment-section { margin-top:1.5rem; }
-.assessment-section h4 { font-family:var(--font-cat); font-size:0.62rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase;
-  margin-bottom:0.8rem; display:flex; align-items:center; gap:0.6rem; color:var(--text-secondary); }
-.tag { font-family:var(--font-cat); font-size:0.55rem; padding:0.15rem 0.5rem; border-radius:2px; font-weight:500; letter-spacing:0.1em; }
-.tag-x { background:var(--accent-soft); color:var(--accent); border:1px solid rgba(139,184,217,0.15); }
-.tag-y { background:var(--green-soft); color:var(--green); border:1px solid rgba(126,207,160,0.15); }
+.wizard-shell {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 4vw, 3.1rem);
+  background:
+    radial-gradient(circle at 84% 14%, rgba(245,225,200,0.12), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012)),
+    rgba(255,255,255,0.018);
+  border-radius: 28px;
+  box-shadow: 0 34px 88px rgba(0,0,0,0.24);
+}
+.wizard-progress {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.35s ease;
+}
+.wizard-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.wizard-step-count {
+  font-family: var(--font-cat);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.wizard-case-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+}
+.wizard-case-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.58rem 0.8rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.045);
+  font-family: var(--font-cat);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.wizard-case-chip.active {
+  color: var(--gold-light);
+  background: rgba(245,225,200,0.11);
+  box-shadow: inset 0 0 0 1px rgba(245,225,200,0.16);
+}
+.wizard-case-chip.done::before {
+  content: "●";
+  color: var(--green);
+  font-size: 0.72rem;
+}
+.wizard-question {
+  min-height: 26rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 64rem;
+}
+.wizard-question-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 1rem;
+  padding: 0.22rem 0.6rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(245,225,200,0.08);
+  font-family: var(--font-cat);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.wizard-question h3 {
+  font-family: var(--font-display);
+  font-size: clamp(2.35rem, 4vw, 3.6rem);
+  line-height: 1.05;
+  color: var(--gold-light);
+  margin-bottom: 0.9rem;
+}
+.wizard-question p {
+  max-width: 44rem;
+  font-size: 1.08rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.8rem;
+}
+.wizard-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem;
+  max-width: 58rem;
+}
+.wizard-option-btn {
+  width: 100%;
+  min-height: 5.6rem;
+  padding: 1.35rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+  color: var(--text);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 1.04rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.wizard-option-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(245,225,200,0.04));
+}
+.wizard-option-btn.is-selected {
+  background: linear-gradient(135deg, rgba(245,225,200,0.2), rgba(212,177,133,0.22));
+  box-shadow: inset 0 0 0 1px rgba(245,225,200,0.24), 0 12px 24px rgba(0,0,0,0.12);
+}
+.wizard-option-btn.is-green { box-shadow: inset 0 0 0 1px rgba(126,207,160,0.26); }
+.wizard-option-btn.is-yellow { box-shadow: inset 0 0 0 1px rgba(226,195,107,0.24); }
+.wizard-option-btn.is-red { box-shadow: inset 0 0 0 1px rgba(212,112,112,0.24); }
+.wizard-option-title {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+.wizard-option-sub {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+.wizard-text-step {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 42rem;
+}
+.wizard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+.wizard-summary {
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.wizard-summary-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+}
+.wizard-summary-card strong {
+  display: block;
+  font-size: 1.04rem
+  color: var(--text);
+}
+.wizard-summary-card span {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+.wizard-empty {
+  padding: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+.add-case-btn {
+  width: 100%;
+  padding: 1.05rem;
+  border: none;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  font-family: var(--font-cat);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.add-case-btn:hover { border-color: var(--gold); color: var(--gold-light); background: var(--gold-soft); }
 
-.factor-row { margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
-.factor-row:last-child { border-bottom:none; padding-bottom:0; }
-.factor-label { font-size:0.82rem; font-weight:400; color:var(--text); margin-bottom:0.25rem; display:flex; align-items:center; gap:0.5rem; }
-.factor-weight-tag { font-family:var(--font-cat); font-size:0.55rem; color:var(--gold); font-weight:500; letter-spacing:0.08em; }
-.factor-hint { font-size:0.72rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:300; }
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+  padding: 2.1rem 1.4rem;
+  text-align: center;
+  border-radius: 24px;
+}
+.kpi-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% -40% auto;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,225,200,0.14), transparent 68%);
+  pointer-events: none;
+}
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.kpi-value.v-green { color: var(--green); }
+.kpi-value.v-blue { color: var(--accent); }
+.kpi-value.v-gold { color: var(--gold-light); filter: drop-shadow(0 0 6px rgba(212,177,133,0.15)); }
+.kpi-value.v-warm { color: var(--gold); }
+.kpi-label {
+  font-family: var(--font-cat);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.66);
+}
+.kpi-sublabel {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
 
-/* OPTION BUTTONS */
-.option-group { display:flex; gap:0.4rem; flex-wrap:wrap; }
-.option-btn { padding:0.4rem 0.85rem; font-family:var(--font-cat); font-size:0.65rem; font-weight:400; letter-spacing:0.06em;
-  border-radius:2px; border:1px solid var(--border-input); background:transparent; color:var(--text-muted);
-  cursor:pointer; transition:all 0.2s; }
-.option-btn:hover { border-color:var(--gold-border); color:var(--text-secondary); }
-.option-btn.selected { background:linear-gradient(135deg, var(--gold-light), var(--gold)); color:var(--bg-deep); border-color:var(--gold);
-  font-weight:500; box-shadow:0 0 10px var(--gold-glow); }
-.option-btn.selected-gov-green { background:var(--green); color:var(--bg-deep); border-color:var(--green); font-weight:500;
-  box-shadow:0 0 10px var(--green-glow); }
-.option-btn.selected-gov-yellow { background:var(--yellow); color:var(--bg-deep); border-color:var(--yellow); font-weight:500; }
-.option-btn.selected-gov-red { background:var(--red); color:var(--bg-deep); border-color:var(--red); font-weight:500; }
+.result-summary,
+.matrix-panel,
+.ranking-panel,
+.single-case-layout,
+.compare-panel,
+.rec-card,
+.cta-section,
+.contact-block,
+.detail-note {
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+  border-radius: 24px;
+}
+.result-summary {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.6rem;
+  padding: 2rem;
+}
+.summary-main,
+.summary-side { padding: 0; background: transparent; }
+.summary-main h3,
+.matrix-panel h3,
+.ranking-panel h3,
+.compare-panel h3,
+.rec-card h3,
+.cta-section h3,
+.contact-block h3 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--gold-light);
+  margin-bottom: 0.45rem;
+}
+.summary-main p,
+.summary-side p,
+.matrix-panel p,
+.compare-panel p,
+.rec-copy p,
+.cta-section p,
+.contact-copy p,
+.detail-note p {
+  font-size: 1.04rem
+  color: var(--text-secondary);
+}
+.summary-kicker,
+.panel-kicker,
+.rec-kicker,
+.contact-kicker {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-cat);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.summary-list {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+.summary-list-item {
+  padding-left: 1rem;
+  position: relative;
+  font-size: 0.96rem;
+  color: rgba(255,255,255,0.78);
+}
+.summary-list-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72rem;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--gold-light);
+}
+.summary-score {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.55rem;
+}
 
-.add-case-btn { width:100%; padding:1rem; border:1px dashed var(--border-input); background:transparent;
-  font-family:var(--font-cat); font-size:0.72rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--text-muted); cursor:pointer; transition:all 0.3s; }
-.add-case-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-soft); }
+.matrix-panel,
+.ranking-panel,
+.compare-panel,
+.detail-note,
+.cta-section,
+.contact-block { padding: 1.9rem; }
+.matrix-panel { margin-bottom: 1.5rem; }
+.matrix-wrap-frame { margin-top: 1.2rem; }
+.matrix-caption {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.single-case-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.9rem;
+}
+.single-case-layout > div { background: transparent; padding: 0; }
+.single-case-note {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-left: 2px solid var(--gold-border);
+  background: rgba(255,255,255,0.02);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.compare-card {
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+}
+.compare-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+  font-size: 1rem;
+}
+.compare-card span {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.priority-banner {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--gold);
+  background: rgba(245,225,200,0.05);
+  color: rgba(255,255,255,0.82);
+}
 
-/* KPIs */
-.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:2rem; }
-.kpi-card { background:var(--bg-deep); padding:1.5rem; text-align:center; }
-.kpi-value { font-family:var(--font-display); font-size:2rem; font-weight:600; line-height:1; margin-bottom:0.3rem; }
-.kpi-value.v-green { color:var(--green); }
-.kpi-value.v-blue { color:var(--accent); }
-.kpi-value.v-gold { color:var(--gold-light); filter:drop-shadow(0 0 6px rgba(212,177,133,0.15)); }
-.kpi-value.v-warm { color:var(--gold); }
-.kpi-label { font-family:var(--font-cat); font-size:0.6rem; font-weight:500; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.1em; }
-.kpi-sublabel { font-size:0.58rem; color:var(--text-muted); margin-top:0.15rem; font-weight:300; }
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.ranking-table th {
+  padding: 0.8rem 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-align: left;
+  font-family: var(--font-cat);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.ranking-table td {
+  padding: 0.9rem 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.96rem;
+}
+.ranking-table tr:hover td { background: rgba(255,255,255,0.02); }
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.rank-1 { background: var(--gold); color: var(--bg-deep); }
+.rank-2 { background: rgba(255,255,255,0.12); color: var(--text); }
+.rank-3 { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+.rank-other { background: rgba(255,255,255,0.04); color: var(--text-secondary); }
+.ampel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.62rem;
+  border-radius: 2px;
+  font-family: var(--font-cat);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.ampel-badge-green { background: var(--green-soft); color: var(--green); }
+.ampel-badge-yellow { background: var(--yellow-soft); color: var(--yellow); }
+.ampel-badge-red { background: var(--red-soft); color: var(--red); }
+.pilot-tag {
+  font-family: var(--font-cat);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 0.18rem 0.45rem;
+  border-radius: 2px;
+  background: var(--green-soft);
+  color: var(--green);
+}
 
-/* RANKING TABLE */
-.ranking-table { width:100%; border-collapse:collapse; margin:1.5rem 0; }
-.ranking-table th { font-family:var(--font-cat); font-size:0.6rem; font-weight:500; color:var(--text-muted); text-transform:uppercase;
-  letter-spacing:0.1em; text-align:left; padding:0.6rem 0.75rem; border-bottom:1px solid var(--border); }
-.ranking-table td { font-size:0.82rem; font-weight:300; padding:0.7rem 0.75rem; border-bottom:1px solid var(--border); }
-.ranking-table tr:hover td { background:rgba(255,255,255,0.02); }
-.rank-badge { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%;
-  font-size:0.65rem; font-weight:600; }
-.rank-1 { background:var(--gold); color:var(--bg-deep); box-shadow:0 0 8px var(--gold-glow); }
-.rank-2 { background:rgba(255,255,255,0.12); color:var(--text); }
-.rank-3 { background:rgba(255,255,255,0.06); color:var(--text-secondary); }
-.ampel-badge { display:inline-flex; align-items:center; gap:0.35rem; font-family:var(--font-cat); font-size:0.62rem; font-weight:500;
-  letter-spacing:0.05em; padding:0.2rem 0.6rem; border-radius:2px; }
-.ampel-badge-green { background:var(--green-soft); color:var(--green); }
-.ampel-badge-yellow { background:var(--yellow-soft); color:var(--yellow); }
-.ampel-badge-red { background:var(--red-soft); color:var(--red); }
-.pilot-tag { font-family:var(--font-cat); font-size:0.55rem; font-weight:500; letter-spacing:0.1em; padding:0.12rem 0.45rem;
-  border-radius:2px; background:var(--green-soft); color:var(--green); border:1px solid rgba(126,207,160,0.2); }
+.rec-card {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.6rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  padding: 1.8rem;
+}
+.rec-copy,
+.rec-output { padding: 0; background: transparent; }
+.rec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+.rec-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  font-family: var(--font-cat);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.rec-badge-top { background: var(--gold-soft); color: var(--gold); border: 1px solid var(--gold-border); }
+.rec-badge-sec { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(139,184,217,0.16); }
+.rec-points {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.rec-point {
+  padding-left: 1rem;
+  position: relative;
+  font-size: 0.94rem;
+  color: rgba(255,255,255,0.8);
+}
+.rec-point::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72rem;
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 50%;
+  background: var(--gold-light);
+}
+.rec-output strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-cat);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.7);
+}
+.rec-output p { margin-bottom: 1rem; }
 
-.matrix-container { border:1px solid var(--border); background:var(--bg-card); padding:2rem; margin-bottom:2rem; }
-.matrix-container h3 { font-family:var(--font-cat); font-size:0.65rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--text-secondary); margin-bottom:1.2rem; }
+.detail-note { margin-bottom: 1.3rem; }
+.case-card {
+  margin-bottom: 1rem;
+  padding: 1.3rem 1.4rem;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+}
+.case-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+.case-card-num {
+  font-family: var(--font-cat);
+  font-size: 0.84rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+.formula-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  margin: 0.7rem 0;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  font-family: var(--font-cat);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.formula-bar .result {
+  color: var(--gold-light);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
 
-/* RECOMMENDATIONS */
-.rec-card { border:1px solid var(--border); background:var(--bg-card); padding:2rem; margin-bottom:1rem; border-left:3px solid var(--accent); }
-.rec-card.primary-rec { border-left-color:var(--gold); background:linear-gradient(135deg, rgba(245,225,200,0.03), var(--bg-card)); }
-.rec-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; }
-.rec-card h3 { font-family:var(--font-display); font-size:1.1rem; font-weight:500; color:var(--gold-light); }
-.rec-badge { font-family:var(--font-cat); font-size:0.55rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase;
-  padding:0.2rem 0.6rem; border-radius:2px; }
-.rec-badge-top { background:var(--gold-soft); color:var(--gold); border:1px solid var(--gold-border); }
-.rec-badge-sec { background:var(--accent-soft); color:var(--accent); border:1px solid rgba(139,184,217,0.15); }
-.rec-card > p { font-size:0.85rem; color:var(--text-secondary); line-height:1.65; font-weight:300; margin-bottom:0.8rem; }
-.rec-reason { font-size:0.78rem; background:rgba(255,255,255,0.02); padding:0.8rem 1.2rem; border-left:2px solid var(--gold-border);
-  color:var(--text); line-height:1.6; font-weight:300; }
-.rec-reason strong { color:var(--gold); font-weight:500; }
+.contact-block {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  background: transparent;
+}
+.contact-copy,
+.contact-option {
+  background: rgba(255,255,255,0.035);
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+.contact-option strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-cat);
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+.contact-option p {
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+.contact-btn.primary {
+  padding: 0.78rem 1rem;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--bg-deep);
+  border-radius: 999px;
+}
+.contact-btn.secondary {
+  padding: 0.78rem 1rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: var(--gold-light);
+  border-radius: 999px;
+}
 
-/* CTA */
-.cta-section { border:1px solid var(--border); background:var(--bg-card); padding:3rem; text-align:center; margin:2rem 0 3rem; }
-.cta-section h3 { font-family:var(--font-display); font-size:1.4rem; font-weight:500; color:var(--gold-light); margin-bottom:0.5rem; }
-.cta-section p { color:var(--text-secondary); font-size:0.88rem; margin-bottom:1.5rem; font-weight:300; }
-.cta-form { display:flex; gap:0.5rem; max-width:460px; margin:0 auto; }
-.cta-form input { flex:1; padding:0.65rem 1rem; border:1px solid var(--border-input); border-radius:2px;
-  background:var(--bg-input); color:var(--text); font-family:var(--font-body); font-size:0.82rem; font-weight:300; }
-.cta-form input::placeholder { color:var(--text-muted); }
-.cta-form input:focus { outline:none; border-color:var(--gold); }
+.cta-section {
+  margin: 1.8rem 0 2.5rem;
+  text-align: center;
+}
+.cta-form {
+  display: flex;
+  gap: 0.7rem;
+  max-width: 560px;
+  margin: 1.4rem auto 0;
+}
+.cta-form input {
+  border: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  padding-left: 1.15rem;
+  padding-right: 1.15rem;
+}
+.site-footer {
+  text-align: center;
+  padding: 2.8rem 0;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+.site-footer img { height: 28px; width: auto; opacity: 0.5; display: block; margin: 0 auto 0.7rem; }
 
-/* FORMULA BAR */
-.formula-bar { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-left:2px solid var(--gold-border);
-  padding:0.6rem 1rem; margin:0.6rem 0; font-family:var(--font-cat); font-size:0.65rem; letter-spacing:0.03em;
-  color:var(--text-muted); display:flex; align-items:center; justify-content:space-between; }
-.formula-bar .result { color:var(--gold-light); font-weight:600; font-size:0.75rem; }
+@media (max-width: 960px) {
+  html { font-size: 16px; }
+  .product-intro-card,
+  .result-summary,
+  .single-case-layout,
+  .rec-card,
+  .contact-block,
+  .comparison-grid,
+  .wizard-option-grid {
+    grid-template-columns: 1fr;
+  }
+  .product-intro-card {
+    min-height: auto;
+    padding-bottom: 8rem;
+  }
+  .product-intro-main { max-width: none; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-form { flex-direction: column; }
+}
 
-.site-footer { text-align:center; padding:2.5rem 0; font-size:0.6rem; color:var(--text-muted); font-weight:300;
-  letter-spacing:0.05em; border-top:1px solid var(--border); }
-
-@media (max-width:640px) {
-  .kpi-grid { grid-template-columns:repeat(2,1fr); }
-  .steps .step-label { display:none; }
-  .cta-form { flex-direction:column; }
-  .option-group { flex-direction:column; }
+@media (max-width: 640px) {
+  .brand-copy,
+  .nav-tag,
+  .step-label { display: none; }
+  .steps { gap: 0.3rem; }
+  .step-connector { width: 24px; margin: 0 0.2rem; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .btn-group,
+  .wizard-actions { flex-direction: column; }
+  .wizard-shell { padding: 1.4rem; }
+  .product-intro-card {
+    padding: 1.4rem 1.4rem 6.6rem;
+    border-radius: 22px;
+  }
+  .product-intro-side {
+    position: absolute;
+    left: 1.4rem;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    width: auto;
+    padding-left: 1rem;
+  }
 }
 </style>
 </head>
 <body>
-
 <div class="scene"></div>
 <div class="light-edge"></div>
 <div class="noise"></div>
 
 <div class="content">
-
-<nav class="site-nav">
-  <div class="container">
-    <a href="index.html" class="nav-logo"><img src="gannaca-logo-white.png" alt="gannaca"></a>
-    <div class="nav-right">
-      <a href="index.html" class="back-link">← Zurück zur Übersicht</a>
-      <span class="nav-tag">Assessment</span>
-    </div>
-  </div>
-</nav>
-
-<div class="container">
-  <div class="steps">
-    <div class="step active" id="step-1"><div class="step-num">1</div><span class="step-label">Eingabe</span></div>
-    <div class="step-connector" id="conn-1"></div>
-    <div class="step" id="step-2"><div class="step-num">2</div><span class="step-label">Überblick</span></div>
-    <div class="step-connector" id="conn-2"></div>
-    <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Details</span></div>
-    <div class="step-connector" id="conn-3"></div>
-    <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Nächster Schritt</span></div>
-  </div>
-</div>
-
-<div class="screen active" id="screen-1">
-  <div class="container">
-    <div class="screen-header">
-      <h2>Welchen Prozess wollen Sie prüfen?</h2>
-      <p>Benennen Sie einen Prozess und klicken Sie sich durch 10 kurze Fragen — fertig.</p>
-    </div>
-    <div id="cases-container"></div>
-    <button class="add-case-btn" onclick="addCase()">+ Noch einen Prozess prüfen</button>
-    <div class="btn-group">
-      <button class="btn btn-gold" onclick="calculateAndShow()">Jetzt auswerten</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen" id="screen-2">
-  <div class="container">
-    <div class="screen-header"><h2>Ihre Cases auf einen Blick</h2><p>Wo lohnt sich KI — und wo wird's regulatorisch eng?</p></div>
-    <div class="kpi-grid" id="kpi-grid"></div>
-    <div class="matrix-container"><h3>Matrix — Mehrwert × Machbarkeit</h3><div id="matrix-wrap"></div></div>
-    <div id="ranking-section"></div>
-    <div class="btn-group">
-      <button class="btn btn-secondary" onclick="goToScreen(1)">← Zurück</button>
-      <button class="btn btn-green" onclick="showRecommendations()">Was soll ich tun?</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen" id="screen-3">
-  <div class="container">
-    <div class="screen-header"><h2>So kommen die Scores zustande</h2><p>Transparent: Die genaue Berechnung für jeden Ihrer Prozesse.</p></div>
-    <div id="detail-cards"></div>
-    <div class="btn-group">
-      <button class="btn btn-secondary" onclick="goToScreen(2)">← Überblick</button>
-      <button class="btn btn-green" onclick="goToScreen(4)">Nächster Schritt</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen" id="screen-4">
-  <div class="container">
-    <div class="screen-header"><h2>Ihr nächster Schritt</h2><p>Basierend auf Ihren Ergebnissen — das empfehlen wir konkret.</p></div>
-    <div id="recommendations"></div>
-    <div class="cta-section">
-      <h3>Ergebnis besprechen?</h3>
-      <p>Wir schauen uns Ihre Scores gemeinsam an und sagen Ihnen, wie es weitergeht — unverbindlich.</p>
-      <div class="cta-form">
-        <input type="email" placeholder="Ihre E-Mail-Adresse" id="cta-email">
-        <button class="btn btn-gold" onclick="sendInquiry()">Gespräch vereinbaren</button>
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="gannaca-logo-white.png" alt="gannaca">
+        <span class="brand-copy">
+          <span class="brand-eyebrow">Intelligence Dividend Index</span>
+          <span class="brand-title">gannaca</span>
+        </span>
+      </a>
+      <div class="nav-right">
+        <span class="nav-tag">Assessment</span>
+        <a href="index.html" class="back-link">Zurück zur Produktübersicht</a>
       </div>
     </div>
-    <div class="btn-group" style="margin-bottom:3rem;">
-      <button class="btn btn-secondary" onclick="goToScreen(2)">← Überblick</button>
-      <button class="btn btn-secondary" onclick="goToScreen(3)">Details</button>
-      <button class="btn btn-secondary" onclick="resetAll()">Nochmal starten</button>
+  </nav>
+
+  <div class="product-intro">
+    <div class="container">
+      <div class="product-intro-card">
+        <div class="product-intro-main">
+          <h1>Strategische Einordnung Ihrer KI-Potenziale</h1>
+          <p>Sie werden Frage für Frage durch die Analyse geführt. So entsteht eine ruhige, fokussierte Einordnung statt einer langen Formularstrecke.</p>
+        </div>
+        <div class="product-intro-side">
+          <strong>Exklusive Beratungsperspektive</strong>
+          <p>Jede Auswahl führt direkt zum nächsten Analyseschritt. Die Methodik bleibt präzise, der Ablauf wird klarer und hochwertiger.</p>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<footer class="site-footer"><div class="container"><span class="footer-logo"><img src="gannaca-logo-white.png" alt="gannaca" style="height:28px;width:auto;opacity:0.5;display:block;margin:0 auto 0.6rem;"></span>© 2026 gannaca · Intelligence Dividend Index</div></footer>
+  <div class="container">
+    <div class="steps">
+      <div class="step active" id="step-1"><div class="step-num">1</div><span class="step-label">Eingabe</span></div>
+      <div class="step-connector" id="conn-1"></div>
+      <div class="step" id="step-2"><div class="step-num">2</div><span class="step-label">Ergebnis</span></div>
+      <div class="step-connector" id="conn-2"></div>
+      <div class="step" id="step-3"><div class="step-num">3</div><span class="step-label">Details</span></div>
+      <div class="step-connector" id="conn-3"></div>
+      <div class="step" id="step-4"><div class="step-num">4</div><span class="step-label">Nächster Schritt</span></div>
+    </div>
+  </div>
 
+  <div class="screen active" id="screen-1">
+    <div class="container">
+      <div class="screen-header">
+        <h2>Welchen Prozess wollen Sie prüfen?</h2>
+        <p>Je Case führen wir Sie durch zehn präzise Analyseschritte.</p>
+      </div>
+      <div id="cases-container"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-2">
+    <div class="container">
+      <div class="screen-header">
+        <h2>Ihre Cases auf einen Blick</h2>
+        <p>Nutzen, Machbarkeit und Priorität in einer Form, die sich direkt lesen und weiterverwenden lässt.</p>
+      </div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div id="results-summary"></div>
+      <div id="matrix-section"></div>
+      <div id="ranking-section"></div>
+      <div id="results-contact"></div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="goToScreen(1)">← Zurück</button>
+        <button class="btn btn-green" onclick="goToScreen(3)">Details ansehen</button>
+        <button class="btn btn-gold" onclick="showRecommendations()">Nächsten Schritt ableiten</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-3">
+    <div class="container">
+      <div class="screen-header">
+        <h2>So kommen die Scores zustande</h2>
+        <p>Transparenz statt Black Box: die genaue Herleitung für jeden Ihrer Prozesse.</p>
+      </div>
+      <div class="detail-note">
+        <span class="panel-kicker">Transparente Methodik</span>
+        <p>Die Detailansicht ist bewusst erklärend gehalten. Sie soll das Ergebnis intern anschlussfähig machen und zeigen, welche Faktoren den Score treiben.</p>
+      </div>
+      <div id="detail-cards"></div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="goToScreen(2)">← Ergebnis</button>
+        <button class="btn btn-green" onclick="goToScreen(4)">Nächster Schritt</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-4">
+    <div class="container">
+      <div class="screen-header">
+        <h2>Ihr nächster Schritt</h2>
+        <p>Aus dem Ergebnis wird jetzt eine kuratierte Empfehlung mit buchbarem Format und klarem Nutzen.</p>
+      </div>
+      <div id="recommendations"></div>
+      <div class="cta-section">
+        <h3>Ergebnis direkt besprechen?</h3>
+        <p>Wenn Sie kurz verifizieren wollen, welches Format tatsächlich passt, können Sie Ihr Ergebnis hier direkt weitergeben.</p>
+        <div class="cta-form">
+          <input type="email" placeholder="Ihre E-Mail-Adresse" id="cta-email">
+          <button class="btn btn-gold" onclick="sendInquiry()">Gespräch vorbereiten</button>
+        </div>
+      </div>
+      <div id="footer-contact"></div>
+      <div class="btn-group" style="margin-bottom: 3rem;">
+        <button class="btn btn-secondary" onclick="goToScreen(2)">← Ergebnis</button>
+        <button class="btn btn-secondary" onclick="goToScreen(3)">Details</button>
+        <button class="btn btn-secondary" onclick="resetAll()">Nochmal starten</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <img src="gannaca-logo-white.png" alt="gannaca">
+      © 2026 gannaca · Intelligence Dividend Index
+    </div>
+  </footer>
 </div>
 
 <script>
-const MAX_FACTOR_SCORE=3.0, SCORE_SCALE=10, Y_START=10, AMPEL_GREEN=7, AMPEL_YELLOW=4;
+const CONTACT_LINKS = {
+  booking: 'mailto:contact@gannaca.com?subject=IDI%20Termin%20anfragen',
+  whatsapp: 'https://wa.me/4916092269672',
+  newsletter: 'https://gannaca.de/blog'
+};
 
-const X_FACTORS=[
-  {key:'frequenz',label:'Wie oft läuft der Prozess?',weight:0.30,hint:'Je häufiger, desto mehr spart KI.',
-    options:[{value:'taeglich',label:'Täglich',score:3},{value:'woechentlich',label:'Wöchentlich',score:2},{value:'monatlich',label:'Monatlich',score:1},{value:'jaehrlich',label:'Jährlich / Seltener',score:0.5}]},
-  {key:'zeitaufwand',label:'Wie lange dauert ein Durchlauf?',weight:0.25,hint:'Je mehr Zeit draufgeht, desto größer der Hebel.',
-    options:[{value:'ueber_20h',label:'> 20 Stunden',score:3},{value:'10_20h',label:'10–20 Stunden',score:2},{value:'5_10h',label:'5–10 Stunden',score:1.5},{value:'lt5h',label:'< 5 Stunden',score:1}]},
-  {key:'relevanz',label:'Wie wichtig ist der Prozess?',weight:0.25,hint:'Kernprozess oder Nice-to-have?',
-    options:[{value:'hoch_risiko_gte4',label:'Hoch + Risiko ≥ 4',score:3},{value:'hoch_risiko_lt4',label:'Hoch + Risiko < 4',score:2},{value:'mittel',label:'Mittel',score:1.5},{value:'niedrig',label:'Niedrig',score:1}]},
-  {key:'qualifikation',label:'Wer macht das heute?',weight:0.20,hint:'Spezialisten-Arbeit oder Routine-Aufgabe?',
-    options:[{value:'spezialist',label:'Spezialist',score:2.5},{value:'senior',label:'Senior',score:2},{value:'medior',label:'Medior',score:1.5},{value:'junior',label:'Junior',score:1}]}
+const MAX_FACTOR_SCORE = 3.0;
+const SCORE_SCALE = 10;
+const Y_START = 10;
+const AMPEL_GREEN = 7;
+const AMPEL_YELLOW = 4;
+
+const X_FACTORS = [
+  {key:'frequenz',label:'Wie oft läuft der Prozess?',weight:0.30,hint:'Je häufiger, desto mehr spart KI.',options:[{value:'taeglich',label:'Täglich',score:3},{value:'woechentlich',label:'Wöchentlich',score:2},{value:'monatlich',label:'Monatlich',score:1},{value:'jaehrlich',label:'Jährlich / seltener',score:0.5}]},
+  {key:'zeitaufwand',label:'Wie lange dauert ein Durchlauf?',weight:0.25,hint:'Je mehr Zeit draufgeht, desto größer der Hebel.',options:[{value:'ueber_20h',label:'> 20 Stunden',score:3},{value:'10_20h',label:'10–20 Stunden',score:2},{value:'5_10h',label:'5–10 Stunden',score:1.5},{value:'lt5h',label:'< 5 Stunden',score:1}]},
+  {key:'relevanz',label:'Wie wichtig ist der Prozess?',weight:0.25,hint:'Kernprozess oder Nice-to-have?',options:[{value:'hoch_risiko_gte4',label:'Hoch + Risiko ≥ 4',score:3},{value:'hoch_risiko_lt4',label:'Hoch + Risiko < 4',score:2},{value:'mittel',label:'Mittel',score:1.5},{value:'niedrig',label:'Niedrig',score:1}]},
+  {key:'qualifikation',label:'Wer macht das heute?',weight:0.20,hint:'Spezialisten-Arbeit oder Routine-Aufgabe?',options:[{value:'spezialist',label:'Spezialist',score:2.5},{value:'senior',label:'Senior',score:2},{value:'medior',label:'Medior',score:1.5},{value:'junior',label:'Junior',score:1}]}
 ];
 
-const GOVERNANCE_CHECKS=[
-  {key:'ai_act',label:'AI Act — Risikoklasse',hint:'Wie stuft der EU AI Act diesen Einsatz ein?',
-    options:[{value:'hochrisiko',label:'Hochrisiko (Annex III)',abzug:-3},{value:'begrenzt',label:'Begrenztes Risiko',abzug:-1},{value:'minimal',label:'Minimales Risiko',abzug:0}]},
-  {key:'kritis',label:'Kritische Infrastruktur?',hint:'Betrifft der Prozess KRITIS oder IT-Sicherheit?',
-    options:[{value:'kernfunktion',label:'Kernfunktion betroffen',abzug:-3},{value:'mittelbar',label:'Mittelbar relevant',abzug:-1},{value:'nicht_relevant',label:'Nicht relevant',abzug:0}]},
-  {key:'dsgvo',label:'Personenbezogene Daten?',hint:'Welche Art von Daten fließt in den Prozess?',
-    options:[{value:'art9',label:'Art. 9 – Besondere Kategorien',abzug:-3},{value:'pbd',label:'Personenbezogene Daten',abzug:-1.5},{value:'nein',label:'Keine personenbez. Daten',abzug:0}]},
-  {key:'haftung',label:'Haftung & Nachweispflicht?',hint:'Gibt es besondere Dokumentations- oder Haftungsregeln?',
-    options:[{value:'entscheidung_kritis',label:'Entscheidungswirkung + KRITIS',abzug:-2},{value:'nur_doku',label:'Nur Dokumentationspflicht',abzug:-1},{value:'keine',label:'Keine besonderen Pflichten',abzug:0}]},
-  {key:'datenlage',label:'Wie sehen die Daten aus?',hint:'Digital, teildigital oder noch auf Papier?',
-    options:[{value:'digital',label:'Vollständig digital',abzug:0},{value:'teilweise',label:'Teilweise digital',abzug:-1},{value:'papier',label:'Überwiegend Papier',abzug:-2}]},
-  {key:'loesungsreife',label:'Gibt es schon KI-Lösungen dafür?',hint:'Fertige Produkte am Markt oder Neuland?',
-    options:[{value:'bestehend',label:'Lösung verfügbar',abzug:1},{value:'nichts',label:'Keine marktreife Lösung',abzug:0}]}
+const GOVERNANCE_CHECKS = [
+  {key:'ai_act',label:'AI Act — Risikoklasse',hint:'Wie stuft der EU AI Act diesen Einsatz ein?',options:[{value:'hochrisiko',label:'Hochrisiko (Annex III)',abzug:-3},{value:'begrenzt',label:'Begrenztes Risiko',abzug:-1},{value:'minimal',label:'Minimales Risiko',abzug:0}]},
+  {key:'kritis',label:'Kritische Infrastruktur?',hint:'Betrifft der Prozess KRITIS oder IT-Sicherheit?',options:[{value:'kernfunktion',label:'Kernfunktion betroffen',abzug:-3},{value:'mittelbar',label:'Mittelbar relevant',abzug:-1},{value:'nicht_relevant',label:'Nicht relevant',abzug:0}]},
+  {key:'dsgvo',label:'Personenbezogene Daten?',hint:'Welche Art von Daten fließt in den Prozess?',options:[{value:'art9',label:'Art. 9 – Besondere Kategorien',abzug:-3},{value:'pbd',label:'Personenbezogene Daten',abzug:-1.5},{value:'nein',label:'Keine personenbez. Daten',abzug:0}]},
+  {key:'haftung',label:'Haftung & Nachweispflicht?',hint:'Gibt es besondere Dokumentations- oder Haftungsregeln?',options:[{value:'entscheidung_kritis',label:'Entscheidungswirkung + KRITIS',abzug:-2},{value:'nur_doku',label:'Nur Dokumentationspflicht',abzug:-1},{value:'keine',label:'Keine besonderen Pflichten',abzug:0}]},
+  {key:'datenlage',label:'Wie sehen die Daten aus?',hint:'Digital, teildigital oder noch auf Papier?',options:[{value:'digital',label:'Vollständig digital',abzug:0},{value:'teilweise',label:'Teilweise digital',abzug:-1},{value:'papier',label:'Überwiegend Papier',abzug:-2}]},
+  {key:'loesungsreife',label:'Gibt es schon KI-Lösungen dafür?',hint:'Fertige Produkte am Markt oder Neuland?',options:[{value:'bestehend',label:'Lösung verfügbar',abzug:1},{value:'nichts',label:'Keine marktreife Lösung',abzug:0}]}
 ];
 
-const PRODUCTS=[
-  {id:'sparring',name:'Executive Decision Sparring',
-    desc:'Vertrauliches, kontinuierliches Sparring für Top-Entscheider:innen bei strategischen Entscheidungen.',
-    icon:'◆',
-    triggers:function(idi,pc,ac,n){return idi>=6.0&&n>=2;},
-    reasons:[
-      (d)=>`Ihr Score von ${d.idi.toFixed(1)} zeigt hohes KI-Potenzial. Bei ${d.n} Prozessen brauchen Sie laufende strategische Begleitung.`,
-      (d)=>`${d.pilotCount} Quick Win(s) stehen bereit — ein Sparringspartner hilft, die richtigen Prioritäten zu setzen.`
-    ]},
-  {id:'sprint',name:'Strategy Sprints for Transformation Decisions',
-    desc:'Verdichtete Formate (2–6 Wochen), um aus komplexen Transformationsfragen konkrete Entscheidungen abzuleiten.',
-    icon:'▸',
-    triggers:function(idi,pc,ac,n){return idi>=5.0&&pc>=1;},
-    reasons:[
-      (d)=>`${d.pilotCount} Ihrer Cases sind Quick Wins mit hohem Mehrwert und grüner Ampel — reif für einen fokussierten Sprint.`,
-      (d)=>`Ihr stärkster Case "${d.winner}" hat die besten Voraussetzungen für eine schnelle Entscheidung.`
-    ]},
-  {id:'governance',name:'Leadership & Governance in the Age of AI',
-    desc:'Begleitung von Führungsteams und Boards bei der Neuausrichtung von Verantwortung und Entscheidungslogik im KI-Zeitalter.',
-    icon:'⬡',
-    triggers:function(idi,pc,ac,n){return (ac.yellow+ac.red)>=2;},
-    reasons:[
-      (d)=>`${d.ac.yellow+d.ac.red} Ihrer Prozesse haben regulatorische Fragezeichen — das erfordert klare Governance-Strukturen.`,
-      (d)=>`AI Act, DSGVO, KRITIS: Ihr Führungsteam braucht ein gemeinsames Verständnis der neuen Verantwortungslogik.`
-    ]},
-  {id:'foresight',name:'Strategic Foresight & Decision Architecture',
-    desc:'Übersetzung von Zukunftsentwicklungen in Entscheidungsarchitekturen und Governance-Strukturen.',
-    icon:'◇',
-    triggers:function(idi,pc,ac,n){return idi<4.0;},
-    reasons:[
-      (d)=>`Ihr Score von ${d.idi!=null?d.idi.toFixed(1):'–'} zeigt: Erstmal Überblick verschaffen, bevor Sie loslegen.`,
-      (d)=>`Wir helfen Ihnen, KI-Entwicklungen in eine Entscheidungsarchitektur zu übersetzen, die zu Ihrem Unternehmen passt.`
-    ]},
-  {id:'briefing',name:'Private Executive Briefings & Decision Salons',
-    desc:'Exklusive, kuratierte Gesprächsformate zur gemeinsamen Einordnung kritischer Zukunftsfragen.',
-    icon:'▪',
-    triggers:function(idi,pc,ac,n){return true;},
-    reasons:[
-      (d)=>`Unabhängig vom Score: Ein kuratiertes Briefing gibt Ihnen die Einordnung, die Sie für Ihre nächste Entscheidung brauchen.`,
-      (d)=>`Gemeinsam mit anderen Entscheidern die richtigen Fragen stellen — bevor alle anderen sie googeln.`
-    ]},
-  {id:'monitoring',name:'Curated Market & Innovation Monitoring',
-    desc:'Kontinuierliche, strategische Auswahl, Erfassung, Analyse und Einordnung externer Informationssignale in visuellem, digitalem Entscheidungsvorlagenformat.',
-    icon:'◈',
-    triggers:function(idi,pc,ac,n){return n>=2&&idi>=4.0;},
-    reasons:[
-      (d)=>`Bei ${d.n} aktiven Prozessen lohnt sich ein kontinuierliches Monitoring relevanter KI-Entwicklungen.`,
-      (d)=>`Sie bekommen regelmäßig aufbereitete Entscheidungsvorlagen — kein Nachrichtenstrom, sondern kuratierte Relevanz.`
-    ]}
+const QUESTION_FLOW = [
+  {type:'meta_name', tag:'Start', title:'Welchen Prozess wollen Sie prüfen?', hint:'Bitte benennen Sie zuerst den Prozess. Danach führt der Check Sie ohne Scroll-Strecke durch alle Fragen.'},
+  {type:'meta_description', tag:'Optional', title:'Worum geht es in diesem Prozess?', hint:'Eine kurze Beschreibung hilft später beim Einordnen, ist aber optional.'},
+  ...X_FACTORS.map((factor) => ({ ...factor, type:'x', tag:'Mehrwert' })),
+  ...GOVERNANCE_CHECKS.map((check) => ({ ...check, type:'gov', tag:'Machbarkeit' }))
 ];
 
-let cases=[],results=null;
+let cases = [];
+let results = null;
+let activeCaseId = null;
+let activeQuestionIndex = 0;
 
-function goToScreen(n){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+n).classList.add('active');
-  for(let i=1;i<=4;i++){const s=document.getElementById('step-'+i);s.classList.remove('active','done');
-    if(i<n)s.classList.add('done');if(i===n)s.classList.add('active');
-    if(i<4)document.getElementById('conn-'+i).classList.toggle('done',i<n);}
-  window.scrollTo({top:0,behavior:'smooth'});
+function createEmptyCase() {
+  return { id: Date.now() + Math.round(Math.random() * 1000), name: '', description: '', xFactors: {}, govChecks: {} };
 }
 
-function addCase(){cases.push({id:Date.now(),name:'',description:'',xFactors:{},govChecks:{}});renderCases();}
-function removeCase(id){cases=cases.filter(c=>c.id!==id);renderCases();}
-function updateCase(id,f,v){const c=cases.find(x=>x.id===id);if(c)c[f]=v;}
-function setXFactor(cId,fk,ov,sc){const c=cases.find(x=>x.id===cId);if(c){c.xFactors[fk]={value:ov,score:sc};renderCases();}}
-function setGovCheck(cId,ck,ov,ab){const c=cases.find(x=>x.id===cId);if(c){c.govChecks[ck]={value:ov,abzug:ab};renderCases();}}
-
-function renderCases(){
-  document.getElementById('cases-container').innerHTML=cases.map((c,i)=>`
-    <div class="case-card">
-      <div class="case-card-header">
-        <span class="case-card-num">Case ${String(i+1).padStart(2,'0')}</span>
-        ${cases.length>1?`<button class="case-remove" onclick="removeCase(${c.id})">✕</button>`:''}
-      </div>
-      <div class="form-group"><label>Prozessbezeichnung</label>
-        <input type="text" placeholder="z.B. Vertragsprüfung, Rechnungsfreigabe..." value="${c.name}" onchange="updateCase(${c.id},'name',this.value)"></div>
-      <div class="form-group"><label>Kurzbeschreibung (optional)</label>
-        <textarea placeholder="Was passiert in diesem Prozess?" onchange="updateCase(${c.id},'description',this.value)">${c.description}</textarea></div>
-      <div class="assessment-section">
-        <h4><span class="tag tag-x">Mehrwert</span> Lohnt sich der Aufwand?</h4>
-        ${X_FACTORS.map(f=>{const sel=c.xFactors[f.key];return`<div class="factor-row">
-          <div class="factor-label">${f.label} <span class="factor-weight-tag">${Math.round(f.weight*100)}%</span></div>
-          <div class="factor-hint">${f.hint}</div>
-          <div class="option-group">${f.options.map(o=>`<button class="option-btn ${sel&&sel.value===o.value?'selected':''}"
-            onclick="setXFactor(${c.id},'${f.key}','${o.value}',${o.score})">${o.label}</button>`).join('')}</div>
-        </div>`;}).join('')}
-      </div>
-      <div class="assessment-section">
-        <h4><span class="tag tag-y">Machbarkeit</span> Darf ich das?</h4>
-        ${GOVERNANCE_CHECKS.map(gc=>{const sel=c.govChecks[gc.key];return`<div class="factor-row">
-          <div class="factor-label">${gc.label}</div>
-          <div class="factor-hint">${gc.hint}</div>
-          <div class="option-group">${gc.options.map(o=>{let cls='';
-            if(sel&&sel.value===o.value){if(o.abzug>=0)cls='selected-gov-green';else if(o.abzug>=-1.5)cls='selected-gov-yellow';else cls='selected-gov-red';}
-            return`<button class="option-btn ${cls}" onclick="setGovCheck(${c.id},'${gc.key}','${o.value}',${o.abzug})">${o.label}</button>`;}).join('')}</div>
-        </div>`;}).join('')}
-      </div>
-    </div>`).join('');
+function getCaseById(caseId) {
+  return cases.find((entry) => entry.id === caseId);
 }
 
-function calculateXScore(c){if(X_FACTORS.some(f=>!c.xFactors[f.key]))return null;
-  return Math.round((X_FACTORS.reduce((s,f)=>s+c.xFactors[f.key].score*f.weight,0)/MAX_FACTOR_SCORE*SCORE_SCALE)*100)/100;}
-function calculateYScore(c){if(GOVERNANCE_CHECKS.some(gc=>!c.govChecks[gc.key]))return null;
-  let s=Y_START;GOVERNANCE_CHECKS.forEach(gc=>{s+=c.govChecks[gc.key].abzug;});return Math.round(Math.max(0,Math.min(SCORE_SCALE,s))*100)/100;}
-function getAmpel(y){if(y==null)return'gray';if(y>AMPEL_GREEN)return'green';if(y>=AMPEL_YELLOW)return'yellow';return'red';}
-function isInPilotZone(x,y){return x!=null&&y!=null&&x>=6.0&&y>AMPEL_GREEN;}
-
-function scoreAllCases(){
-  const scored=cases.map((c,i)=>{const x=calculateXScore(c),y=calculateYScore(c);
-    return{caseId:c.id,name:c.name||`Case ${i+1}`,num:i+1,x,y,
-      combined:(x!=null&&y!=null)?Math.round((x*0.6+y*0.4)*100)/100:null,
-      ampel:getAmpel(y),pilot:isInPilotZone(x,y),xFactors:c.xFactors,govChecks:c.govChecks};});
-  const ranked=scored.filter(s=>s.x!=null&&s.y!=null).sort((a,b)=>{if(a.x!==b.x)return b.x-a.x;if(a.y!==b.y)return b.y-a.y;return a.num-b.num;});
-  ranked.forEach((r,i)=>r.rank=i+1);
-  const vx=scored.filter(s=>s.x!=null),vy=scored.filter(s=>s.y!=null);
-  const avgX=vx.length?Math.round(vx.reduce((s,c)=>s+c.x,0)/vx.length*100)/100:null;
-  const avgY=vy.length?Math.round(vy.reduce((s,c)=>s+c.y,0)/vy.length*100)/100:null;
-  return{scored,ranked,avgX,avgY,idi:(avgX!=null&&avgY!=null)?Math.round((avgX*0.6+avgY*0.4)*100)/100:null,pilotCount:scored.filter(s=>s.pilot).length};
+function getActiveCase() {
+  return getCaseById(activeCaseId) || cases[0] || null;
 }
 
-function calculateAndShow(){
-  if(!cases.length){alert('Bitte mindestens einen Prozess eingeben.');return;}
-  if(cases.some(c=>X_FACTORS.some(f=>!c.xFactors[f.key])||GOVERNANCE_CHECKS.some(gc=>!c.govChecks[gc.key]))){
-    alert('Noch nicht alle Fragen beantwortet — bitte kurz durchklicken.');return;}
-  results=scoreAllCases();renderResults();goToScreen(2);
+function getQuestionCount() {
+  return QUESTION_FLOW.length;
 }
 
-function renderResults(){
-  const{scored,ranked,avgX,avgY,idi,pilotCount}=results;
-  document.getElementById('kpi-grid').innerHTML=`
-    <div class="kpi-card"><div class="kpi-value v-blue">${avgX!=null?avgX.toFixed(1):'–'}</div><div class="kpi-label">Ø Mehrwert</div><div class="kpi-sublabel">Lohnt sich's? (0–10)</div></div>
-    <div class="kpi-card"><div class="kpi-value v-green">${avgY!=null?avgY.toFixed(1):'–'}</div><div class="kpi-label">Ø Machbarkeit</div><div class="kpi-sublabel">Darf ich's? (0–10)</div></div>
-    <div class="kpi-card"><div class="kpi-value v-gold">${idi!=null?idi.toFixed(1):'–'}</div><div class="kpi-label">IDI Score</div><div class="kpi-sublabel">X×0.6 + Y×0.4</div></div>
-    <div class="kpi-card"><div class="kpi-value v-warm">${pilotCount}</div><div class="kpi-label">Quick Wins</div><div class="kpi-sublabel">Sofort umsetzbar</div></div>`;
-  renderMatrix(scored);
-  if(ranked.length>0){
-    let h=`<div class="matrix-container"><h3>Ranking — Ihre besten Cases zuerst</h3>
-    <table class="ranking-table"><thead><tr><th>Rang</th><th>Prozess</th><th>Mehrwert</th><th>Machbar?</th><th>IDI</th><th>Status</th><th>Quick Win?</th></tr></thead><tbody>`;
-    ranked.forEach(r=>{h+=`<tr><td><span class="rank-badge rank-${r.rank<=3?r.rank:'other'}">${r.rank}</span></td>
-      <td>${r.name}</td><td style="font-weight:500;">${r.x.toFixed(2)}</td><td style="font-weight:500;">${r.y.toFixed(2)}</td>
-      <td style="color:var(--gold);font-weight:500;">${r.combined.toFixed(2)}</td>
-      <td><span class="ampel-badge ampel-badge-${r.ampel}">● ${r.ampel==='green'?'Freie Fahrt':r.ampel==='yellow'?'Genauer hinschauen':'Erst klären'}</span></td>
-      <td>${r.pilot?'<span class="pilot-tag">QUICK WIN</span>':'–'}</td></tr>`;});
-    h+=`</tbody></table></div>`;document.getElementById('ranking-section').innerHTML=h;}
-  renderDetailCards(scored);
+function isQuestionAnswered(item, question) {
+  if (question.type === 'meta_name') return item.name.trim().length > 0;
+  if (question.type === 'meta_description') return true;
+  if (question.type === 'x') return Boolean(item.xFactors[question.key]);
+  if (question.type === 'gov') return Boolean(item.govChecks[question.key]);
+  return false;
 }
 
-function renderMatrix(scored){
-  const w=880,h=440,pad={top:40,right:35,bottom:60,left:70};
-  const pw=w-pad.left-pad.right,ph=h-pad.top-pad.bottom;
-  const sx=v=>pad.left+((v-2)/8)*pw, sy=v=>pad.top+ph-(v/10)*ph;
-  const ampelColors={green:'rgba(126,207,160,0.75)',yellow:'rgba(226,195,107,0.7)',red:'rgba(212,112,112,0.7)',gray:'rgba(255,255,255,0.15)'};
-  let svg=`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">`;
-  const pzX1=sx(6),pzX2=sx(10),pzY1=sy(10),pzY2=sy(7);
-  svg+=`<rect x="${pzX1}" y="${pzY1}" width="${pzX2-pzX1}" height="${pzY2-pzY1}" fill="rgba(126,207,160,0.04)" stroke="rgba(126,207,160,0.15)" stroke-width="1" stroke-dasharray="4,4" rx="2"/>`;
-  svg+=`<text x="${(pzX1+pzX2)/2}" y="${pzY1+14}" text-anchor="middle" font-size="8" font-weight="500" fill="rgba(126,207,160,0.35)" font-family="Montserrat" letter-spacing="0.15em">PILOTZONE</text>`;
-  [7,4].forEach(t=>{const yy=sy(t);svg+=`<line x1="${pad.left}" y1="${yy}" x2="${pad.left+pw}" y2="${yy}" stroke="${t===7?'rgba(126,207,160,0.12)':'rgba(212,112,112,0.12)'}" stroke-width="1" stroke-dasharray="3,5"/>`;
-    svg+=`<text x="${pad.left+pw+5}" y="${yy+4}" font-size="7" fill="${t===7?'rgba(126,207,160,0.4)':'rgba(212,112,112,0.4)'}" font-family="Montserrat" letter-spacing="0.08em">Y=${t}</text>`;});
-  for(let t=2;t<=10;t++){svg+=`<line x1="${sx(t)}" y1="${pad.top}" x2="${sx(t)}" y2="${pad.top+ph}" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>`;
-    svg+=`<text x="${sx(t)}" y="${pad.top+ph+18}" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.2)" font-family="Inter">${t}</text>`;}
-  for(let t=0;t<=10;t+=2){svg+=`<line x1="${pad.left}" y1="${sy(t)}" x2="${pad.left+pw}" y2="${sy(t)}" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>`;
-    svg+=`<text x="${pad.left-10}" y="${sy(t)+4}" text-anchor="end" font-size="10" fill="rgba(255,255,255,0.2)" font-family="Inter">${t}</text>`;}
-  svg+=`<line x1="${pad.left}" y1="${pad.top+ph}" x2="${pad.left+pw}" y2="${pad.top+ph}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
-  svg+=`<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top+ph}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
-  svg+=`<text x="${pad.left+pw/2}" y="${h-8}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em">LOHNT SICH DER AUFWAND? →</text>`;
-  svg+=`<text x="16" y="${pad.top+ph/2}" text-anchor="middle" font-size="10" font-weight="400" fill="rgba(255,255,255,0.2)" font-family="Montserrat" letter-spacing="0.12em" transform="rotate(-90,16,${pad.top+ph/2})">↑ DARF ICH DAS?</text>`;
-  scored.forEach(s=>{if(s.x==null||s.y==null)return;const cx=sx(s.x),cy=sy(s.y),col=ampelColors[s.ampel];
-    svg+=`<circle cx="${cx}" cy="${cy}" r="14" fill="${col}" stroke="rgba(18,21,26,0.5)" stroke-width="2"/>`;
-    svg+=`<text x="${cx}" y="${cy+4.5}" text-anchor="middle" font-size="10" font-weight="600" fill="rgba(18,21,26,0.9)" font-family="Inter">${s.num}</text>`;
-    svg+=`<text x="${cx+20}" y="${cy+4}" font-size="10" font-weight="400" fill="rgba(255,255,255,0.5)" font-family="Inter">${s.name}</text>`;});
-  svg+=`</svg>`;document.getElementById('matrix-wrap').innerHTML=svg;
+function getCaseCompletion(item) {
+  return QUESTION_FLOW.filter((question) => isQuestionAnswered(item, question)).length;
 }
 
-function renderDetailCards(scored){
-  document.getElementById('detail-cards').innerHTML=scored.map(s=>{
-    const xTerms=X_FACTORS.map(f=>{const sel=s.xFactors[f.key];return sel?`${sel.score}×${f.weight.toFixed(2)}`:'?';}).join(' + ');
-    const govTerms=GOVERNANCE_CHECKS.map(gc=>{const sel=s.govChecks[gc.key];return sel?`${sel.abzug>=0?'+':''}${sel.abzug}`:'?';}).join(', ');
-    return`<div class="case-card" style="border-left:3px solid ${s.ampel==='green'?'var(--green)':s.ampel==='yellow'?'var(--yellow)':s.ampel==='red'?'var(--red)':'var(--text-muted)'};">
-      <div class="case-card-header"><span class="case-card-num">Case ${String(s.num).padStart(2,'0')} — ${s.name}</span>
-        <span class="ampel-badge ampel-badge-${s.ampel}">● ${s.ampel==='green'?'Freie Fahrt':s.ampel==='yellow'?'Genauer hinschauen':s.ampel==='red'?'Erst klären':'N/A'}${s.pilot?' · QUICK WIN':''}</span></div>
-      <div class="formula-bar"><span>X = (${xTerms}) / ${MAX_FACTOR_SCORE} × ${SCORE_SCALE}</span><span class="result">X = ${s.x!=null?s.x.toFixed(2):'–'}</span></div>
-      <div class="formula-bar"><span>Y = CLAMP(${Y_START} ${govTerms.replace(/,/g,'')}, 0, ${SCORE_SCALE})</span><span class="result">Y = ${s.y!=null?s.y.toFixed(2):'–'}</span></div>
-      ${s.combined!=null?`<div class="formula-bar"><span>IDI = ${s.x.toFixed(2)}×0.6 + ${s.y.toFixed(2)}×0.4</span><span class="result">${s.combined.toFixed(2)}</span></div>`:''}</div>`;}).join('');
+function isCaseComplete(item) {
+  return getCaseCompletion(item) >= QUESTION_FLOW.length;
 }
 
-function showRecommendations(){
-  if(!results)return;const{scored,ranked,idi,pilotCount}=results;
-  const ac={green:0,yellow:0,red:0};scored.forEach(s=>{if(s.ampel!=='gray')ac[s.ampel]++;});
-  const n=cases.length, winner=ranked[0]?.name||'–';
-  const ctx={idi,pilotCount,ac,n,winner};
-  const recs=[];
-  /* Primäre Empfehlung nach IDI-Tier */
-  if(idi>=6.0){
-    const p=PRODUCTS.find(x=>x.id==='sprint');
-    recs.push({...p,primary:true,reason:p.reasons[0](ctx)});
-    const sp=PRODUCTS.find(x=>x.id==='sparring');
-    if(n>=2)recs.push({...sp,reason:sp.reasons[0](ctx)});
-  } else if(idi>=4.0){
-    const b=PRODUCTS.find(x=>x.id==='briefing');
-    recs.push({...b,primary:true,reason:b.reasons[0](ctx)});
-    if(ac.yellow+ac.red>=1){const g=PRODUCTS.find(x=>x.id==='governance');
-      recs.push({...g,reason:g.reasons[0](ctx)});}
-  } else {
-    const f=PRODUCTS.find(x=>x.id==='foresight');
-    recs.push({...f,primary:true,reason:f.reasons[0](ctx)});
-    const g=PRODUCTS.find(x=>x.id==='governance');
-    recs.push({...g,reason:g.reasons[1](ctx)});
+function addCase() {
+  const nextCase = createEmptyCase();
+  cases.push(nextCase);
+  activeCaseId = nextCase.id;
+  activeQuestionIndex = 0;
+  renderCases();
+}
+
+function setActiveCase(caseId, questionIndex = null) {
+  activeCaseId = caseId;
+  const item = getCaseById(caseId);
+  if (!item) return;
+  activeQuestionIndex = questionIndex == null ? Math.min(getCaseCompletion(item), QUESTION_FLOW.length - 1) : questionIndex;
+  renderCases();
+}
+
+function removeCase(caseId) {
+  cases = cases.filter((entry) => entry.id !== caseId);
+  if (!cases.length) {
+    const firstCase = createEmptyCase();
+    cases = [firstCase];
+    activeCaseId = firstCase.id;
+    activeQuestionIndex = 0;
+  } else if (activeCaseId === caseId) {
+    activeCaseId = cases[0].id;
+    activeQuestionIndex = Math.min(getCaseCompletion(cases[0]), QUESTION_FLOW.length - 1);
   }
-  /* Monitoring wenn genug Cases */
-  if(n>=2&&idi>=4.0&&!recs.find(r=>r.id==='monitoring')){
-    const m=PRODUCTS.find(x=>x.id==='monitoring');
-    recs.push({...m,reason:m.reasons[0](ctx)});}
-  /* Briefing immer als Einstieg, falls nicht schon primary */
-  if(!recs.find(r=>r.id==='briefing')&&recs.length<3){
-    const b=PRODUCTS.find(x=>x.id==='briefing');
-    recs.push({...b,reason:b.reasons[1](ctx)});}
-  document.getElementById('recommendations').innerHTML=recs.map(r=>`
-    <div class="rec-card ${r.primary?'primary-rec':''}"><div class="rec-card-header">
-      <h3><span style="color:var(--gold);margin-right:0.5rem;">${r.icon}</span> ${r.name}</h3>
-      <span class="rec-badge ${r.primary?'rec-badge-top':'rec-badge-sec'}">${r.primary?'Unser Tipp':'Auch sinnvoll'}</span></div>
-      <p>${r.desc}</p><div class="rec-reason"><strong>Warum? </strong>${r.reason}</div></div>`).join('')
-    +`<div style="margin-top:1.5rem;padding:1rem 1.5rem;border:1px solid var(--gold-border);background:rgba(245,225,200,0.03);text-align:center;">
-      <p style="font-family:var(--font-cat);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.2rem;">Retainer-Modell</p>
-      <p style="font-size:0.8rem;color:var(--text-secondary);font-weight:300;">Alle Leistungen als Retainer — laufende Begleitung statt Einzelprojekte.</p></div>`;
+  renderCases();
+}
+
+function updateCase(caseId, field, value) {
+  const item = getCaseById(caseId);
+  if (!item) return;
+  item[field] = value;
+}
+
+function goToPreviousQuestion() {
+  activeQuestionIndex = Math.max(0, activeQuestionIndex - 1);
+  renderCases();
+}
+
+function goToNextQuestion() {
+  const item = getActiveCase();
+  if (!item) return;
+  if (activeQuestionIndex < QUESTION_FLOW.length - 1) {
+    activeQuestionIndex += 1;
+    renderCases();
+    return;
+  }
+  if (cases.every(isCaseComplete)) {
+    renderCases();
+    return;
+  }
+  addCase();
+}
+
+function submitMetaStep() {
+  const item = getActiveCase();
+  const question = QUESTION_FLOW[activeQuestionIndex];
+  if (!item || !question) return;
+  if (question.type === 'meta_name' && !item.name.trim()) {
+    alert('Bitte geben Sie eine Prozessbezeichnung ein.');
+    return;
+  }
+  goToNextQuestion();
+}
+
+function setXFactor(caseId, factorKey, optionValue, score) {
+  const item = getCaseById(caseId);
+  if (!item) return;
+  item.xFactors[factorKey] = { value: optionValue, score };
+  setTimeout(() => {
+    if (activeCaseId === caseId) goToNextQuestion();
+  }, 120);
+  renderCases();
+}
+
+function setGovCheck(caseId, checkKey, optionValue, abzug) {
+  const item = getCaseById(caseId);
+  if (!item) return;
+  item.govChecks[checkKey] = { value: optionValue, abzug };
+  setTimeout(() => {
+    if (activeCaseId === caseId) goToNextQuestion();
+  }, 120);
+  renderCases();
+}
+
+function getWizardProgress(item) {
+  if (!item) return 0;
+  return ((activeQuestionIndex + (isQuestionAnswered(item, QUESTION_FLOW[activeQuestionIndex]) ? 1 : 0)) / QUESTION_FLOW.length) * 100;
+}
+
+function renderOptionButton(item, question, option) {
+  let selected = false;
+  let extraClass = '';
+  if (question.type === 'x') {
+    selected = item.xFactors[question.key]?.value === option.value;
+  } else {
+    selected = item.govChecks[question.key]?.value === option.value;
+    if (selected) {
+      if (option.abzug >= 0) extraClass = 'is-green';
+      else if (option.abzug >= -1.5) extraClass = 'is-yellow';
+      else extraClass = 'is-red';
+    }
+  }
+  const onclick = question.type === 'x'
+    ? `setXFactor(${item.id}, '${question.key}', '${option.value}', ${option.score})`
+    : `setGovCheck(${item.id}, '${question.key}', '${option.value}', ${option.abzug})`;
+
+  return `<button class="wizard-option-btn ${selected ? `is-selected ${extraClass}` : ''}" onclick="${onclick}">
+    <span class="wizard-option-title">${option.label}</span>
+    <span class="wizard-option-sub">${question.type === 'x'
+      ? `Score ${option.score.toFixed(1)} auf der Mehrwert-Achse`
+      : option.abzug >= 0
+        ? 'Erhöht bzw. stabilisiert die Machbarkeit'
+        : `Wirkt mit ${Math.abs(option.abzug).toFixed(option.abzug % 1 === 0 ? 0 : 1)} Punkt${Math.abs(option.abzug) === 1 ? '' : 'en'} auf die Machbarkeit`}</span>
+  </button>`;
+}
+
+function renderWizardQuestion(item, question) {
+  if (question.type === 'meta_name') {
+    return `
+      <div class="wizard-question">
+        <span class="wizard-question-tag">${question.tag}</span>
+        <h3>${question.title}</h3>
+        <p>${question.hint}</p>
+        <div class="wizard-text-step">
+          <div class="form-group">
+            <label>Prozessbezeichnung</label>
+            <input type="text" placeholder="z. B. Vertragsprüfung, Rechnungsfreigabe ..." value="${item.name}" oninput="updateCase(${item.id}, 'name', this.value)">
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (question.type === 'meta_description') {
+    return `
+      <div class="wizard-question">
+        <span class="wizard-question-tag">${question.tag}</span>
+        <h3>${question.title}</h3>
+        <p>${question.hint}</p>
+        <div class="wizard-text-step">
+          <div class="form-group">
+            <label>Kurzbeschreibung</label>
+            <textarea placeholder="Was passiert in diesem Prozess?" oninput="updateCase(${item.id}, 'description', this.value)">${item.description}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="wizard-question">
+      <span class="wizard-question-tag">${question.tag}</span>
+      <h3>${question.label}</h3>
+      <p>${question.hint}</p>
+      <div class="wizard-option-grid">
+        ${question.options.map((option) => renderOptionButton(item, question, option)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderCaseSummary() {
+  if (!cases.length) {
+    return '<div class="wizard-empty">Noch kein Case angelegt.</div>';
+  }
+
+  return `
+    <div class="wizard-summary">
+      ${cases.map((item, index) => `
+        <div class="wizard-summary-card">
+          <div>
+            <strong>${item.name || `Case ${index + 1}`}</strong>
+            <span>${isCaseComplete(item) ? 'Vollständig beantwortet' : `${getCaseCompletion(item)} von ${QUESTION_FLOW.length} Schritten beantwortet`}</span>
+          </div>
+          <div class="btn-group" style="margin:0; justify-content:flex-end;">
+            <button class="btn btn-secondary" onclick="setActiveCase(${item.id})">${isCaseComplete(item) ? 'Bearbeiten' : 'Weiter'}</button>
+            ${cases.length > 1 ? `<button class="btn btn-secondary" onclick="removeCase(${item.id})">Entfernen</button>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderCases() {
+  const item = getActiveCase();
+  const question = QUESTION_FLOW[activeQuestionIndex];
+  const allComplete = cases.length > 0 && cases.every(isCaseComplete);
+  const progress = Math.min(100, Math.max(0, getWizardProgress(item)));
+
+  document.getElementById('cases-container').innerHTML = `
+    <div class="wizard-shell">
+      <div class="wizard-progress" style="width:${progress}%;"></div>
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-step-count">Schritt ${activeQuestionIndex + 1} von ${QUESTION_FLOW.length}</div>
+        </div>
+        <button class="add-case-btn" onclick="addCase()">+ Noch einen Prozess prüfen</button>
+      </div>
+      <div class="wizard-case-nav">
+        ${cases.map((entry, index) => `<button class="wizard-case-chip ${entry.id === activeCaseId ? 'active' : ''} ${isCaseComplete(entry) ? 'done' : ''}" onclick="setActiveCase(${entry.id})">${entry.name || `Case ${index + 1}`}</button>`).join('')}
+      </div>
+      ${item && question ? renderWizardQuestion(item, question) : '<div class="wizard-empty">Kein aktiver Case.</div>'}
+      <div class="wizard-actions">
+        <button class="btn btn-secondary" onclick="goToPreviousQuestion()" ${activeQuestionIndex === 0 ? 'disabled style="opacity:0.45;cursor:not-allowed;"' : ''}>← Zurück</button>
+        <div style="display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:flex-end;">
+          ${question && question.type === 'meta_description' ? '<button class="btn btn-secondary" onclick="goToNextQuestion()">Überspringen</button>' : ''}
+          ${question && (question.type === 'meta_name' || question.type === 'meta_description') ? `<button class="btn btn-gold" onclick="submitMetaStep()">${activeQuestionIndex === QUESTION_FLOW.length - 1 ? 'Case abschließen' : 'Weiter'}</button>` : ''}
+          ${allComplete ? '<button class="btn btn-green" onclick="calculateAndShow()">Ergebnisse anzeigen</button>' : ''}
+        </div>
+      </div>
+      ${renderCaseSummary()}
+      ${allComplete ? '<div class="btn-group" style="margin-top:1.5rem;"><button class="btn btn-green" onclick="calculateAndShow()">Alle Ergebnisse anzeigen</button></div>' : ''}
+    </div>
+  `;
+}
+
+function goToScreen(n) {
+  document.querySelectorAll('.screen').forEach((screen) => screen.classList.remove('active'));
+  document.getElementById(`screen-${n}`).classList.add('active');
+  for (let i = 1; i <= 4; i += 1) {
+    const step = document.getElementById(`step-${i}`);
+    step.classList.remove('active', 'done');
+    if (i < n) step.classList.add('done');
+    if (i === n) step.classList.add('active');
+    if (i < 4) document.getElementById(`conn-${i}`).classList.toggle('done', i < n);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function calculateXScore(item) {
+  if (X_FACTORS.some((factor) => !item.xFactors[factor.key])) return null;
+  const raw = X_FACTORS.reduce((sum, factor) => sum + item.xFactors[factor.key].score * factor.weight, 0);
+  return Math.round((raw / MAX_FACTOR_SCORE * SCORE_SCALE) * 100) / 100;
+}
+
+function calculateYScore(item) {
+  if (GOVERNANCE_CHECKS.some((check) => !item.govChecks[check.key])) return null;
+  let score = Y_START;
+  GOVERNANCE_CHECKS.forEach((check) => { score += item.govChecks[check.key].abzug; });
+  return Math.round(Math.max(0, Math.min(SCORE_SCALE, score)) * 100) / 100;
+}
+
+function getAmpel(y) {
+  if (y == null) return 'gray';
+  if (y > AMPEL_GREEN) return 'green';
+  if (y >= AMPEL_YELLOW) return 'yellow';
+  return 'red';
+}
+
+function isInPilotZone(x, y) {
+  return x != null && y != null && x >= 6 && y > AMPEL_GREEN;
+}
+
+function scoreAllCases() {
+  const scored = cases.map((item, index) => {
+    const x = calculateXScore(item);
+    const y = calculateYScore(item);
+    return {
+      caseId: item.id,
+      name: item.name || `Case ${index + 1}`,
+      description: item.description,
+      num: index + 1,
+      x,
+      y,
+      combined: x != null && y != null ? Math.round((x * 0.6 + y * 0.4) * 100) / 100 : null,
+      ampel: getAmpel(y),
+      pilot: isInPilotZone(x, y),
+      xFactors: item.xFactors,
+      govChecks: item.govChecks
+    };
+  });
+
+  const ranked = [...scored].filter((item) => item.x != null && item.y != null).sort((a, b) => {
+    if (a.combined !== b.combined) return b.combined - a.combined;
+    if (a.x !== b.x) return b.x - a.x;
+    if (a.y !== b.y) return b.y - a.y;
+    return a.num - b.num;
+  });
+  ranked.forEach((entry, index) => { entry.rank = index + 1; });
+
+  const avgX = ranked.length ? Math.round((ranked.reduce((sum, item) => sum + item.x, 0) / ranked.length) * 100) / 100 : null;
+  const avgY = ranked.length ? Math.round((ranked.reduce((sum, item) => sum + item.y, 0) / ranked.length) * 100) / 100 : null;
+  const idi = avgX != null && avgY != null ? Math.round((avgX * 0.6 + avgY * 0.4) * 100) / 100 : null;
+  const ampelCounts = { green: 0, yellow: 0, red: 0 };
+  ranked.forEach((entry) => { if (entry.ampel !== 'gray') ampelCounts[entry.ampel] += 1; });
+
+  return {
+    scored,
+    ranked,
+    avgX,
+    avgY,
+    idi,
+    pilotCount: ranked.filter((item) => item.pilot).length,
+    ampelCounts,
+    caseCount: ranked.length
+  };
+}
+
+function calculateAndShow() {
+  if (!cases.length) {
+    alert('Bitte mindestens einen Prozess eingeben.');
+    return;
+  }
+  if (!cases.every(isCaseComplete)) {
+    alert('Mindestens ein Case ist noch nicht vollständig beantwortet.');
+    return;
+  }
+  results = scoreAllCases();
+  renderResults();
+  goToScreen(2);
+}
+
+function getResultMode() {
+  const count = results?.caseCount || 0;
+  if (count <= 1) return 'single';
+  if (count === 2) return 'double';
+  return 'multi';
+}
+
+function getAmpelText(ampel) {
+  if (ampel === 'green') return 'Freie Fahrt';
+  if (ampel === 'yellow') return 'Genauer hinschauen';
+  if (ampel === 'red') return 'Erst klären';
+  return 'Keine Einordnung';
+}
+
+function getOutcomeSummary() {
+  const { ranked, pilotCount, idi, ampelCounts, caseCount } = results;
+  const winner = ranked[0];
+  if (caseCount === 1) {
+    if (winner.pilot) {
+      return {
+        title: `${winner.name} ist ein belastbarer Quick Win.`,
+        body: 'Ihr einzelner Case zeigt sowohl relevanten Nutzen als auch hohe Machbarkeit. Die zentrale Frage ist jetzt weniger, ob sich der Case lohnt, sondern wie schnell Sie ihn sauber in eine Pilotentscheidung übersetzen.',
+        points: [
+          `IDI Score ${winner.combined.toFixed(1)} bei ${winner.x.toFixed(1)} Mehrwert und ${winner.y.toFixed(1)} Machbarkeit.`,
+          'Das Ergebnis ist vollständig lesbar, auch wenn noch kein Vergleichscase vorliegt.',
+          'Ein zweiter Case erhöht später die Aussagekraft der Matrix und schärft Prioritäten zusätzlich.'
+        ],
+        sideTitle: 'Was bedeutet das konkret?',
+        sideBody: 'Sie haben keinen unvollständigen Zustand vor sich, sondern eine fokussierte Einzelfallbewertung. Für einen Vergleich oder eine Priorisierungsdiskussion im Team lohnt sich als nächstes ein zweiter Case.'
+      };
+    }
+    return {
+      title: `${winner.name} ist interessant, aber noch nicht entscheidungsreif.`,
+      body: 'Der Case ist nicht wertlos. Das Ergebnis zeigt vielmehr, ob die Hürde eher im Mehrwert, in der Governance oder in beidem liegt. Genau daraus ergibt sich der passende nächste Schritt.',
+      points: [
+        `Aktueller IDI Score ${winner.combined.toFixed(1)} mit Ampel ${getAmpelText(winner.ampel)}.`,
+        'Die Einzelfallansicht erklärt den Case in Klartext, statt eine große leere Vergleichsmatrix zu erzwingen.',
+        'Ein zusätzlicher Case macht sichtbarer, ob Sie eher ein generelles Governance-Thema oder nur einen schwachen Einzelprozess haben.'
+      ],
+      sideTitle: 'Lesart',
+      sideBody: 'Wenn der Mehrwert hoch, die Machbarkeit aber schwächer ist, brauchen Sie Governance-Klärung. Wenn schon der Mehrwert niedrig ausfällt, sollten Sie zuerst den Use Case selbst schärfen.'
+    };
+  }
+  if (caseCount === 2) {
+    return {
+      title: `${winner.name} sollte zuerst verfolgt werden.`,
+      body: 'Mit zwei Cases entsteht zum ersten Mal ein echter Priorisierungsvergleich. Die Frage ist jetzt nicht mehr, ob KI irgendwo Potenzial hat, sondern welcher Prozess die bessere erste Management-Entscheidung darstellt.',
+      points: [
+        `${winner.name} liegt aktuell vor dem Vergleichscase und bietet damit den klareren ersten Hebel.`,
+        `${pilotCount} von 2 Cases liegen bereits in oder nahe der Pilotzone.`,
+        `${ampelCounts.yellow + ampelCounts.red} Case(s) brauchen vor der Umsetzung zusätzliche Klärung.`
+      ],
+      sideTitle: 'Nächster Blick',
+      sideBody: 'Die Ergebnisdarstellung fokussiert jetzt bewusst auf Vergleich und Reihenfolge. Wenn ein dritter Case dazukommt, wird die Matrix als Portfolioansicht nochmals aussagekräftiger.'
+    };
+  }
+  return {
+    title: `Sie haben jetzt ein priorisierbares KI-Portfolio mit ${caseCount} Cases.`,
+    body: 'Die Matrix und das Ranking zeigen, wo Sie sofort starten können, wo Governance gefragt ist und welche Cases auf Führungsebene in eine Reihenfolge gebracht werden sollten.',
+    points: [
+      `${pilotCount} Case(s) sind aktuell Quick Wins.`,
+      `${ampelCounts.yellow} Case(s) erfordern vertiefte Klärung, ${ampelCounts.red} Case(s) sollten vorerst nicht ohne Governance-Entscheidung starten.`,
+      `Der durchschnittliche IDI Score liegt bei ${idi.toFixed(1)}.`
+    ],
+    sideTitle: 'Management-Lesart',
+    sideBody: 'Mit drei oder mehr Cases wechselt der Nutzen der Matrix von der Einzelfalleinordnung zur Portfolio-Priorisierung. Genau dafür ist der volle Überblick gedacht.'
+  };
+}
+
+function renderResultsSummary() {
+  const summary = getOutcomeSummary();
+  document.getElementById('results-summary').innerHTML = `
+    <div class="result-summary">
+      <div class="summary-main">
+        <span class="summary-kicker">Ergebnis in Klartext</span>
+        <h3>${summary.title}</h3>
+        <p>${summary.body}</p>
+        <div class="summary-list">${summary.points.map((item) => `<div class="summary-list-item">${item}</div>`).join('')}</div>
+      </div>
+      <div class="summary-side">
+        <span class="summary-kicker">IDI Score</span>
+        <div class="summary-score">${results.idi != null ? results.idi.toFixed(1) : '–'}</div>
+        <p><strong>${summary.sideTitle}</strong></p>
+        <p>${summary.sideBody}</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderMatrix(scored, options = {}) {
+  const compact = Boolean(options.compact);
+  const w = compact ? 620 : 900;
+  const h = compact ? 360 : 460;
+  const pad = compact ? { top: 34, right: 34, bottom: 58, left: 64 } : { top: 42, right: 38, bottom: 68, left: 76 };
+  const plotW = w - pad.left - pad.right;
+  const plotH = h - pad.top - pad.bottom;
+  const sx = (value) => pad.left + ((value - 2) / 8) * plotW;
+  const sy = (value) => pad.top + plotH - (value / 10) * plotH;
+  const colors = { green: 'rgba(126,207,160,0.78)', yellow: 'rgba(226,195,107,0.76)', red: 'rgba(212,112,112,0.76)', gray: 'rgba(255,255,255,0.18)' };
+
+  let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">`;
+  svg += `<rect x="${pad.left}" y="${pad.top}" width="${plotW}" height="${plotH}" fill="rgba(255,255,255,0.01)" rx="2"/>`;
+  const pzX1 = sx(6);
+  const pzX2 = sx(10);
+  const pzY1 = sy(10);
+  const pzY2 = sy(7);
+  svg += `<rect x="${pzX1}" y="${pzY1}" width="${pzX2 - pzX1}" height="${pzY2 - pzY1}" fill="rgba(126,207,160,0.04)" stroke="rgba(126,207,160,0.15)" stroke-width="1" stroke-dasharray="4,4" rx="2"/>`;
+  svg += `<text x="${(pzX1 + pzX2) / 2}" y="${pzY1 + 16}" text-anchor="middle" font-size="${compact ? 9 : 10}" font-weight="500" fill="rgba(126,207,160,0.35)" font-family="Montserrat" letter-spacing="0.14em">PILOTZONE</text>`;
+  [7, 4].forEach((threshold) => {
+    const y = sy(threshold);
+    svg += `<line x1="${pad.left}" y1="${y}" x2="${pad.left + plotW}" y2="${y}" stroke="${threshold === 7 ? 'rgba(126,207,160,0.12)' : 'rgba(212,112,112,0.12)'}" stroke-width="1" stroke-dasharray="3,5"/>`;
+    svg += `<text x="${pad.left + plotW + 8}" y="${y + 4}" font-size="${compact ? 8 : 9}" fill="${threshold === 7 ? 'rgba(126,207,160,0.42)' : 'rgba(212,112,112,0.42)'}" font-family="Montserrat">Y=${threshold}</text>`;
+  });
+  for (let step = 2; step <= 10; step += 1) {
+    svg += `<line x1="${sx(step)}" y1="${pad.top}" x2="${sx(step)}" y2="${pad.top + plotH}" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>`;
+    svg += `<text x="${sx(step)}" y="${pad.top + plotH + 20}" text-anchor="middle" font-size="${compact ? 10 : 11}" fill="rgba(255,255,255,0.22)" font-family="Inter">${step}</text>`;
+  }
+  for (let step = 0; step <= 10; step += 2) {
+    svg += `<line x1="${pad.left}" y1="${sy(step)}" x2="${pad.left + plotW}" y2="${sy(step)}" stroke="rgba(255,255,255,0.025)" stroke-width="1"/>`;
+    svg += `<text x="${pad.left - 12}" y="${sy(step) + 4}" text-anchor="end" font-size="${compact ? 10 : 11}" fill="rgba(255,255,255,0.22)" font-family="Inter">${step}</text>`;
+  }
+  svg += `<line x1="${pad.left}" y1="${pad.top + plotH}" x2="${pad.left + plotW}" y2="${pad.top + plotH}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
+  svg += `<line x1="${pad.left}" y1="${pad.top}" x2="${pad.left}" y2="${pad.top + plotH}" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>`;
+  svg += `<text x="${pad.left + plotW / 2}" y="${h - 10}" text-anchor="middle" font-size="${compact ? 11 : 12}" font-weight="500" fill="rgba(255,255,255,0.25)" font-family="Montserrat" letter-spacing="0.08em">LOHNT SICH DER AUFWAND? →</text>`;
+  svg += `<text x="18" y="${pad.top + plotH / 2}" text-anchor="middle" font-size="${compact ? 11 : 12}" font-weight="500" fill="rgba(255,255,255,0.25)" font-family="Montserrat" letter-spacing="0.08em" transform="rotate(-90,18,${pad.top + plotH / 2})">↑ DARF ICH DAS?</text>`;
+  scored.forEach((item) => {
+    if (item.x == null || item.y == null) return;
+    const cx = sx(item.x);
+    const cy = sy(item.y);
+    const radius = compact ? (scored.length === 1 ? 22 : 16) : (scored.length === 1 ? 24 : 15);
+    const labelOffset = compact ? 26 : 22;
+    svg += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="${colors[item.ampel]}" stroke="rgba(18,21,26,0.65)" stroke-width="2.5"/>`;
+    svg += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="${compact ? 13 : 12}" font-weight="700" fill="rgba(18,21,26,0.92)" font-family="Inter">${item.num}</text>`;
+    svg += `<text x="${cx + labelOffset}" y="${cy + 4}" font-size="${compact ? 12 : 11}" font-weight="500" fill="rgba(255,255,255,0.68)" font-family="Inter">${item.name}</text>`;
+  });
+  svg += '</svg>';
+  return svg;
+}
+
+function renderMatrixSection() {
+  const mode = getResultMode();
+  const { ranked } = results;
+  if (mode === 'single') {
+    const item = ranked[0];
+    document.getElementById('matrix-section').innerHTML = `
+      <div class="single-case-layout">
+        <div>
+          <span class="panel-kicker">Einzelfall-Modus</span>
+          <h3>${item.name} in der Matrix</h3>
+          <p>Die Matrix bleibt sichtbar, nimmt aber bewusst weniger Raum ein. Bei einem einzelnen Case ist die verbale Einordnung wichtiger als die leere Vergleichsfläche.</p>
+          <div class="matrix-wrap-frame">${renderMatrix(ranked, { compact: true })}</div>
+          <div class="single-case-note">Die Matrix wird im Vergleich mehrerer Prozesse besonders aussagekräftig. Für eine echte Priorisierung lohnt sich als nächstes ein zweiter Case.</div>
+        </div>
+        <div>
+          <span class="panel-kicker">Interpretation</span>
+          <h3>${item.name}</h3>
+          <p>${item.x >= 6 ? 'Der Mehrwert ist erkennbar hoch.' : 'Der Mehrwert ist aktuell noch nicht stark genug ausgeprägt.'} ${item.y > AMPEL_GREEN ? 'Governance-seitig wirkt der Prozess gut beherrschbar.' : item.y >= AMPEL_YELLOW ? 'Governance-seitig gibt es erkennbare Fragen vor dem Start.' : 'Governance-seitig sollten zuerst kritische Punkte geklärt werden.'}</p>
+          <div class="summary-list">
+            <div class="summary-list-item">Mehrwert: ${item.x.toFixed(1)} / 10</div>
+            <div class="summary-list-item">Machbarkeit: ${item.y.toFixed(1)} / 10</div>
+            <div class="summary-list-item">IDI: ${item.combined.toFixed(1)} / 10</div>
+          </div>
+          <div class="btn-group" style="justify-content:flex-start; margin: 1.4rem 0 0;">
+            <button class="btn btn-secondary" onclick="addSecondCaseFromResult()">Zweiten Case hinzufügen</button>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if (mode === 'double') {
+    const winner = ranked[0];
+    const runnerUp = ranked[1];
+    document.getElementById('matrix-section').innerHTML = `
+      <div class="compare-panel">
+        <span class="panel-kicker">Vergleichsmodus für 2 Cases</span>
+        <h3>Vergleich und Priorisierung</h3>
+        <p>Mit zwei Cases entsteht eine saubere Erst-Priorisierung. Die Matrix zeigt die Lage beider Prozesse, die Textauswertung macht die Reihenfolge explizit.</p>
+        <div class="matrix-wrap-frame">${renderMatrix(ranked)}</div>
+        <div class="comparison-grid">
+          <div class="compare-card">
+            <strong>${winner.name}</strong>
+            <span>IDI ${winner.combined.toFixed(1)} · Mehrwert ${winner.x.toFixed(1)} · Machbarkeit ${winner.y.toFixed(1)}</span>
+          </div>
+          <div class="compare-card">
+            <strong>${runnerUp.name}</strong>
+            <span>IDI ${runnerUp.combined.toFixed(1)} · Mehrwert ${runnerUp.x.toFixed(1)} · Machbarkeit ${runnerUp.y.toFixed(1)}</span>
+          </div>
+        </div>
+        <div class="priority-banner"><strong>Empfohlene Reihenfolge:</strong> ${winner.name} zuerst, weil dieser Case aktuell den besseren Mix aus Hebel und Umsetzbarkeit zeigt. ${runnerUp.name} bleibt relevant, ist aber derzeit der zweite Schritt.</div>
+      </div>
+    `;
+    return;
+  }
+
+  document.getElementById('matrix-section').innerHTML = `
+    <div class="matrix-panel">
+      <span class="panel-kicker">Portfolio-Modus</span>
+      <h3>Matrix für mehrere Cases</h3>
+      <p>Ab drei Cases funktioniert die Matrix als Portfolioansicht: Sie sehen auf einen Blick, wo Pilotchancen liegen und welche Prozesse vorerst Governance-Arbeit brauchen.</p>
+      <div class="matrix-wrap-frame">${renderMatrix(ranked)}</div>
+      <div class="matrix-caption">Oben rechts liegen die Cases mit dem besten Verhältnis aus Mehrwert und Machbarkeit. Genau dort sollte die Reihenfolge beginnen.</div>
+    </div>
+  `;
+}
+
+function renderRankingSection() {
+  const mode = getResultMode();
+  const { ranked } = results;
+  if (mode === 'single') {
+    document.getElementById('ranking-section').innerHTML = '';
+    return;
+  }
+
+  document.getElementById('ranking-section').innerHTML = `
+    <div class="ranking-panel">
+      <span class="panel-kicker">Ranking</span>
+      <h3>${mode === 'double' ? 'Welcher Case kommt zuerst?' : 'Ihre besten Cases zuerst'}</h3>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>Rang</th>
+            <th>Prozess</th>
+            <th>Mehrwert</th>
+            <th>Machbarkeit</th>
+            <th>IDI</th>
+            <th>Status</th>
+            <th>Quick Win</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranked.map((item) => `
+            <tr>
+              <td><span class="rank-badge rank-${item.rank <= 3 ? item.rank : 'other'}">${item.rank}</span></td>
+              <td>${item.name}</td>
+              <td>${item.x.toFixed(1)}</td>
+              <td>${item.y.toFixed(1)}</td>
+              <td style="color: var(--gold-light); font-weight: 500;">${item.combined.toFixed(1)}</td>
+              <td><span class="ampel-badge ampel-badge-${item.ampel}">● ${getAmpelText(item.ampel)}</span></td>
+              <td>${item.pilot ? '<span class="pilot-tag">QUICK WIN</span>' : '–'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderResultsContact() {
+  const mode = getResultMode();
+  const headline = mode === 'single'
+    ? 'Einzelfall einordnen oder zweiten Case ergänzen'
+    : mode === 'double'
+      ? 'Priorisierung direkt besprechen'
+      : 'Portfolio gemeinsam sortieren';
+  const copy = mode === 'single'
+    ? 'Wenn Sie diesen Case kurz challengen oder einen zweiten Vergleichsprozess ergänzen wollen, ist der schnellste Weg ein kurzes Gespräch.'
+    : mode === 'double'
+      ? 'Zwei Cases reichen bereits für eine belastbare Erst-Reihenfolge. Im Gespräch lässt sich klären, welcher Prozess wirklich zuerst auf die Agenda gehört.'
+      : 'Bei mehreren Cases wird die Führungsfrage wichtiger als der Einzelfall. Nutzen Sie das Ergebnis als Aufschlag für eine priorisierte Management-Entscheidung.';
+
+  const block = `
+    <div class="contact-block">
+      <div class="contact-copy">
+        <span class="contact-kicker">Nächster Kontaktpunkt</span>
+        <h3>${headline}</h3>
+        <p>${copy}</p>
+      </div>
+      <div class="contact-option">
+        <strong>Termin buchen mit mir</strong>
+        <p>15 Min. Einordnung Ihres Ergebnisses.</p>
+        <a class="contact-btn primary" href="${CONTACT_LINKS.booking}">Termin anfragen</a>
+      </div>
+      <div class="contact-option">
+        <strong>WhatsApp</strong>
+        <p>Kurze Rückfrage direkt klären.</p>
+        <a class="contact-btn secondary" href="${CONTACT_LINKS.whatsapp}">WhatsApp öffnen</a>
+      </div>
+      <div class="contact-option">
+        <strong>Newsletter</strong>
+        <p>Updates zu KI-Entscheidungen und Governance.</p>
+        <a class="contact-btn secondary" href="${CONTACT_LINKS.newsletter}">Blog &amp; Newsletter</a>
+      </div>
+    </div>
+  `;
+  document.getElementById('results-contact').innerHTML = block;
+  document.getElementById('footer-contact').innerHTML = block;
+}
+
+function renderResults() {
+  const { avgX, avgY, idi, pilotCount, caseCount } = results;
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card"><div class="kpi-value v-blue">${avgX != null ? avgX.toFixed(1) : '–'}</div><div class="kpi-label">Ø Mehrwert</div><div class="kpi-sublabel">Wertpotenzial</div></div>
+    <div class="kpi-card"><div class="kpi-value v-green">${avgY != null ? avgY.toFixed(1) : '–'}</div><div class="kpi-label">Ø Machbarkeit</div><div class="kpi-sublabel">Regulatorischer Rahmen</div></div>
+    <div class="kpi-card"><div class="kpi-value v-gold">${idi != null ? idi.toFixed(1) : '–'}</div><div class="kpi-label">IDI Score</div><div class="kpi-sublabel">Gesamteinordnung</div></div>
+    <div class="kpi-card"><div class="kpi-value v-warm">${caseCount === 1 ? '1' : pilotCount}</div><div class="kpi-label">${caseCount === 1 ? 'Case' : 'Quick Wins'}</div><div class="kpi-sublabel">${caseCount === 1 ? 'bewertet' : 'direkt startbar'}</div></div>
+  `;
+  renderResultsSummary();
+  renderMatrixSection();
+  renderRankingSection();
+  renderResultsContact();
+  renderDetailCards(results.scored);
+}
+
+function renderDetailCards(scored) {
+  document.getElementById('detail-cards').innerHTML = scored.map((item) => {
+    const xTerms = X_FACTORS.map((factor) => {
+      const selected = item.xFactors[factor.key];
+      return selected ? `${selected.score}×${factor.weight.toFixed(2)}` : '?';
+    }).join(' + ');
+    const yTerms = GOVERNANCE_CHECKS.map((check) => {
+      const selected = item.govChecks[check.key];
+      return selected ? `${selected.abzug >= 0 ? '+' : ''}${selected.abzug}` : '?';
+    }).join(' ');
+    return `
+      <div class="case-card" style="border-left: 3px solid ${item.ampel === 'green' ? 'var(--green)' : item.ampel === 'yellow' ? 'var(--yellow)' : item.ampel === 'red' ? 'var(--red)' : 'rgba(255,255,255,0.2)'};">
+        <div class="case-card-header">
+          <span class="case-card-num">Case ${String(item.num).padStart(2, '0')} — ${item.name}</span>
+          <span class="ampel-badge ampel-badge-${item.ampel}">● ${getAmpelText(item.ampel)}${item.pilot ? ' · QUICK WIN' : ''}</span>
+        </div>
+        <div class="formula-bar"><span>X = (${xTerms}) / ${MAX_FACTOR_SCORE} × ${SCORE_SCALE}</span><span class="result">X = ${item.x != null ? item.x.toFixed(2) : '–'}</span></div>
+        <div class="formula-bar"><span>Y = CLAMP(${Y_START} ${yTerms}, 0, ${SCORE_SCALE})</span><span class="result">Y = ${item.y != null ? item.y.toFixed(2) : '–'}</span></div>
+        <div class="formula-bar"><span>IDI = ${item.x.toFixed(2)}×0.6 + ${item.y.toFixed(2)}×0.4</span><span class="result">${item.combined.toFixed(2)}</span></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getRecommendationSet() {
+  const { ranked, caseCount, idi, ampelCounts } = results;
+  const winner = ranked[0];
+  const hasGovernancePressure = ampelCounts.yellow + ampelCounts.red > 0;
+  const multipleRelevantCases = caseCount >= 2;
+
+  if (winner.x >= 6 && winner.y > AMPEL_GREEN) {
+    return {
+      primary: {
+        name: 'Strategy Sprint for Transformation Decisions',
+        kicker: 'Primäre Empfehlung',
+        meaning: `Ihr Ergebnis zeigt einen Case mit hohem Mehrwert und hoher Machbarkeit. ${winner.name} ist nicht nur interessant, sondern geeignet, in einen klaren Pilot- oder Entscheidungsprozess überführt zu werden.`,
+        nextStep: `Starten Sie mit ${winner.name} in einem fokussierten Sprint, statt das Thema weiter allgemein zu diskutieren.`,
+        format: 'Verdichtetes Entscheidungsformat über 2–6 Wochen.',
+        output: 'Priorisierter Use Case, Entscheidungsrahmen, klare Empfehlung für Pilot oder Umsetzung.'
+      },
+      secondary: multipleRelevantCases ? {
+        name: 'Executive Decision Sparring',
+        kicker: 'Sekundäre Alternative',
+        meaning: 'Neben dem führenden Case gibt es weitere relevante Themen. Dann reicht ein Einzelfallformat oft nicht mehr aus.',
+        nextStep: 'Nutzen Sie Executive Sparring, um Reihenfolge, Ressourcen und Governance auf Führungsebene zu sortieren.',
+        format: 'Laufendes Sparring für Priorisierung und Management-Entscheidungen.',
+        output: 'Entscheidungslogik für mehrere Cases und eine belastbare Reihenfolge.'
+      } : {
+        name: 'Private Executive Briefing',
+        kicker: 'Sekundäre Alternative',
+        meaning: 'Wenn Sie den Case erst intern politisch oder strategisch anschlussfähig machen müssen, ist ein Briefing der pragmatischere Einstieg.',
+        nextStep: 'Lassen Sie das Ergebnis für Führung und Stakeholder in eine knappe Entscheidungsunterlage übersetzen.',
+        format: 'Kuratiertes Executive Briefing.',
+        output: 'Einordnung, Leitfragen und Management-kompatible Entscheidungsvorlage.'
+      }
+    };
+  }
+
+  if (winner.x >= 6 && winner.y <= AMPEL_GREEN) {
+    return {
+      primary: {
+        name: 'Leadership & Governance in the Age of AI',
+        kicker: 'Primäre Empfehlung',
+        meaning: `Der Case ${winner.name} hat erkennbaren Hebel, wird aber durch Governance- oder Regulierungsfragen gebremst. Das Ergebnis sagt also nicht Nein, sondern Erst klären.`,
+        nextStep: 'Klären Sie Verantwortlichkeiten, Freigabelogik und regulatorische Leitplanken, bevor Sie in eine Umsetzung gehen.',
+        format: 'Governance- und Führungsformat zur Entscheidungsabsicherung.',
+        output: 'Klare Leitplanken, Freigabe-Pfade und belastbare Einschätzung regulatorischer Grenzen.'
+      },
+      secondary: {
+        name: 'Private Executive Briefing',
+        kicker: 'Sekundäre Alternative',
+        meaning: 'Wenn die Organisation zuerst ein gemeinsames Verständnis braucht, ist ein Briefing der niedrigschwelligere Einstieg.',
+        nextStep: 'Verdichten Sie die Fragen in ein Führungsbriefing, bevor Sie ein größeres Governance-Format starten.',
+        format: 'Executive Briefing für Einordnung und Entscheidungsreife.',
+        output: 'Gemeinsames Lagebild, zentrale Risiken, nächste Entscheidungen.'
+      }
+    };
+  }
+
+  if (multipleRelevantCases && idi >= 4) {
+    return {
+      primary: {
+        name: 'Executive Decision Sparring',
+        kicker: 'Primäre Empfehlung',
+        meaning: 'Ihr Ergebnis zeigt mehrere relevante Cases, aber nicht den einen offensichtlich dominanten Startpunkt. Die Führungsfrage lautet daher Priorisierung, nicht Tool-Auswahl.',
+        nextStep: 'Sortieren Sie die Cases in eine belastbare Reihenfolge und definieren Sie, was zuerst, zweitens und später entschieden werden soll.',
+        format: 'Vertrauliches Sparring für Priorisierung und Sequenzierung.',
+        output: 'Management-Priorisierung, Entscheidungslogik und klares Vorgehen über mehrere Cases.'
+      },
+      secondary: hasGovernancePressure ? {
+        name: 'Leadership & Governance in the Age of AI',
+        kicker: 'Sekundäre Alternative',
+        meaning: 'Mehrere relevante Cases erzeugen oft auch mehrere Governance-Spannungen gleichzeitig.',
+        nextStep: 'Klären Sie die übergreifenden Regeln einmal sauber, statt jeden Case isoliert auszudiskutieren.',
+        format: 'Governance-Rahmen für mehrere KI-Entscheidungen.',
+        output: 'Übergreifende Leitplanken für die nächsten Schritte im Portfolio.'
+      } : {
+        name: 'Curated Market & Innovation Monitoring',
+        kicker: 'Sekundäre Alternative',
+        meaning: 'Wenn mehrere Themen beobachtet werden, braucht es verdichtete Relevanz statt weiteren Informationslärm.',
+        nextStep: 'Ergänzen Sie die Priorisierung um laufend kuratierte Markt- und Signalbeobachtung.',
+        format: 'Kontinuierliches Monitoring in entscheidungsfähiger Form.',
+        output: 'Regelmäßige, fokussierte Inputs für Führung und Priorisierung.'
+      }
+    };
+  }
+
+  return {
+    primary: {
+      name: 'Private Executive Briefings & Decision Salons',
+      kicker: 'Primäre Empfehlung',
+      meaning: 'Das Ergebnis zeigt noch kein klares Sofort-Go. In dieser Lage ist Einordnung wertvoller als vorschnelle Umsetzung.',
+      nextStep: 'Nutzen Sie ein Executive Briefing, um das Ergebnis zu lesen, strategisch zu verorten und die richtigen Folgefragen zu definieren.',
+      format: 'Kuratiertes Einordnungsformat für Entscheider:innen.',
+      output: 'Klare Lesart des Ergebnisses, relevante Optionen und konkrete nächste Fragen.'
+    },
+    secondary: {
+      name: 'Strategic Foresight & Decision Architecture',
+      kicker: 'Sekundäre Alternative',
+      meaning: 'Wenn nicht nur einzelne Cases, sondern die ganze Entscheidungslogik unscharf ist, reicht ein Briefing allein oft nicht aus.',
+      nextStep: 'Arbeiten Sie an der übergeordneten Entscheidungsarchitektur, bevor Sie Cases einzeln bewerten.',
+      format: 'Strukturelles Strategie- und Entscheidungsformat.',
+      output: 'Zukunftsbild, Ordnungssystem für Entscheidungen und klare Governance-Perspektive.'
+    }
+  };
+}
+
+function renderRecommendationCard(rec, primary = false) {
+  return `
+    <div class="rec-card">
+      <div class="rec-copy">
+        <span class="rec-kicker">${rec.kicker}</span>
+        <div class="rec-header">
+          <h3>${rec.name}</h3>
+          <span class="rec-badge ${primary ? 'rec-badge-top' : 'rec-badge-sec'}">${primary ? 'Unser Tipp' : 'Alternative'}</span>
+        </div>
+        <p>${rec.meaning}</p>
+        <div class="rec-points">
+          <div class="rec-point"><strong>Was bedeutet dieses Ergebnis?</strong> ${rec.meaning}</div>
+          <div class="rec-point"><strong>Was ist jetzt der richtige Schritt?</strong> ${rec.nextStep}</div>
+        </div>
+      </div>
+      <div class="rec-output">
+        <strong>Buchbares Format</strong>
+        <p>${rec.format}</p>
+        <strong>Nutzen / Output</strong>
+        <p>${rec.output}</p>
+      </div>
+    </div>
+  `;
+}
+
+function showRecommendations() {
+  if (!results) return;
+  const set = getRecommendationSet();
+  document.getElementById('recommendations').innerHTML = renderRecommendationCard(set.primary, true) + renderRecommendationCard(set.secondary, false);
+  renderResultsContact();
   goToScreen(4);
 }
 
-function sendInquiry(){const e=document.getElementById('cta-email').value;
-  if(!e||!e.includes('@')){alert('Bitte gültige E-Mail eingeben.');return;}
-  alert('Perfekt — wir melden uns innerhalb von 24 Stunden bei Ihnen.\n\n(Demo-Modus)');}
-function resetAll(){cases=[];results=null;addCase();goToScreen(1);}
-addCase();
+function addSecondCaseFromResult() {
+  addCase();
+  goToScreen(1);
+}
+
+function sendInquiry() {
+  const email = document.getElementById('cta-email').value;
+  if (!email || !email.includes('@')) {
+    alert('Bitte eine gültige E-Mail-Adresse eingeben.');
+    return;
+  }
+  alert('Perfekt — wir melden uns mit Bezug auf Ihr Assessment-Ergebnis.\n\n(Demo-Modus)');
+}
+
+function resetAll() {
+  cases = [];
+  results = null;
+  const firstCase = createEmptyCase();
+  cases = [firstCase];
+  activeCaseId = firstCase.id;
+  activeQuestionIndex = 0;
+  renderCases();
+  goToScreen(1);
+}
+
+const firstCase = createEmptyCase();
+cases = [firstCase];
+activeCaseId = firstCase.id;
+renderCases();
 </script>
 </body>
 </html>
